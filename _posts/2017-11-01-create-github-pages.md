@@ -1,12 +1,18 @@
 ---
-title: GitHub Pages 생성
-date: 2017-11-01 23:32:43 +09:00
-excerpt: ''
-categories:
-  - GitHub
+layout: post
+current: post
+navigation: true
+class: post-template
+subclass: 'post tag-getting-started'
+
+category: Git
 tags:
   - github
   - github_pages
+
+date: 2017-11-01 23:32:43 +09:00
+title: GitHub Pages 생성
+cover: assets/posts/2017-11-01/create-github-pages/cover.jpeg
 ---
 
 # 개요

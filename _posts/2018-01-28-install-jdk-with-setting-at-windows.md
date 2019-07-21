@@ -1,13 +1,19 @@
 ---
-title: "윈도우에서 JDK 8 설치 및 환경설정"
-date: 2018-01-28 15:53:25 +09:00
-excerpt: ''
-categories:
-  - Web Server
+layout: post
+current: post
+navigation: true
+class: post-template
+subclass: 'post tag-getting-started'
+
+category: Web-Server
 tags:
   - jdk
   - jdk8
   - windows
+
+date: 2018-01-28 15:53:25 +09:00
+title: "윈도우에서 JDK 8 설치 및 환경설정"
+cover: assets/posts/2018-01-28/install-jdk-with-setting-at-windows/cover.jpg
 ---
 
 # 개요

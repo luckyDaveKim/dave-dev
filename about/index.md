@@ -1,6 +1,12 @@
 ---
-title: about
 layout: page
+current: about
+navigation: true
+class: page-template
+subclass: 'post page'
+
+title: About
+logo: 'assets/images/dev-dave.png'
 ---
 
 ## Profile
@@ -9,8 +15,7 @@ layout: page
 - 2011.01 ~ 2012.10 :: Serving a mandatory military service
 
 ## Links
-
-- Email : lucky_dave@naver.com
+- Email : lucky.dave.k@gmail.com
 
 - Github : [https://github.com/luckydavekim](https://github.com/luckydavekim)
 

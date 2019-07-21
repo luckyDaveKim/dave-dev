@@ -1,13 +1,19 @@
 ---
-title: Jekyll 설치하기
-date: 2017-11-02 13:45:30 +09:00
-excerpt: ''
-categories:
-  - Jekyll
+layout: post
+current: post
+navigation: true
+class: post-template
+subclass: 'post tag-getting-started'
+
+category: Jekyll
 tags:
   - jekyll
   - github
   - github_pages
+
+date: 2017-11-02 13:45:30 +09:00
+title: Jekyll 설치하기
+cover: assets/posts/2017-11-02/install-jekyll/cover.png
 ---
 
 # 개요

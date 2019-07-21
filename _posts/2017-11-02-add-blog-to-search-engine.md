@@ -1,16 +1,22 @@
 ---
-title: 검색엔진에서 페이지 검색 가능하게 하기
-date: 2017-11-02 13:48:18 +09:00
-excerpt: ''
-categories:
-  - Jekyll
+layout: post
+current: post
+navigation: true
+class: post-template
+subclass: 'post tag-getting-started'
+
+category: Jekyll
 tags:
   - jekyll
   - search_engine
   - github
-  - github_pates
+  - github_pages
   - google
   - naver
+
+date: 2017-11-02 13:48:18 +09:00
+title: 검색엔진에서 페이지 검색 가능하게 하기
+cover: assets/posts/2017-11-02/add-blog-to-search-engine/cover.jpg
 ---
 
 # 개요

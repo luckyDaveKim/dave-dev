@@ -1,13 +1,19 @@
 ---
-title: "윈도우10 부팅 USB 만들기"
-date: 2017-11-19 02:06:00 +09:00
-excerpt: ''
-categories:
-  - Windows
+layout: post
+current: post
+navigation: true
+class: post-template
+subclass: 'post tag-getting-started'
+
+category: Windows
 tags:
   - windows
   - windows10
   - booting_usb
+
+date: 2017-11-19 02:06:00 +09:00
+title: "윈도우10 부팅 USB 만들기"
+cover: assets/posts/2017-11-19/make-windows-booting-usb/cover.jpg
 ---
 
 # 개요
