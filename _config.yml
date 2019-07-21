@@ -69,7 +69,7 @@ safe: false
 lsi: false
 username: luckyDaveKim
 repo: luckyDaveKim.github.io
-branch: blog
+branch: master
 # relative_source: ../blog/
 destination: ./_site/
 production_url: https://luckydavekim.github.io/
