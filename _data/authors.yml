@@ -1,0 +1,12 @@
+dave:
+  username: dave
+  name: Dave
+  location: Seoul, South Korea
+  url_full: false
+  url: false
+  bio: The professional publishing platform
+  picture: assets/images/dev-dave.png
+  twitter: false
+  facebook: lucky.dave.k
+  instagram: lucky.dave
+  cover: false
