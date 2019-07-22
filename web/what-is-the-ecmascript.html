@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- Document Settings -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Base Meta -->
+    <!-- dynamically fixing the title for tag/author pages -->
+
+
+
+    <title>ES6?! ES2015?! ECMAScript란 도대체 무엇인가?</title>
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Styles'n'Scripts -->
+    <link rel="stylesheet" type="text/css" href="/assets/built/screen.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/built/screen.edited.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/built/syntax.css" />
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+    <style>.hljs { background: none; }</style>
+
+    <!--[if IE]>
+        <style>
+            p, ol, ul{
+                width: 100%;
+            }
+            blockquote{
+                width: 100%;
+            }
+        </style>
+    <![endif]-->
+    
+    <!-- This tag outputs SEO meta+structured data and other important settings -->
+    <meta name="description" content="프로그래밍으로 예술을 꿈꾸다" />
+    <link rel="shortcut icon" href="http://localhost:4000/assets/images/favicon.png" type="image/png" />
+    <link rel="canonical" href="http://localhost:4000/web/what-is-the-ecmascript" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+
+     <!--title below is coming from _includes/dynamic_title-->
+    <meta property="og:site_name" content="DevDave" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="ES6?! ES2015?! ECMAScript란 도대체 무엇인가?" />
+    <meta property="og:description" content="ES6은 뭐고 ES2015는 뭐야?! 가끔씩 볼때마다 헷갈리는 ECMAScript 버전!! 도대체 어떻게 버전관리를 하는거야 ㅠㅠ. 다음부터 헷갈리지 않게 한번 정리해놔야겠다. 자바스크립트(JavaScript) 잘 알고있니? ECMAScript를 알기전에 우선 친숙한 자바스크립트에 대해 알아보자. 우리(내게)에게 친숙한 자바스크립트는 웹브라우저(클라이언트)에서 멀고먼 서버에 데이터를 보내기 전, 데이터 유효성 검사 등을 처리하는 스크립트 언어였다. 이 자바스크립트는 1995년 넷스케이프(Netscape)의 Brendan" />
+    <meta property="og:url" content="http://localhost:4000/web/what-is-the-ecmascript" />
+    <meta property="og:image" content="http://localhost:4000/assets/posts/2018-02-07/what-is-the-ecmascript/javascript-history.png" />
+    <meta property="article:publisher" content="https://www.facebook.com/lucky.dave.k" />
+    <meta property="article:author" content="https://www.facebook.com/lucky.dave.k" />
+    <meta property="article:published_time" content="2018-02-07T20:30:04+09:00" />
+    <meta property="article:modified_time" content="2018-02-07T20:30:04+09:00" />
+    <meta property="article:tag" content="Javascript" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ES6?! ES2015?! ECMAScript란 도대체 무엇인가?" />
+    <meta name="twitter:description" content="ES6은 뭐고 ES2015는 뭐야?! 가끔씩 볼때마다 헷갈리는 ECMAScript 버전!! 도대체 어떻게 버전관리를 하는거야 ㅠㅠ. 다음부터 헷갈리지 않게 한번 정리해놔야겠다. 자바스크립트(JavaScript) 잘 알고있니? ECMAScript를 알기전에 우선 친숙한 자바스크립트에 대해 알아보자. 우리(내게)에게 친숙한 자바스크립트는 웹브라우저(클라이언트)에서 멀고먼 서버에 데이터를 보내기 전, 데이터 유효성 검사 등을 처리하는 스크립트 언어였다. 이 자바스크립트는 1995년 넷스케이프(Netscape)의 Brendan" />
+    <meta name="twitter:url" content="http://localhost:4000/" />
+    <meta name="twitter:image" content="http://localhost:4000/assets/posts/2018-02-07/what-is-the-ecmascript/javascript-history.png" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="DevDave" />
+    <meta name="twitter:label2" content="Filed under" />
+    <meta name="twitter:data2" content="Javascript" />
+    <meta name="twitter:site" content="@" />
+    <meta name="twitter:creator" content="@" />
+    <meta property="og:image:width" content="1400" />
+    <meta property="og:image:height" content="933" />
+
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Website",
+    "publisher": {
+        "@type": "Organization",
+        "name": "DevDave",
+        "logo": "http://localhost:4000/assets/images/blog-icon.png"
+    },
+    "url": "http://localhost:4000/web/what-is-the-ecmascript",
+    "image": {
+        "@type": "ImageObject",
+        "url": "http://localhost:4000/assets/posts/2018-02-07/what-is-the-ecmascript/javascript-history.png",
+        "width": 2000,
+        "height": 666
+    },
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "http://localhost:4000/web/what-is-the-ecmascript"
+    },
+    "description": "ES6은 뭐고 ES2015는 뭐야?! 가끔씩 볼때마다 헷갈리는 ECMAScript 버전!! 도대체 어떻게 버전관리를 하는거야 ㅠㅠ. 다음부터 헷갈리지 않게 한번 정리해놔야겠다. 자바스크립트(JavaScript) 잘 알고있니? ECMAScript를 알기전에 우선 친숙한 자바스크립트에 대해 알아보자. 우리(내게)에게 친숙한 자바스크립트는 웹브라우저(클라이언트)에서 멀고먼 서버에 데이터를 보내기 전, 데이터 유효성 검사 등을 처리하는 스크립트 언어였다. 이 자바스크립트는 1995년 넷스케이프(Netscape)의 Brendan"
+}
+    </script>
+
+    <!-- <script type="text/javascript" src="https://demo.ghost.io/public/ghost-sdk.min.js?v=724281a32e"></script>
+    <script type="text/javascript">
+    ghost.init({
+    	clientId: "ghost-frontend",
+    	clientSecret: "f84a07a72b17"
+    });
+    </script> -->
+
+    <meta name="generator" content="Jekyll 3.6.2" />
+    <link rel="alternate" type="application/rss+xml" title="ES6?! ES2015?! ECMAScript란 도대체 무엇인가?" href="/feed.xml" />
+
+
+</head>
+<body class="post-template">
+
+    <div class="site-wrapper">
+        <!-- All the main content gets inserted here, index.hbs, post.hbs, etc -->
+        <!-- default -->
+
+<!-- The tag above means: insert everything in this file
+into the {body} of the default.hbs template -->
+
+<header class="site-header outer">
+    <div class="inner">
+        <nav class="site-nav">
+    <div class="site-nav-left">
+        
+            
+                <a class="site-nav-logo" href="http://localhost:4000/"><img src="/assets/images/blog-icon.png" alt="DevDave" /></a>
+            
+        
+        
+            <ul class="nav" role="menu">
+    <li class="nav-home" role="menuitem"><a href="/">Home</a></li>
+    <li class="nav-about" role="menuitem"><a href="/about/">About</a></li>
+    <li class="nav-github" role="menuitem"><a href="/tag/github/">Github</a></li>
+</ul>
+
+        
+    </div>
+    <div class="site-nav-right">
+        <div class="social-links">
+            
+                <a class="social-link social-link-fb" href="https://facebook.com/lucky.dave.k" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+</a>
+            
+            
+        </div>
+        
+    </div>
+</nav>
+
+    </div>
+</header>
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<main id="site-main" class="site-main outer" role="main">
+    <div class="inner">
+
+        <article class="post-full post tag-getting-started ">
+
+            <header class="post-full-header">
+                <section class="post-full-meta">
+                    <time class="post-full-meta-date" datetime="2018-02-07">2018-02-07</time>
+                    
+                        <span class="date-divider">/</span>
+                        
+                            
+                               <a href="/tag/javascript/">#JAVASCRIPT</a>&nbsp
+                            
+                        
+                            
+                               <a href="/tag/js/">#JS</a>&nbsp
+                            
+                        
+                            
+                               <a href="/tag/ecmascript/">#ECMASCRIPT</a>&nbsp
+                            
+                        
+                            
+                               <a href="/tag/es5/">#ES5</a>&nbsp
+                            
+                        
+                            
+                               <a href="/tag/es6/">#ES6</a>&nbsp
+                            
+                        
+                            
+                               <a href="/tag/es2015/">#ES2015</a>&nbsp
+                            
+                        
+                            
+                               <a href="/tag/es2016/">#ES2016</a>
+                            
+                        
+                    
+                </section>
+                <h1 class="post-full-title">ES6?! ES2015?! ECMAScript란 도대체 무엇인가?</h1>
+            </header>
+
+            
+            <figure class="post-full-image" style="background-image: url(/assets/posts/2018-02-07/what-is-the-ecmascript/javascript-history.png)">
+            </figure>
+            
+
+            <section class="post-full-content">
+                <div class="kg-card-markdown">
+                    <h1 id="es6은-뭐고-es2015는-뭐야">ES6은 뭐고 ES2015는 뭐야?!</h1>
+<p>가끔씩 볼때마다 헷갈리는 ECMAScript 버전!! 도대체 어떻게 버전관리를 하는거야 ㅠㅠ.
+다음부터 헷갈리지 않게 한번 정리해놔야겠다.</p>
+
+<h1 id="자바스크립트javascript-잘-알고있니">자바스크립트(JavaScript) 잘 알고있니?</h1>
+<p>ECMAScript를 알기전에 우선 친숙한 자바스크립트에 대해 알아보자.</p>
+
+<p>우리(내게)에게 친숙한 자바스크립트는 웹브라우저(클라이언트)에서 멀고먼 서버에 데이터를 보내기 전, 데이터 유효성 검사 등을 처리하는 스크립트 언어였다. 이 자바스크립트는 1995년 넷스케이프(Netscape)의 Brendan Eich에 의해 개발된 언어이고, Mocha -&gt; LiveScript -&gt; JavaScript의 네이밍 변천사를 갖고있는 아이이다. 그리고 사실 우리가 알던 자바스크립트는 <code class="highlighter-rouge">ECMAScript</code> + <code class="highlighter-rouge">BOM(Browser Object Model)</code> + <code class="highlighter-rouge">DOM(Document Object Model)</code>라는 1개의 코어와 2개의 모델로 이루어져있다는 것만 인지하고 있자.</p>
+
+<h1 id="ecmascript란">ECMAScript란?</h1>
+<p>그렇다면! 다시 본론으로 돌아가서 ECMAScript(이하 ES)란 무엇인가?</p>
+
+<p>ES는 자바스크립트를 이루는 코어(Core)스크립트 언어로써, 다양한 환경에서 운용될 수 있게 확장성을 갖고 있기때문에 사용처가 웹환경으로 국한되어있지는 않다. 즉 위에서 말한 우리가 아는 자바스크립트는 웹브라우저에서 돌아갈 수 있도록 <code class="highlighter-rouge">BOM</code> 과 <code class="highlighter-rouge">DOM</code>을 함께 사용하는 확장성이 되겠다. 이러한 확장성들은 ES 버전에 따른 문법과 기능의 확장을 가능하게 한다.</p>
+
+<h1 id="그렇다면-es의-버전관리는-어떻게-되는거야">그렇다면 ES의 버전관리는 어떻게 되는거야?</h1>
+
+<p>ES는 다음과 같은 버전 히스토리를 갖고있다.</p>
+
+<p><code class="highlighter-rouge">ES3</code> -&gt; <code class="highlighter-rouge">ES5</code> -&gt; <code class="highlighter-rouge">ES6</code>(ES2015) -&gt; <code class="highlighter-rouge">ES7</code>(ES2016)</p>
+
+<p>뭐야…! 헷갈리게 넘버링과 년도가 따로있네, 그렇다 ES5 != ES2015 였던 것이다. 그렇다면 각 버전에 대해 좀더 자세히 알아보자.</p>
+
+<h2 id="es3-1999">ES3 (1999)</h2>
+<p>대중적으로 알고있는 그냥 자바스크립트라고 보면 된다.
+<code class="highlighter-rouge">함수 단위의 스코프</code>, <code class="highlighter-rouge">호이스팅</code>, <code class="highlighter-rouge">클로저</code>, <code class="highlighter-rouge">프로토타입</code> 등… 우리가 익히 알고있는 자바스크립트의 기본적인 특징들을 갖고있다. 대부분의 브라우저에서 지원하며, IE8까지 크로스브라우징을 지원하는 환경이라면 <code class="highlighter-rouge">ES3</code>을 쓰고 있다고 보면 된다.</p>
+
+<h2 id="es5-2009">ES5 (2009)</h2>
+<p>ES4는 너무 시대의 흐름을 앞서갔는지 거절되고, 그 후에 점진적인 개선을 목표로 ES5가 나왔다고 한다. 아무리 그래도 10년만에 버전업이라니 너무한것 같지만 ㅁ낳은 편리한 기능이 추가되었다.</p>
+
+<ul>
+  <li>배열
+배열과 관련하여 편리한 메소드들이 다수 생겼다. <code class="highlighter-rouge">forEach</code>, <code class="highlighter-rouge">map</code>, <code class="highlighter-rouge">reduce</code>, <code class="highlighter-rouge">filter</code>, <code class="highlighter-rouge">some</code>, <code class="highlighter-rouge">every</code>와 같은 순환 메소드들이 생겼다. 이 메소드들은 개발 시 불필요한 중복 코드를 줄여주어서 가독성은 높이고 버그율은 낮추는 효과가 있다.</li>
+  <li>객체
+객체는 프로퍼티에 대한 설정을 할 수 있게 되었다. 객체를 생성, 수정, 복사하는 표준 메소드 <code class="highlighter-rouge">Object.Create()</code>, <code class="highlighter-rouge">Object.defineProperty()</code>, <code class="highlighter-rouge">Object.freeze()</code>, <code class="highlighter-rouge">Object.assign()</code> 등 과 <code class="highlighter-rouge">getter</code>, <code class="highlighter-rouge">setter</code> 등이 추가되었으며, <code class="highlighter-rouge">Object.keys()</code> 메소드를 이용하면 for in 메소드도 대체할 수 있게 되었다.</li>
+  <li>strict 모드
+문법을 좀 더 깐깐하게 체크하는 모드이다. 너무 자유분방하였던 기존 ES를 안전하고, <code class="highlighter-rouge">개발자가 인지할 수 있는 범위 안에서</code> 개발할 수 있도록 사용하기 위해 등장했다. <a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Strict_mode">Strict mode - JavaScript | MDN</a>에서 자세한 특징을 확인 할 수 있다.</li>
+  <li>bind() 메소드
+this를 강제로 바인딩 시켜주는 메소드이다. 좀 더 명확하게 this 스코프를 지정 할 수 있게 되었다.</li>
+</ul>
+
+<h2 id="es6-es2015">ES6 (ES2015)</h2>
+<p>ES6보다 ES2015라고 많이 불리우며, ES6 Harmony라고도 불리운다고 한다. ES2015에서 다음과 같은 문제점들이 해결되었다.</p>
+<ul>
+  <li>호이스팅이 사라진 것 같은 효과</li>
+  <li>함수 단위 스코프에서 블록 단위 스코프로 변경</li>
+  <li>this를 동적으로 바인딩하지 않는 화살표 함수</li>
+  <li>모듈화 지원</li>
+  <li>콜백 지옥에서 구원해줄 Promise</li>
+  <li>Default, Rest 파라미터</li>
+  <li>해체 할당, Spread 연산자</li>
+  <li>템플릿 리터럴</li>
+  <li>클래스
+이 외에도 추가된점이 너무 많아서 이부분에서 사람들이 진입장벽을 느끼는 것 같다.
+브라우저(특히 MS 계열)에서 지원해주지 않는 경우가 많아 <code class="highlighter-rouge">바벨(Babel)</code>이라는 트랜스파일러를 써야하는데 이 바벨은 웹브라우저가 아닌 <code class="highlighter-rouge">Node.js</code> 위에서 돌아가고… Node.js를 설치하려면 <code class="highlighter-rouge">NPM</code>을 알아야하고… 또 모듈화를 사용하려면 <code class="highlighter-rouge">웹팩(WebPack)</code>같은 모듈 번들러를 알아야하고…</li>
+</ul>
+
+<p>이런 다양한 장벽 때문에 사람들이 ES2015를 쉽게 접근하지 못하는 경향이 있는 것 같다.
+하지만 우리는 언제나처럼 도전할 것이다!</p>
+
+<h2 id="es7-es2016">ES7 (ES2016)</h2>
+<p>이번에는 다행히? ES2015때처럼 큰 변화는 없었다. 비교하자면 ES2015의 1/10 정도도 안되는 분량? 휴.. 다행이다.</p>
+<ul>
+  <li>제곱 연산자(**) 등장</li>
+  <li>Array.includes 배열에 해당 요소가 존재하는지 확인하는 메소드 등장</li>
+</ul>
+
+<h2 id="es8-es2017">ES8 (ES2017)</h2>
+<p>ES2017에서는 Promise 급의 중대한 변화인 <code class="highlighter-rouge">async</code>, <code class="highlighter-rouge">await</code>등이 발표되었습니다!</p>
+<ul>
+  <li>async</li>
+  <li>await</li>
+  <li>객체
+객체의 좀더 심화된 메소드가 등장했습니다. Object.keys()에 대응되는 메소드인 <code class="highlighter-rouge">Object.values()</code>, Object.keys()와 Object.values()를 합쳐 놓은 <code class="highlighter-rouge">Object.entries()</code>, Object.getOwnPropertyDescriptor의 복수 형태인 <code class="highlighter-rouge">Object.getOwnPropertDescriptors()</code>로써 상속받지 않은 속성들의 설명만 보여줍니다.</li>
+  <li>문자열
+단순 편의기능이 추가되었습니다. 문자열 앞부분에 공백을 넣어 자리수를 맞춰주는 <code class="highlighter-rouge">String.padStart()</code>, 문자열 뒷부분에 공백을 넣어 자리수를 맞춰주는 <code class="highlighter-rouge">String.padEnd()</code></li>
+  <li>매개변수 마지막에 콤마를 붙이는걸 허용</li>
+</ul>
+
+<h1 id="이제-좀-명쾌하네">이제 좀 명쾌하네~!</h1>
+<p>ES3에서 ES5까지 10년, ES6까지 7년의 공백 때문에 많은 변화가 있었는데, 앞으로 매년 표준을 제정하며 그런 혼란을 줄일 예정인 것 같다. 또한 이후에 나올 ES를 통칭해서 ES.Next라고 부른다. 다음 ES9(ES2018)은 어떨까..?
+이번에는 전반적인 ES에 대해 알아보느라 메소드 하나하나 자세히 알아보지는 못한것 같다. 다음 시간에는 각 메소드를 자세히 알아보도록 하자.</p>
+
+                </div>
+            </section>
+
+            <!-- Email subscribe form at the bottom of the page -->
+            
+
+            <footer class="post-full-footer">
+                <!-- Everything inside the #author tags pulls data from the author -->
+                <!-- #author-->
+                
+                    
+                
+                <!-- /author  -->
+            </footer>
+
+            <!-- If you use Disqus comments, just uncomment this block.
+            The only thing you need to change is "test-apkdzgmqhj" - which
+            should be replaced with your own Disqus site-id. -->
+            
+                <section class="post-full-comments">
+                    <div id="disqus_thread"></div>
+                    <script>
+                        var disqus_config = function () {
+                            this.page.url = 'http://localhost:4000/';
+                            this.page.identifier = 'DevDave';
+                        };
+                        (function() {
+                            var d = document, s = d.createElement('script');
+                            s.src = 'https://lucky-dave.disqus.com/embed.js';
+                            s.setAttribute('data-timestamp', +new Date());
+                            (d.head || d.body).appendChild(s);
+                        })();
+                    </script>
+                </section>
+            
+
+        </article>
+
+    </div>
+</main>
+
+<!-- Links to Previous/Next posts -->
+<aside class="read-next outer">
+    <div class="inner">
+        <div class="read-next-feed">
+            
+                
+                
+                
+                
+            
+
+            <!-- If there's a next post, display it using the same markup included from - partials/post-card.hbs -->
+            
+
+            <!-- If there's a previous post, display it using the same markup included from - partials/post-card.hbs -->
+            
+                
+
+    <article class="post-card post-template">
+        
+            <a class="post-card-image-link" href="/web-server/install-jdk-with-setting-at-windows">
+                <div class="post-card-image" style="background-image: url(/assets/posts/2018-01-28/install-jdk-with-setting-at-windows/cover.jpg)"></div>
+            </a>
+        
+        <div class="post-card-content">
+            <a class="post-card-content-link" href="/web-server/install-jdk-with-setting-at-windows">
+                <header class="post-card-header">
+                    
+                        
+                            
+                               <span class="post-card-tags">Jdk</span>
+                            
+                        
+                            
+                               <span class="post-card-tags">Jdk8</span>
+                            
+                        
+                            
+                                <span class="post-card-tags">Windows</span>
+                            
+                        
+                    
+
+                    <h2 class="post-card-title">윈도우에서 JDK 8 설치 및 환경설정</h2>
+                </header>
+                <section class="post-card-excerpt">
+                    
+                        <p></p>
+                    
+                </section>
+            </a>
+            <footer class="post-card-meta">
+                
+                    
+                
+                <span class="reading-time">
+                    
+                    
+                      1 min read
+                    
+                </span>
+            </footer>
+        </div>
+    </article>
+
+            
+
+        </div>
+    </div>
+</aside>
+
+<!-- Floating header which appears on-scroll, included from includes/floating-header.hbs -->
+<div class="floating-header">
+    <div class="floating-header-logo">
+        <a href="http://localhost:4000/">
+            
+                <img src="/assets/images/favicon.png" alt="DevDave icon" />
+            
+            <span>DevDave</span>
+        </a>
+    </div>
+    <span class="floating-header-divider">&mdash;</span>
+    <div class="floating-header-title">ES6?! ES2015?! ECMAScript란 도대체 무엇인가?</div>
+    <div class="floating-header-share">
+        <div class="floating-header-share-label">Share this <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M7.5 15.5V4a1.5 1.5 0 1 1 3 0v4.5h2a1 1 0 0 1 1 1h2a1 1 0 0 1 1 1H18a1.5 1.5 0 0 1 1.5 1.5v3.099c0 .929-.13 1.854-.385 2.748L17.5 23.5h-9c-1.5-2-5.417-8.673-5.417-8.673a1.2 1.2 0 0 1 1.76-1.605L7.5 15.5zm6-6v2m-3-3.5v3.5m6-1v2"/>
+</svg>
+</div>
+        <a class="floating-header-share-tw" href="https://twitter.com/share?text=ES6%3F%21+ES2015%3F%21+ECMAScript%EB%9E%80+%EB%8F%84%EB%8C%80%EC%B2%B4+%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80%3F&amp;url=https://luckydavekim.github.io/web/what-is-the-ecmascript"
+            onclick="window.open(this.href, 'share-twitter', 'width=550,height=235');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M30.063 7.313c-.813 1.125-1.75 2.125-2.875 2.938v.75c0 1.563-.188 3.125-.688 4.625a15.088 15.088 0 0 1-2.063 4.438c-.875 1.438-2 2.688-3.25 3.813a15.015 15.015 0 0 1-4.625 2.563c-1.813.688-3.75 1-5.75 1-3.25 0-6.188-.875-8.875-2.625.438.063.875.125 1.375.125 2.688 0 5.063-.875 7.188-2.5-1.25 0-2.375-.375-3.375-1.125s-1.688-1.688-2.063-2.875c.438.063.813.125 1.125.125.5 0 1-.063 1.5-.25-1.313-.25-2.438-.938-3.313-1.938a5.673 5.673 0 0 1-1.313-3.688v-.063c.813.438 1.688.688 2.625.688a5.228 5.228 0 0 1-1.875-2c-.5-.875-.688-1.813-.688-2.75 0-1.063.25-2.063.75-2.938 1.438 1.75 3.188 3.188 5.25 4.25s4.313 1.688 6.688 1.813a5.579 5.579 0 0 1 1.5-5.438c1.125-1.125 2.5-1.688 4.125-1.688s3.063.625 4.188 1.813a11.48 11.48 0 0 0 3.688-1.375c-.438 1.375-1.313 2.438-2.563 3.188 1.125-.125 2.188-.438 3.313-.875z"/></svg>
+
+        </a>
+        <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=https://luckydavekim.github.io/web/what-is-the-ecmascript"
+            onclick="window.open(this.href, 'share-facebook','width=580,height=296');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+
+        </a>
+    </div>
+    <progress class="progress" value="0">
+        <div class="progress-container">
+            <span class="progress-bar"></span>
+        </div>
+    </progress>
+</div>
+
+
+<!-- /post -->
+
+<!-- The #contentFor helper here will send everything inside it up to the matching #block helper found in default.hbs -->
+
+
+        <!-- Previous/next page links - displayed on every page -->
+        
+
+        <!-- The footer at the very bottom of the screen -->
+        <footer class="site-footer outer">
+            <div class="site-footer-content inner">
+                <section class="copyright"><a href="http://localhost:4000/">DevDave</a> &copy; 2019</section>
+                <section class="poweredby">Proudly published with <a href="https://jekyllrb.com/">Jekyll</a> &
+                    <a href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages</a> using
+                    <a href="https://github.com/jekyller/jasper2" target="_blank" rel="noopener">Jasper2</a></section>
+                <nav class="site-footer-nav">
+                    <a href="/">Latest Posts</a>
+                    
+                    <a href="https://facebook.com/lucky.dave.k" target="_blank" rel="noopener">Facebook</a>
+                </nav>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- The big email subscribe modal content -->
+    
+
+    <!-- jQuery + Fitvids, which makes all video embeds responsive -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+
+    <!-- highlight.js -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+    <script>$(document).ready(function() {
+        $('pre code').each(function(i, block) {
+        hljs.highlightBlock(block);
+        });
+    });</script>
+
+
+    <!-- Paginator increased to "infinit" in _config.yml -->
+    <!-- if paginator.posts  -->
+    <!-- <script>
+        var maxPages = parseInt('');
+    </script>
+    <script src="/assets/js/infinitescroll.js"></script> -->
+    <!-- /endif -->
+
+    
+
+
+    <!-- Add Google Analytics  -->
+    <!-- Google Analytics Tracking code -->
+ <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-144176044-1', 'auto');
+  ga('send', 'pageview');
+
+ </script>
+
+
+    <!-- The #block helper will pull in data from the #contentFor other template files. In this case, there's some JavaScript which we only want to use in post.hbs, but it needs to be included down here, after jQuery has already loaded. -->
+    
+        <script>
+
+// NOTE: Scroll performance is poor in Safari
+// - this appears to be due to the events firing much more slowly in Safari.
+//   Dropping the scroll event and using only a raf loop results in smoother
+//   scrolling but continuous processing even when not scrolling
+$(document).ready(function () {
+    // Start fitVids
+    var $postContent = $(".post-full-content");
+    $postContent.fitVids();
+    // End fitVids
+
+    var progressBar = document.querySelector('progress');
+    var header = document.querySelector('.floating-header');
+    var title = document.querySelector('.post-full-title');
+
+    var lastScrollY = window.scrollY;
+    var lastWindowHeight = window.innerHeight;
+    var lastDocumentHeight = $(document).height();
+    var ticking = false;
+
+    function onScroll() {
+        lastScrollY = window.scrollY;
+        requestTick();
+    }
+
+    function onResize() {
+        lastWindowHeight = window.innerHeight;
+        lastDocumentHeight = $(document).height();
+        requestTick();
+    }
+
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(update);
+        }
+        ticking = true;
+    }
+
+    function update() {
+        var trigger = title.getBoundingClientRect().top + window.scrollY;
+        var triggerOffset = title.offsetHeight + 35;
+        var progressMax = lastDocumentHeight - lastWindowHeight;
+
+        // show/hide floating header
+        if (lastScrollY >= trigger + triggerOffset) {
+            header.classList.add('floating-active');
+        } else {
+            header.classList.remove('floating-active');
+        }
+
+        progressBar.setAttribute('max', progressMax);
+        progressBar.setAttribute('value', lastScrollY);
+
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', onScroll, {passive: true});
+    window.addEventListener('resize', onResize, false);
+
+    update();
+});
+</script>
+
+    
+
+</body>
+</html>

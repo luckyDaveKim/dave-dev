@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<feed xmlns="http://www.w3.org/2005/Atom" >
+  <generator uri="https://jekyllrb.com/" version="3.7.4">Jekyll</generator>
+  <link href="http://localhost:4000/tag/booting_usb/feed.xml" rel="self" type="application/atom+xml" />
+  <link href="http://localhost:4000/" rel="alternate" type="text/html" />
+  <updated>2019-07-22T21:17:13+09:00</updated>
+  <id>http://localhost:4000/tag/booting_usb/feed.xml</id>
+
+  
+  
+  
+
+  
+    <title type="html">DevDave | </title>
+  
+
+  
+    <subtitle>프로그래밍으로 예술을 꿈꾸다</subtitle>
+  
+
+  
+
+  
+    
+      
+    
+  
+
+  
+  
+
+  
+    <entry>
+      <title type="html">윈도우10 부팅 USB 만들기</title>
+      <link href="http://localhost:4000/windows/make-windows-booting-usb" rel="alternate" type="text/html" title="윈도우10 부팅 USB 만들기" />
+      <published>2017-11-19T02:06:00+09:00</published>
+      <updated>2017-11-19T02:06:00+09:00</updated>
+      <id>http://localhost:4000/windows/make-windows-booting-usb</id>
+      <content type="html" xml:base="http://localhost:4000/windows/make-windows-booting-usb">&lt;h1 id=&quot;개요&quot;&gt;개요&lt;/h1&gt;
+&lt;p&gt;이 포스팅에서는 윈도우10 부팅 USB 만드는 방법에 대해 소개하고자 합니다.&lt;/p&gt;
+
+&lt;h1 id=&quot;준비물&quot;&gt;준비물&lt;/h1&gt;
+&lt;ul&gt;
+  &lt;li&gt;USB (최소 8GB)&lt;/li&gt;
+  &lt;li&gt;MediaCreationTool&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;usb-포멧&quot;&gt;USB 포멧&lt;/h1&gt;
+&lt;ol&gt;
+  &lt;li&gt;USB를 삽입한다.&lt;/li&gt;
+  &lt;li&gt;내컴퓨터에서 삽입된 USB항목을 [오른쪽 클릭] -&amp;gt; [포멧]을 클릭한다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;시작&lt;/strong&gt;버튼을 클릭한다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;mediacreationtool-설치&quot;&gt;MediaCreationTool 설치&lt;/h1&gt;
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.microsoft.com/ko-kr/software-download/windows10&quot;&gt;Microsoft 홈페이지&lt;/a&gt;에서 MediaCreationTool을 다운로드 한다.
+&lt;img src=&quot;/assets/posts/2017-11-19/make-windows-booting-usb/media-creation-tool-download.png&quot; alt=&quot;media-creation-tool-download&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;다운로드한 MediaCreationTool을 실행한다.
+&lt;img src=&quot;/assets/posts/2017-11-19/make-windows-booting-usb/create-media-init.png&quot; alt=&quot;create-media-init&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;원하는 작업을 선택한다.
+(다른 PC용 설치 미디어(USB 플래시 드라이브, DVD 또는 ISO 파일) 만들기)
+&lt;img src=&quot;/assets/posts/2017-11-19/make-windows-booting-usb/create-media-choose-work.png&quot; alt=&quot;create-media-choose-work&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;부팅 USB로 만들 Windows 정보를 선택한다.
+&lt;img src=&quot;/assets/posts/2017-11-19/make-windows-booting-usb/create-media-choose-version.png&quot; alt=&quot;create-media-choose-version&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;USB 플래시 드라이브를 선택하여, 부팅 USB 만들 준비를 한다.
+&lt;img src=&quot;/assets/posts/2017-11-19/make-windows-booting-usb/create-media-choose-media-type.png&quot; alt=&quot;create-media-choose-media-type&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;부팅 USB로 만들 드라이브를 선택한다.
+&lt;img src=&quot;/assets/posts/2017-11-19/make-windows-booting-usb/create-media-choose-drive.png&quot; alt=&quot;create-media-choose-drive&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;Windows10 다운로드를 진행한다.
+&lt;img src=&quot;/assets/posts/2017-11-19/make-windows-booting-usb/create-media-install.png&quot; alt=&quot;create-media-install&quot; /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;부팅-usb-생성-완료&quot;&gt;부팅 USB 생성 완료&lt;/h1&gt;
+&lt;p&gt;SB를 열어보면 다음과 같이 부팅 Windows USB가 생성되어있다.
+&lt;img src=&quot;/assets/posts/2017-11-19/make-windows-booting-usb/booting-usb.png&quot; alt=&quot;booting-usb&quot; /&gt;&lt;/p&gt;</content>
+
+      
+      
+      
+      
+      
+
+      <author>
+          <name></name>
+        
+        
+      </author>
+
+      
+        <category term="Windows" />
+      
+
+      
+        <category term="windows" />
+      
+        <category term="windows10" />
+      
+        <category term="booting_usb" />
+      
+
+      
+        <summary type="html">개요 이 포스팅에서는 윈도우10 부팅 USB 만드는 방법에 대해 소개하고자 합니다.</summary>
+      
+
+      
+      
+    </entry>
+  
+</feed>
