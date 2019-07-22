@@ -70,8 +70,8 @@ lsi: false
 username: luckyDaveKim
 repo: luckyDaveKim.github.io
 branch: master
-# relative_source: ../blog/
-destination: ./_site/
+relative_source:
+destination: ../pages/
 production_url: https://luckydavekim.github.io/
 source_url: https://github.com/luckyDaveKim/luckyDaveKim.github.io/
 
