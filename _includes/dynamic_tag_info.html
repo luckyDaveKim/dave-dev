@@ -1,0 +1,10 @@
+<!-- dynamically loading backgrounds for tags,  descriptions and page titles -->
+{% for tag in site.data.tags %}
+    {% assign tagName = '/' | append: tag[1].name | append: '/' %}
+    {% if page.url contains tagName %}
+        {% assign cover = tag[1].cover %}
+        {% assign tag_description = tag[1].description %}
+        {{ tagName }} == {{tag[1].name}}
+        {% break %}
+    {% endif %}
+{% endfor %}
