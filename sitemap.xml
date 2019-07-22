@@ -1,20 +1,242 @@
----
----
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    {% for post in site.posts %}
+    
     <url>
-        <loc>{{ site.url }}{{ post.url | remove: 'index.html' }}</loc>
+        <loc>/web/what-is-the-ecmascript</loc>
     </url>
-    {% endfor %}
+    
+    <url>
+        <loc>/web-server/install-jdk-with-setting-at-windows</loc>
+    </url>
+    
+    <url>
+        <loc>/windows/make-windows-booting-usb</loc>
+    </url>
+    
+    <url>
+        <loc>/jekyll/add-blog-to-search-engine</loc>
+    </url>
+    
+    <url>
+        <loc>/jekyll/install-jekyll</loc>
+    </url>
+    
+    <url>
+        <loc>/git/create-github-pages</loc>
+    </url>
+    
 
-    {% for page in site.pages %}
-    {% if page.layout != nil %}
-    {% if page.layout != 'feed' %}
+    
+    
+    
     <url>
-        <loc>{{ site.url }}{{ page.url | remove: 'index.html' }}</loc>
+        <loc>/404.html</loc>
     </url>
-    {% endif %}
-    {% endif %}
-    {% endfor %}
+    
+    
+    
+    
+    
+    
+    
+    <url>
+        <loc>/</loc>
+    </url>
+    
+    
+    
+    
+    
+    <url>
+        <loc>/about/</loc>
+    </url>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <url>
+        <loc>/tag/github/</loc>
+    </url>
+    
+    
+    
+    
+    
+    
+    
+    <url>
+        <loc>/tag/github_pages/</loc>
+    </url>
+    
+    
+    
+    
+    
+    
+    
+    <url>
+        <loc>/tag/jekyll/</loc>
+    </url>
+    
+    
+    
+    
+    
+    
+    
+    <url>
+        <loc>/tag/search_engine/</loc>
+    </url>
+    
+    
+    
+    
+    
+    
+    
+    <url>
+        <loc>/tag/google/</loc>
+    </url>
+    
+    
+    
+    
+    
+    
+    
+    <url>
+        <loc>/tag/naver/</loc>
+    </url>
+    
+    
+    
+    
+    
+    
+    
+    <url>
+        <loc>/tag/windows/</loc>
+    </url>
+    
+    
+    
+    
+    
+    
+    
+    <url>
+        <loc>/tag/windows10/</loc>
+    </url>
+    
+    
+    
+    
+    
+    
+    
+    <url>
+        <loc>/tag/booting_usb/</loc>
+    </url>
+    
+    
+    
+    
+    
+    
+    
+    <url>
+        <loc>/tag/jdk/</loc>
+    </url>
+    
+    
+    
+    
+    
+    
+    
+    <url>
+        <loc>/tag/jdk8/</loc>
+    </url>
+    
+    
+    
+    
+    
+    
+    
+    <url>
+        <loc>/tag/javascript/</loc>
+    </url>
+    
+    
+    
+    
+    
+    
+    
+    <url>
+        <loc>/tag/js/</loc>
+    </url>
+    
+    
+    
+    
+    
+    
+    
+    <url>
+        <loc>/tag/ecmascript/</loc>
+    </url>
+    
+    
+    
+    
+    
+    
+    
+    <url>
+        <loc>/tag/es5/</loc>
+    </url>
+    
+    
+    
+    
+    
+    
+    
+    <url>
+        <loc>/tag/es6/</loc>
+    </url>
+    
+    
+    
+    
+    
+    
+    
+    <url>
+        <loc>/tag/es2015/</loc>
+    </url>
+    
+    
+    
+    
+    
+    
+    
+    <url>
+        <loc>/tag/es2016/</loc>
+    </url>
+    
+    
+    
+    
+    
+    
+    
 </urlset>

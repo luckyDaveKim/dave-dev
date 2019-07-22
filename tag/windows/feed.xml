@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<feed xmlns="http://www.w3.org/2005/Atom" >
+  <generator uri="https://jekyllrb.com/" version="3.7.4">Jekyll</generator>
+  <link href="/tag/windows/feed.xml" rel="self" type="application/atom+xml" />
+  <link href="/" rel="alternate" type="text/html" />
+  <updated>2019-07-22T15:01:58+00:00</updated>
+  <id>/tag/windows/feed.xml</id>
+
+  
+  
+  
+
+  
+    <title type="html">DevDave | </title>
+  
+
+  
+    <subtitle>프로그래밍으로 예술을 꿈꾸다</subtitle>
+  
+
+  
+
+  
+    
+      
+    
+  
+
+  
+  
+
+  
+    <entry>
+      <title type="html">윈도우에서 JDK 8 설치 및 환경설정</title>
+      <link href="/web-server/install-jdk-with-setting-at-windows" rel="alternate" type="text/html" title="윈도우에서 JDK 8 설치 및 환경설정" />
+      <published>2018-01-28T06:53:25+00:00</published>
+      <updated>2018-01-28T06:53:25+00:00</updated>
+      <id>/web-server/install-jdk-with-setting-at-windows</id>
+      <content type="html" xml:base="/web-server/install-jdk-with-setting-at-windows">&lt;h1 id=&quot;개요&quot;&gt;개요&lt;/h1&gt;
+&lt;p&gt;이 포스팅에서는 JDK 8 설치 및 환경설정하는 방법에 대해 소개하고자 합니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/posts/2018-01-28/install-jdk-with-setting-at-windows/jdk-java-development-kit.jpg&quot; alt=&quot;jdk-logo&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;jdk-다운로드&quot;&gt;JDK 다운로드&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html&quot;&gt;JDK 다운로드&lt;/a&gt;를 클릭하여 JDK를 다운로드 하거나, 혹은 다음 절차를 따라 다운로드 한다.&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.oracle.com&quot;&gt;Oracle 홈페이지&lt;/a&gt;에 접속한다.&lt;/li&gt;
+  &lt;li&gt;상단 메뉴를 클릭 후 &lt;strong&gt;Java &amp;gt; Java SE&lt;/strong&gt;를 클릭한다.
+&lt;img src=&quot;/assets/posts/2018-01-28/install-jdk-with-setting-at-windows/java-se-download-menu.png&quot; alt=&quot;Java SE 다운로드 메뉴&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;하단의 &lt;strong&gt;Get Started&lt;/strong&gt;에서 &lt;strong&gt;Download Java SE for Developers&lt;/strong&gt;를 클릭한다.
+&lt;img src=&quot;/assets/posts/2018-01-28/install-jdk-with-setting-at-windows/java-se-get-started.png&quot; alt=&quot;Java SE 다운로드 메뉴&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;JDK 8버전을 받을 것이므로 해당 버튼을 클릭한다.
+&lt;img src=&quot;/assets/posts/2018-01-28/install-jdk-with-setting-at-windows/jdk-download.png&quot; alt=&quot;Java SE 다운로드 메뉴&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Accept License Agreement&lt;/strong&gt;를 클릭 후, 자신의 윈도우 비트에 맞는 JDK를 클릭하여 다운로드한다.
+&lt;img src=&quot;/assets/posts/2018-01-28/install-jdk-with-setting-at-windows/jdk-windows-download.png&quot; alt=&quot;Java SE 다운로드 메뉴&quot; /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;jdk-설치&quot;&gt;JDK 설치&lt;/h1&gt;
+&lt;p&gt;위에서 다운로드받은 JDK 파일을 다음 절차에 따라 설치한다.&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;Next&lt;/strong&gt; 클릭한다.
+&lt;img src=&quot;/assets/posts/2018-01-28/install-jdk-with-setting-at-windows/jdk-install-agreement.png&quot; alt=&quot;JDK 설치 동의&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;원하는 JDK 설치 경로를 지정한다.
+&lt;img src=&quot;/assets/posts/2018-01-28/install-jdk-with-setting-at-windows/jdk-install-path-setting.png&quot; alt=&quot;JDK 설치 경로 설정&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;JDK 설치완료!
+&lt;img src=&quot;/assets/posts/2018-01-28/install-jdk-with-setting-at-windows/jdk-install.png&quot; alt=&quot;JDK 설치&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;원하는 JRE 설치 경로를 지정한다.
+&lt;img src=&quot;/assets/posts/2018-01-28/install-jdk-with-setting-at-windows/jre-install-path-setting.png&quot; alt=&quot;JRD 설치 경로 설정&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;JRD 설치완료!
+&lt;img src=&quot;/assets/posts/2018-01-28/install-jdk-with-setting-at-windows/jre-install.png&quot; alt=&quot;JDK 설치&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;Java SE 설치완료!
+&lt;img src=&quot;/assets/posts/2018-01-28/install-jdk-with-setting-at-windows/java-se-installed.png&quot; alt=&quot;Java SE 설치&quot; /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;jdk-환경변수-설정&quot;&gt;JDK 환경변수 설정&lt;/h1&gt;
+&lt;p&gt;다음 절차에 따라 JDK 환경변수를 설정한다.&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;키보드에서 &lt;strong&gt;Windows + Pause Break&lt;/strong&gt;를 눌러서 시스템창을 띄운후, 좌측의 &lt;strong&gt;고급 시스템 설정&lt;/strong&gt;을 클릭한다.
+&lt;img src=&quot;/assets/posts/2018-01-28/install-jdk-with-setting-at-windows/system.png&quot; alt=&quot;윈도우 시스템 화면&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;하단의 &lt;strong&gt;환경 변수&lt;/strong&gt;를 클릭한다.
+&lt;img src=&quot;/assets/posts/2018-01-28/install-jdk-with-setting-at-windows/system-properties.png&quot; alt=&quot;시스템 속성&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;시스템 변수&lt;/strong&gt;에서 &lt;strong&gt;새로 만들기&lt;/strong&gt;를 클릭한다.
+&lt;img src=&quot;/assets/posts/2018-01-28/install-jdk-with-setting-at-windows/local-path-setting.png&quot; alt=&quot;새로운 변수 추가&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;변수 이름&lt;/strong&gt;에
+&lt;code class=&quot;highlighter-rouge&quot;&gt;JAVA_HOME&lt;/code&gt;을 입력 하고, &lt;strong&gt;변수 값&lt;/strong&gt;에 JDK 설치 경로 &lt;code class=&quot;highlighter-rouge&quot;&gt;C:\Program Files\Java\jdk1.8.0_161&lt;/code&gt;를 입력후 &lt;strong&gt;확인&lt;/strong&gt;버튼을 클릭한다.
+&lt;img src=&quot;/assets/posts/2018-01-28/install-jdk-with-setting-at-windows/new-java-home-local-path.png&quot; alt=&quot;JavaHome 변수 추가&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;시스템 변수&lt;/strong&gt;에 &lt;strong&gt;Path&lt;/strong&gt;를 찾아 선택 후 &lt;strong&gt;편집&lt;/strong&gt;을 클릭한다.
+&lt;img src=&quot;/assets/posts/2018-01-28/install-jdk-with-setting-at-windows/local-path-edit.png&quot; alt=&quot;Path 변수 편집&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;시스템 변수&lt;/strong&gt;에 &lt;strong&gt;Path&lt;/strong&gt;를 찾아 선택 후 &lt;strong&gt;편집&lt;/strong&gt;을 클릭하여 &lt;code class=&quot;highlighter-rouge&quot;&gt;%JAVA_HOME%\bin&lt;/code&gt;을 입려하고 확인을 클릭한다.
+&lt;img src=&quot;/assets/posts/2018-01-28/install-jdk-with-setting-at-windows/local-path-add.png&quot; alt=&quot;Path 변수 추가&quot; /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;jdk-설치-확인&quot;&gt;JDK 설치 확인&lt;/h1&gt;
+&lt;p&gt;JDK 설치 및 환경변수 설정이 완료되었는지 다음 절차를 따라 확인한다.&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;키보드에서 &lt;strong&gt;Windows + R&lt;/strong&gt;을 눌러 &lt;strong&gt;실행창&lt;/strong&gt;을 띄운후, &lt;code class=&quot;highlighter-rouge&quot;&gt;cmd&lt;/code&gt;를 입력하고 &lt;strong&gt;확인&lt;/strong&gt;버튼을 클릭한다.
+&lt;img src=&quot;/assets/posts/2018-01-28/install-jdk-with-setting-at-windows/running.png&quot; alt=&quot;실행창&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;cmd&lt;/strong&gt;창이 뜨면 &lt;code class=&quot;highlighter-rouge&quot;&gt;java -version&lt;/code&gt; 및 &lt;code class=&quot;highlighter-rouge&quot;&gt;javac -version&lt;/code&gt;을 입력하여 설치한 JDK 버전이 뜨는지 확인한다.
+&lt;img src=&quot;/assets/posts/2018-01-28/install-jdk-with-setting-at-windows/cmd.png&quot; alt=&quot;커맨드창&quot; /&gt;&lt;/li&gt;
+&lt;/ol&gt;</content>
+
+      
+      
+      
+      
+      
+
+      <author>
+          <name></name>
+        
+        
+      </author>
+
+      
+        <category term="Web-Server" />
+      
+
+      
+        <category term="jdk" />
+      
+        <category term="jdk8" />
+      
+        <category term="windows" />
+      
+
+      
+        <summary type="html">개요 이 포스팅에서는 JDK 8 설치 및 환경설정하는 방법에 대해 소개하고자 합니다.</summary>
+      
+
+      
+      
+    </entry>
+  
+    <entry>
+      <title type="html">윈도우10 부팅 USB 만들기</title>
+      <link href="/windows/make-windows-booting-usb" rel="alternate" type="text/html" title="윈도우10 부팅 USB 만들기" />
+      <published>2017-11-18T17:06:00+00:00</published>
+      <updated>2017-11-18T17:06:00+00:00</updated>
+      <id>/windows/make-windows-booting-usb</id>
+      <content type="html" xml:base="/windows/make-windows-booting-usb">&lt;h1 id=&quot;개요&quot;&gt;개요&lt;/h1&gt;
+&lt;p&gt;이 포스팅에서는 윈도우10 부팅 USB 만드는 방법에 대해 소개하고자 합니다.&lt;/p&gt;
+
+&lt;h1 id=&quot;준비물&quot;&gt;준비물&lt;/h1&gt;
+&lt;ul&gt;
+  &lt;li&gt;USB (최소 8GB)&lt;/li&gt;
+  &lt;li&gt;MediaCreationTool&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;usb-포멧&quot;&gt;USB 포멧&lt;/h1&gt;
+&lt;ol&gt;
+  &lt;li&gt;USB를 삽입한다.&lt;/li&gt;
+  &lt;li&gt;내컴퓨터에서 삽입된 USB항목을 [오른쪽 클릭] -&amp;gt; [포멧]을 클릭한다.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;시작&lt;/strong&gt;버튼을 클릭한다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;mediacreationtool-설치&quot;&gt;MediaCreationTool 설치&lt;/h1&gt;
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.microsoft.com/ko-kr/software-download/windows10&quot;&gt;Microsoft 홈페이지&lt;/a&gt;에서 MediaCreationTool을 다운로드 한다.
+&lt;img src=&quot;/assets/posts/2017-11-19/make-windows-booting-usb/media-creation-tool-download.png&quot; alt=&quot;media-creation-tool-download&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;다운로드한 MediaCreationTool을 실행한다.
+&lt;img src=&quot;/assets/posts/2017-11-19/make-windows-booting-usb/create-media-init.png&quot; alt=&quot;create-media-init&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;원하는 작업을 선택한다.
+(다른 PC용 설치 미디어(USB 플래시 드라이브, DVD 또는 ISO 파일) 만들기)
+&lt;img src=&quot;/assets/posts/2017-11-19/make-windows-booting-usb/create-media-choose-work.png&quot; alt=&quot;create-media-choose-work&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;부팅 USB로 만들 Windows 정보를 선택한다.
+&lt;img src=&quot;/assets/posts/2017-11-19/make-windows-booting-usb/create-media-choose-version.png&quot; alt=&quot;create-media-choose-version&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;USB 플래시 드라이브를 선택하여, 부팅 USB 만들 준비를 한다.
+&lt;img src=&quot;/assets/posts/2017-11-19/make-windows-booting-usb/create-media-choose-media-type.png&quot; alt=&quot;create-media-choose-media-type&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;부팅 USB로 만들 드라이브를 선택한다.
+&lt;img src=&quot;/assets/posts/2017-11-19/make-windows-booting-usb/create-media-choose-drive.png&quot; alt=&quot;create-media-choose-drive&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;Windows10 다운로드를 진행한다.
+&lt;img src=&quot;/assets/posts/2017-11-19/make-windows-booting-usb/create-media-install.png&quot; alt=&quot;create-media-install&quot; /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;부팅-usb-생성-완료&quot;&gt;부팅 USB 생성 완료&lt;/h1&gt;
+&lt;p&gt;SB를 열어보면 다음과 같이 부팅 Windows USB가 생성되어있다.
+&lt;img src=&quot;/assets/posts/2017-11-19/make-windows-booting-usb/booting-usb.png&quot; alt=&quot;booting-usb&quot; /&gt;&lt;/p&gt;</content>
+
+      
+      
+      
+      
+      
+
+      <author>
+          <name></name>
+        
+        
+      </author>
+
+      
+        <category term="Windows" />
+      
+
+      
+        <category term="windows" />
+      
+        <category term="windows10" />
+      
+        <category term="booting_usb" />
+      
+
+      
+        <summary type="html">개요 이 포스팅에서는 윈도우10 부팅 USB 만드는 방법에 대해 소개하고자 합니다.</summary>
+      
+
+      
+      
+    </entry>
+  
+</feed>
