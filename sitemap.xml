@@ -2,15 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     
     <url>
-        <loc>/web/what-is-the-ecmascript</loc>
+        <loc>/javascript/what-is-the-ecmascript</loc>
     </url>
     
     <url>
-        <loc>/web-server/install-jdk-with-setting-at-windows</loc>
+        <loc>/environment/install-jdk-with-setting-at-windows</loc>
     </url>
     
     <url>
-        <loc>/windows/make-windows-booting-usb</loc>
+        <loc>/environment/make-windows-booting-usb</loc>
     </url>
     
     <url>
@@ -34,6 +34,14 @@
     </url>
     
     
+    
+    
+    
+    
+    
+    <url>
+        <loc>/categories/</loc>
+    </url>
     
     
     
@@ -231,6 +239,46 @@
     
     <url>
         <loc>/tag/es2016/</loc>
+    </url>
+    
+    
+    
+    
+    
+    
+    
+    <url>
+        <loc>/category/environment/</loc>
+    </url>
+    
+    
+    
+    
+    
+    
+    
+    <url>
+        <loc>/category/git/</loc>
+    </url>
+    
+    
+    
+    
+    
+    
+    
+    <url>
+        <loc>/category/javascript/</loc>
+    </url>
+    
+    
+    
+    
+    
+    
+    
+    <url>
+        <loc>/category/jekyll/</loc>
     </url>
     
     

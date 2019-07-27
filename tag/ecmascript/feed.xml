@@ -4,7 +4,7 @@
   <generator uri="https://jekyllrb.com/" version="3.7.4">Jekyll</generator>
   <link href="/tag/ecmascript/feed.xml" rel="self" type="application/atom+xml" />
   <link href="/" rel="alternate" type="text/html" />
-  <updated>2019-07-22T15:19:11+00:00</updated>
+  <updated>2019-07-27T08:26:19+00:00</updated>
   <id>/tag/ecmascript/feed.xml</id>
 
   
@@ -33,11 +33,11 @@
   
     <entry>
       <title type="html">ES6?! ES2015?! ECMAScript란 도대체 무엇인가?</title>
-      <link href="/web/what-is-the-ecmascript" rel="alternate" type="text/html" title="ES6?! ES2015?! ECMAScript란 도대체 무엇인가?" />
+      <link href="/javascript/what-is-the-ecmascript" rel="alternate" type="text/html" title="ES6?! ES2015?! ECMAScript란 도대체 무엇인가?" />
       <published>2018-02-07T11:30:04+00:00</published>
       <updated>2018-02-07T11:30:04+00:00</updated>
-      <id>/web/what-is-the-ecmascript</id>
-      <content type="html" xml:base="/web/what-is-the-ecmascript">&lt;h1 id=&quot;es6은-뭐고-es2015는-뭐야&quot;&gt;ES6은 뭐고 ES2015는 뭐야?!&lt;/h1&gt;
+      <id>/javascript/what-is-the-ecmascript</id>
+      <content type="html" xml:base="/javascript/what-is-the-ecmascript">&lt;h1 id=&quot;es6은-뭐고-es2015는-뭐야&quot;&gt;ES6은 뭐고 ES2015는 뭐야?!&lt;/h1&gt;
 &lt;p&gt;가끔씩 볼때마다 헷갈리는 ECMAScript 버전!! 도대체 어떻게 버전관리를 하는거야 ㅠㅠ.
 다음부터 헷갈리지 않게 한번 정리해놔야겠다.&lt;/p&gt;
 
@@ -132,7 +132,7 @@ this를 강제로 바인딩 시켜주는 메소드이다. 좀 더 명확하게 t
       </author>
 
       
-        <category term="Web" />
+        <category term="javascript" />
       
 
       
