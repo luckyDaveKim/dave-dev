@@ -8,6 +8,22 @@
     
       
       <item>
+        <title>Vue.js 사용하기</title>
+        
+          <description>&lt;h1 id=&quot;vue-cli란&quot;&gt;Vue CLI란?&lt;/h1&gt;
+&lt;p&gt;Vue CLI는 커멘드라인 인터페이스 기반의 Vue 프로젝트 생성 도구이며, 사용자가 어플리케이션 개발에 집중할 수 있도록 프로젝트 구성을 도와준다.&lt;/p&gt;
+
+</description>
+        
+        <pubDate>Mon, 09 Sep 2019 10:20:55 +0000</pubDate>
+        <link>
+        /vuejs/create-vuejs</link>
+        <guid isPermaLink="true">/vuejs/create-vuejs</guid>
+      </item>
+      
+    
+      
+      <item>
         <title>ES6?! ES2015?! ECMAScript란 도대체 무엇인가?</title>
         
           <description>&lt;h1 id=&quot;es6은-뭐고-es2015는-뭐야&quot;&gt;ES6은 뭐고 ES2015는 뭐야?!&lt;/h1&gt;
