@@ -4,7 +4,7 @@
   <generator uri="https://jekyllrb.com/" version="3.7.4">Jekyll</generator>
   <link href="/tag/windows10/feed.xml" rel="self" type="application/atom+xml" />
   <link href="/" rel="alternate" type="text/html" />
-  <updated>2019-07-27T16:15:52+00:00</updated>
+  <updated>2019-09-09T12:37:35+00:00</updated>
   <id>/tag/windows10/feed.xml</id>
 
   
@@ -56,25 +56,25 @@
 &lt;h1 id=&quot;mediacreationtool-설치&quot;&gt;MediaCreationTool 설치&lt;/h1&gt;
 &lt;ol&gt;
   &lt;li&gt;&lt;a href=&quot;https://www.microsoft.com/ko-kr/software-download/windows10&quot;&gt;Microsoft 홈페이지&lt;/a&gt;에서 MediaCreationTool을 다운로드 한다.
-&lt;img src=&quot;/assets/posts/2017-11-19/make-windows-booting-usb/media-creation-tool-download.png&quot; alt=&quot;media-creation-tool-download&quot; /&gt;&lt;/li&gt;
+&lt;img src=&quot;/assets/images/post/environment/2017/2017-11-19/make-windows-booting-usb/media-creation-tool-download.png&quot; alt=&quot;media-creation-tool-download&quot; /&gt;&lt;/li&gt;
   &lt;li&gt;다운로드한 MediaCreationTool을 실행한다.
-&lt;img src=&quot;/assets/posts/2017-11-19/make-windows-booting-usb/create-media-init.png&quot; alt=&quot;create-media-init&quot; /&gt;&lt;/li&gt;
+&lt;img src=&quot;/assets/images/post/environment/2017/2017-11-19/make-windows-booting-usb/create-media-init.png&quot; alt=&quot;create-media-init&quot; /&gt;&lt;/li&gt;
   &lt;li&gt;원하는 작업을 선택한다.
 (다른 PC용 설치 미디어(USB 플래시 드라이브, DVD 또는 ISO 파일) 만들기)
-&lt;img src=&quot;/assets/posts/2017-11-19/make-windows-booting-usb/create-media-choose-work.png&quot; alt=&quot;create-media-choose-work&quot; /&gt;&lt;/li&gt;
+&lt;img src=&quot;/assets/images/post/environment/2017/2017-11-19/make-windows-booting-usb/create-media-choose-work.png&quot; alt=&quot;create-media-choose-work&quot; /&gt;&lt;/li&gt;
   &lt;li&gt;부팅 USB로 만들 Windows 정보를 선택한다.
-&lt;img src=&quot;/assets/posts/2017-11-19/make-windows-booting-usb/create-media-choose-version.png&quot; alt=&quot;create-media-choose-version&quot; /&gt;&lt;/li&gt;
+&lt;img src=&quot;/assets/images/post/environment/2017/2017-11-19/make-windows-booting-usb/create-media-choose-version.png&quot; alt=&quot;create-media-choose-version&quot; /&gt;&lt;/li&gt;
   &lt;li&gt;USB 플래시 드라이브를 선택하여, 부팅 USB 만들 준비를 한다.
-&lt;img src=&quot;/assets/posts/2017-11-19/make-windows-booting-usb/create-media-choose-media-type.png&quot; alt=&quot;create-media-choose-media-type&quot; /&gt;&lt;/li&gt;
+&lt;img src=&quot;/assets/images/post/environment/2017/2017-11-19/make-windows-booting-usb/create-media-choose-media-type.png&quot; alt=&quot;create-media-choose-media-type&quot; /&gt;&lt;/li&gt;
   &lt;li&gt;부팅 USB로 만들 드라이브를 선택한다.
-&lt;img src=&quot;/assets/posts/2017-11-19/make-windows-booting-usb/create-media-choose-drive.png&quot; alt=&quot;create-media-choose-drive&quot; /&gt;&lt;/li&gt;
+&lt;img src=&quot;/assets/images/post/environment/2017/2017-11-19/make-windows-booting-usb/create-media-choose-drive.png&quot; alt=&quot;create-media-choose-drive&quot; /&gt;&lt;/li&gt;
   &lt;li&gt;Windows10 다운로드를 진행한다.
-&lt;img src=&quot;/assets/posts/2017-11-19/make-windows-booting-usb/create-media-install.png&quot; alt=&quot;create-media-install&quot; /&gt;&lt;/li&gt;
+&lt;img src=&quot;/assets/images/post/environment/2017/2017-11-19/make-windows-booting-usb/create-media-install.png&quot; alt=&quot;create-media-install&quot; /&gt;&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;h1 id=&quot;부팅-usb-생성-완료&quot;&gt;부팅 USB 생성 완료&lt;/h1&gt;
 &lt;p&gt;SB를 열어보면 다음과 같이 부팅 Windows USB가 생성되어있다.
-&lt;img src=&quot;/assets/posts/2017-11-19/make-windows-booting-usb/booting-usb.png&quot; alt=&quot;booting-usb&quot; /&gt;&lt;/p&gt;</content>
+&lt;img src=&quot;/assets/images/post/environment/2017/2017-11-19/make-windows-booting-usb/booting-usb.png&quot; alt=&quot;booting-usb&quot; /&gt;&lt;/p&gt;</content>
 
       
       
