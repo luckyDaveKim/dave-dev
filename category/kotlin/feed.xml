@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<feed xmlns="http://www.w3.org/2005/Atom" >
+  <generator uri="https://jekyllrb.com/" version="3.7.4">Jekyll</generator>
+  <link href="/category/kotlin/feed.xml" rel="self" type="application/atom+xml" />
+  <link href="/" rel="alternate" type="text/html" />
+  <updated>2019-09-25T18:05:32+00:00</updated>
+  <id>/category/kotlin/feed.xml</id>
+
+  
+  
+  
+
+  
+    <title type="html">DevDave |  | Kotlin</title>
+  
+
+  
+    <subtitle>프로그래밍으로 예술을 꿈꾸다</subtitle>
+  
+
+  
+
+  
+    
+      
+    
+  
+
+  
+  
+
+  
+    <entry>
+      <title type="html">Kotlin과 Spring Boot로 REST API 서비스 구축</title>
+      <link href="/kotlin/create-kotlin-spring-boot" rel="alternate" type="text/html" title="Kotlin과 Spring Boot로 REST API 서비스 구축" />
+      <published>2019-09-25T10:05:34+00:00</published>
+      <updated>2019-09-25T10:05:34+00:00</updated>
+      <id>/kotlin/create-kotlin-spring-boot</id>
+      <content type="html" xml:base="/kotlin/create-kotlin-spring-boot">&lt;h1 id=&quot;개요&quot;&gt;개요&lt;/h1&gt;
+&lt;p&gt;이 포스팅에서는 &lt;a href=&quot;https://kotlinlang.org/&quot;&gt;Kotlin&lt;/a&gt; 언어와 &lt;a href=&quot;https://spring.io/projects/spring-boot&quot;&gt;Spring Boot&lt;/a&gt; 프레임워크로 REST Api 서비스를 구축하는 과정을 담고자 합니다.&lt;/p&gt;
+
+&lt;p&gt;만약 Kotlin에 대해 자세히 알고 싶으시면 &lt;a href=&quot;https://kotlinlang.org/docs/reference/&quot;&gt;참고 문서&lt;/a&gt;를 읽어보시고, &lt;a href=&quot;https://play.kotlinlang.org/koans/overview&quot;&gt;웹 튜토리얼&lt;/a&gt;을 통해 쉽게 배우실 수 있습니다.&lt;/p&gt;
+
+&lt;h1 id=&quot;목표&quot;&gt;목표&lt;/h1&gt;
+&lt;p&gt;새로운 기술을 재미있게 공부하기 위해서는 &lt;strong&gt;토이 프로젝트&lt;/strong&gt;가 제격이라고 봅니다.&lt;br /&gt;
+이번 토이 프로젝트는 &lt;strong&gt;&lt;a href=&quot;https://github.com/luckyDaveKim/vue.kt&quot;&gt;Vue.kt&lt;/a&gt;&lt;/strong&gt;로써 Front-end는 &lt;strong&gt;Vue.js&lt;/strong&gt;를 사용하고, Back-end는 &lt;strong&gt;Kotlin&lt;/strong&gt;을 사용하여 처음 시작하는 사람도 쉽게 접근할 수 있는 &lt;strong&gt;Web Service Starter&lt;/strong&gt; Todo List를 만들어 보려고 합니다.&lt;/p&gt;
+
+&lt;p&gt;그 중 이번 포스팅에서는 Kotlin과 Spring Boot로 Back-end REST Api 서버를 구축하는 기본 과정을 그려보려 합니다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;이번 포스팅에서 진행하는 모든 과정은 &lt;strong&gt;&lt;a href=&quot;https://github.com/luckyDaveKim/vue.kt&quot;&gt;Vue.kt&lt;/a&gt;&lt;/strong&gt; github에 담아두었습니다.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h1 id=&quot;구성&quot;&gt;구성&lt;/h1&gt;
+&lt;p&gt;다음과 같은 기술들을 사용합니다.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Kotlin&lt;/li&gt;
+  &lt;li&gt;Spring boot&lt;/li&gt;
+  &lt;li&gt;Gradle&lt;/li&gt;
+  &lt;li&gt;JUnit5&lt;/li&gt;
+  &lt;li&gt;H2&lt;/li&gt;
+  &lt;li&gt;JPA&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;프로젝트-생성&quot;&gt;프로젝트 생성&lt;/h1&gt;
+&lt;p&gt;Spring 사이트에서 Spring Frameworks를 구성을 도와주는 웹 페이지 &lt;a href=&quot;https://start.spring.io/&quot;&gt;Spring Initializr&lt;/a&gt;를 통해서 기본적인 Spring Boot 프로젝트를 생성하도록 하겠습니다.&lt;br /&gt;
+웹 페이지에 접속 후, Build Tool로 &lt;strong&gt;Gradle&lt;/strong&gt;을 선택하고, 개발 언어로 &lt;strong&gt;Kotlin&lt;/strong&gt;을 선택, 프로젝트 group명과 artifact를 입력하면 손쉽게 Spring Boot 프로젝트를 생성 할 수 있습니다.&lt;br /&gt;
+Dependencies 같은 경우 추후에 필요 시 추가할 수 있기 때문에 지금은 아무것도 입력하지 않았습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/post/kotlin/2019/2019-09-25/create-kotlin-spring-boot/spring-initializr.png&quot; alt=&quot;spring-initializr&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;이렇게 생성된 프로젝트 압축 파일을 원하는 경로에 풀고 각자의 개발 IDE로 실행하면 기본적인 준비는 끝났습니다. 저는 &lt;strong&gt;&lt;a href=&quot;https://www.jetbrains.com/idea/&quot;&gt;IntelliJ&lt;/a&gt;&lt;/strong&gt;를 통해 개발하도록 하겠습니다.&lt;br /&gt;
+IntelliJ로 프로젝트를 열어보면, Spring Boot는 다음과 같은 구조를 갖고 있습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/post/kotlin/2019/2019-09-25/create-kotlin-spring-boot/spring-boot-architecture.png&quot; alt=&quot;spring-boot-architecture&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;간단하게 살펴보시면, 최상위에 src로 source root가 위치하고 있으며, 그 내부에 &lt;em&gt;main&lt;/em&gt;과 &lt;em&gt;test&lt;/em&gt;가 있습니다.&lt;br /&gt;
+&lt;em&gt;main&lt;/em&gt;에는 핵심 source가 들어갈 예정이며, Spring Initializr에서 입력한 프로젝트 group명과 artifact로 패키지가 생성되어 있습니다.&lt;br /&gt;
+기본 패키지 아래를 보시면, &lt;em&gt;artifact명 + Application.kt&lt;/em&gt;로 메인 클래스가 위치하고 있습니다.&lt;br /&gt;
+또한, main 아래에 &lt;em&gt;resources&lt;/em&gt;는 정적인 파일들이 관리될 예정입니다.&lt;/p&gt;
+
+&lt;p&gt;여기까지 간단하게 Spring Boot의 기본 구조를 살펴보았습니다.&lt;br /&gt;
+이제 본격적으로 Spring Boot를 활용해 보도록 하겠습니다.&lt;/p&gt;
+
+&lt;h1 id=&quot;hello-todo-출력하기&quot;&gt;Hello Todo 출력하기&lt;/h1&gt;
+&lt;p&gt;프로젝트도 생성 했겠다. 기본적인 “Hello Todo”를 프린트하지 않고 넘어갈 수 없겠죠?&lt;/p&gt;
+
+&lt;h2 id=&quot;api-생성&quot;&gt;Api 생성&lt;/h2&gt;
+&lt;p&gt;기본적인 Todo API를 만들어 보겠습니다.&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;com.backend.vuekt.todo.api&lt;/code&gt; 패키지에 &lt;code class=&quot;highlighter-rouge&quot;&gt;TodoApi.kt&lt;/code&gt; 클래스를 생성하였습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-$xslt&quot;&gt;package com.backend.vuekt.todo.api
+
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
+
+@RestController &amp;lt;=== (1)
+@RequestMapping(&quot;/api/v1&quot;) &amp;lt;=== (2)
+class TodoApi {
+
+    @GetMapping(&quot;/&quot;) &amp;lt;=== (3)
+    fun readTodo(): String { &amp;lt;=== (4)
+        return &quot;Hello Todo&quot;
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;(1) : class 상단에 &lt;code class=&quot;highlighter-rouge&quot;&gt;@RestController&lt;/code&gt; Annotation을 선언하였습니다.&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;@RestController&lt;/code&gt;는 &lt;code class=&quot;highlighter-rouge&quot;&gt;@Controller&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;@ResponseBody&lt;/code&gt;를 한번에 선언해주는 Annotation으로 해당 class의 모든 하위 함수에 &lt;code class=&quot;highlighter-rouge&quot;&gt;@ResponseBody&lt;/code&gt;를 명시적으로 붙여주지 않아도 자동으로 설정해준다.&lt;/li&gt;
+  &lt;li&gt;(2) : calss 상단에 &lt;code class=&quot;highlighter-rouge&quot;&gt;@RequestMapping&lt;/code&gt;를 선언하여 해당 class의 모든 하위 함수 Url Mapping값 앞에 &lt;em&gt;/api/v1&lt;/em&gt;을 적용하였습니다.&lt;/li&gt;
+  &lt;li&gt;(3) : 함수 상단에 &lt;code class=&quot;highlighter-rouge&quot;&gt;@GetMapping&lt;/code&gt;을 선언하여 &lt;em&gt;get&lt;/em&gt;으로 접근하는 request를 매핑하도록 하였습니다.&lt;/li&gt;
+  &lt;li&gt;(4) : &lt;em&gt;readTodo&lt;/em&gt;라는 함수를 선언하고 requset요청 시 &lt;em&gt;Hello Todo&lt;/em&gt;를 반환하도록 하였습니다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;프로젝트를 빌드 및 실행 후, &lt;em&gt;localhost:8080/api/v1/&lt;/em&gt;로 get request를 날리면 &lt;em&gt;Hello Todo&lt;/em&gt;가 출력되는 것을 확인할 수 있습니다.&lt;/p&gt;
+
+&lt;h2 id=&quot;unit-test&quot;&gt;Unit Test&lt;/h2&gt;
+&lt;p&gt;생성한 Api를 테스트하는 간단한 unit test를 작성해 보겠습니다.&lt;/p&gt;
+
+&lt;h3 id=&quot;junit5-dependencies-설정&quot;&gt;JUnit5 Dependencies 설정&lt;/h3&gt;
+&lt;p&gt;테스트를 작성하기에 앞서 의존성 모듈을 설정하도록 하겠습니다.&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;build.gradle.kts&lt;/code&gt; gradle 설정 파일에 다음과 같이 dependencies를 변경해 줍니다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;As-Is
+    &lt;pre&gt;&lt;code class=&quot;language-$xslt&quot;&gt;dependencies {
+  implementation(&quot;org.springframework.boot:spring-boot-starter-web&quot;)
+  implementation(&quot;com.fasterxml.jackson.module:jackson-module-kotlin&quot;)
+  implementation(&quot;org.jetbrains.kotlin:kotlin-reflect&quot;)
+  implementation(&quot;org.jetbrains.kotlin:kotlin-stdlib-jdk8&quot;)
+  testImplementation(&quot;org.springframework.boot:spring-boot-starter-test&quot;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/li&gt;
+  &lt;li&gt;To-Be
+    &lt;pre&gt;&lt;code class=&quot;language-$xslt&quot;&gt;dependencies {
+  implementation(&quot;org.springframework.boot:spring-boot-starter-web&quot;)
+  implementation(&quot;com.fasterxml.jackson.module:jackson-module-kotlin&quot;)
+  implementation(&quot;org.jetbrains.kotlin:kotlin-reflect&quot;)
+  implementation(&quot;org.jetbrains.kotlin:kotlin-stdlib-jdk8&quot;)
+  testCompile(&quot;org.springframework.boot:spring-boot-starter-test&quot;) {
+      exclude(module = &quot;junit&quot;) &amp;lt;=== (1)
+  }
+  testImplementation(&quot;org.junit.jupiter:junit-jupiter-api&quot;) &amp;lt;=== (2)
+  testRuntimeOnly(&quot;org.junit.jupiter:junit-jupiter-engine&quot;) &amp;lt;=== (3)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;(1) : &lt;code class=&quot;highlighter-rouge&quot;&gt;org.springframework.boot:spring-boot-starter-test&lt;/code&gt; 모듈은 &lt;code class=&quot;highlighter-rouge&quot;&gt;JUnit4&lt;/code&gt;에 대한 의존성을 가지고 있습니다.&lt;br /&gt;
+그래서 &lt;code class=&quot;highlighter-rouge&quot;&gt;JUnit5&lt;/code&gt;를 사용하기 위해서는 &lt;code class=&quot;highlighter-rouge&quot;&gt;org.springframework.boot:spring-boot-starter-test&lt;/code&gt;에 추가되어 있는 &lt;code class=&quot;highlighter-rouge&quot;&gt;JUnit4&lt;/code&gt;를 제외해야 합니다.&lt;/li&gt;
+      &lt;li&gt;(2) : &lt;code class=&quot;highlighter-rouge&quot;&gt;org.junit.jupiter:junit-jupiter-api&lt;/code&gt; 모듈은 테스트 코드 작성에 사용되는 모듈입니다.&lt;/li&gt;
+      &lt;li&gt;(3) : &lt;code class=&quot;highlighter-rouge&quot;&gt;org.junit.jupiter:junit-jupiter-engine&lt;/code&gt; 모듈은 테스트 실행에 사용되는 모듈입니다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;그리고 추가로 &lt;code class=&quot;highlighter-rouge&quot;&gt;useJUnitPlatform&lt;/code&gt;을 선언합니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-$xslt&quot;&gt;tasks.withType&amp;lt;Test&amp;gt; {
+	useJUnitPlatform() &amp;lt;=== (1)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;(1) : &lt;code class=&quot;highlighter-rouge&quot;&gt;useJUnitPlatform()&lt;/code&gt;은 테스트 실행시 JUnit 플랫폼이라는 것을 명시합니다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;unit-test-작성&quot;&gt;Unit Test 작성&lt;/h3&gt;
+&lt;p&gt;의존성 모듈을 모두 설정하였으니 이제 본격적으로 unit test를 작성하도록 하겠습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;com.backend.vuekt.todo.api.todoapi&lt;/code&gt; 패키지에 &lt;code class=&quot;highlighter-rouge&quot;&gt;ReadTodoTests.kt&lt;/code&gt; 클래스를 생성하였습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-$xslt&quot;&gt;package com.backend.vuekt.todo.api.todoapi
+
+import com.backend.vuekt.todo.api.TodoApi
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+
+@WebMvcTest(TodoApi::class) &amp;lt;=== (1)
+class ReadTodoTests(@Autowired val mockMvc: MockMvc) { &amp;lt;=== (2)
+
+    @Test
+    fun `Assert get right contents`() {
+        /* when */
+        val actions = mockMvc.perform(get(&quot;/api/v1/&quot;)) &amp;lt;=== (3)
+
+        /* then */
+        actions.andExpect(status().isOk)
+                .andExpect(content().string(&quot;Hello Todo&quot;)) &amp;lt;=== (4)
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;(1) : &lt;code class=&quot;highlighter-rouge&quot;&gt;@WebMvcTest&lt;/code&gt;은 MVC를 위한 단위 테스트 annotation으로 &lt;code class=&quot;highlighter-rouge&quot;&gt;@SpringBootTest&lt;/code&gt;보다 가볍습니다.
+그렇기 때문에 테스트할 특정 클래스를 명시 해야합니다.&lt;/li&gt;
+  &lt;li&gt;(2) : 주입된 &lt;code class=&quot;highlighter-rouge&quot;&gt;MockMvc&lt;/code&gt;는 테스트시, 모든 의존성을 로드하는 것이 아닌 &lt;code class=&quot;highlighter-rouge&quot;&gt;@WebMvcTest&lt;/code&gt;에 설정한 클래스와 관련된 Bean만 로드합니다.&lt;/li&gt;
+  &lt;li&gt;(3) : &lt;em&gt;Given/When/Then&lt;/em&gt; 테스트 패턴(DBB:Behavior-Driven-Development)중 &lt;code class=&quot;highlighter-rouge&quot;&gt;When&lt;/code&gt;으로 테스트의 행위를 기술합니다.&lt;/li&gt;
+  &lt;li&gt;(4) : &lt;code class=&quot;highlighter-rouge&quot;&gt;Then&lt;/code&gt;은 테스트의 결과를 검증합니다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;줄이며&quot;&gt;줄이며…&lt;/h1&gt;
+&lt;p&gt;지금까지 Kotlin-Spring Boot 프로젝트 생성부터 간단한 REST Api 작성 및 테스트를 진행하였습니다.&lt;br /&gt;
+다음에는 DB 연결을 진행하도록 하겠습니다.&lt;/p&gt;</content>
+
+      
+      
+      
+      
+      
+
+      <author>
+          <name></name>
+        
+        
+      </author>
+
+      
+        <category term="kotlin" />
+      
+
+      
+        <category term="kotlin" />
+      
+        <category term="spring_boot" />
+      
+        <category term="rest_api" />
+      
+        <category term="junit5" />
+      
+
+      
+        <summary type="html">개요 이 포스팅에서는 Kotlin 언어와 Spring Boot 프레임워크로 REST Api 서비스를 구축하는 과정을 담고자 합니다.</summary>
+      
+
+      
+      
+    </entry>
+  
+</feed>
