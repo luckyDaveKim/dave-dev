@@ -272,38 +272,35 @@ class TodoApi {
 <p>테스트를 작성하기에 앞서 의존성 모듈을 설정하도록 하겠습니다.<br />
 <code class="highlighter-rouge">build.gradle.kts</code> gradle 설정 파일에 다음과 같이 dependencies를 변경해 줍니다.</p>
 
-<ul>
-  <li>As-Is
-    <pre><code class="language-$xslt">dependencies {
-  implementation("org.springframework.boot:spring-boot-starter-web")
-  implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-  implementation("org.jetbrains.kotlin:kotlin-reflect")
-  implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-  testImplementation("org.springframework.boot:spring-boot-starter-test")
-}
-</code></pre>
-  </li>
-  <li>To-Be
-    <pre><code class="language-$xslt">dependencies {
-  implementation("org.springframework.boot:spring-boot-starter-web")
-  implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-  implementation("org.jetbrains.kotlin:kotlin-reflect")
-  implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-  testCompile("org.springframework.boot:spring-boot-starter-test") {
-      exclude(module = "junit") &lt;=== (1)
-  }
-  testImplementation("org.junit.jupiter:junit-jupiter-api") &lt;=== (2)
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine") &lt;=== (3)
+<h4 id="as-is">As-Is</h4>
+<pre><code class="language-$xslt">dependencies {
+	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+	implementation("org.jetbrains.kotlin:kotlin-reflect")
+	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 </code></pre>
 
-    <ul>
-      <li>(1) : <code class="highlighter-rouge">org.springframework.boot:spring-boot-starter-test</code> 모듈은 <code class="highlighter-rouge">JUnit4</code>에 대한 의존성을 가지고 있습니다.<br />
+<h4 id="to-be">To-Be</h4>
+<pre><code class="language-$xslt">dependencies {
+	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+	implementation("org.jetbrains.kotlin:kotlin-reflect")
+	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+	testCompile("org.springframework.boot:spring-boot-starter-test") {
+		exclude(module = "junit") &lt;=== (1)
+	}
+	testImplementation("org.junit.jupiter:junit-jupiter-api") &lt;=== (2)
+	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine") &lt;=== (3)
+}
+</code></pre>
+
+<ul>
+  <li>(1) : <code class="highlighter-rouge">org.springframework.boot:spring-boot-starter-test</code> 모듈은 <code class="highlighter-rouge">JUnit4</code>에 대한 의존성을 가지고 있습니다.<br />
 그래서 <code class="highlighter-rouge">JUnit5</code>를 사용하기 위해서는 <code class="highlighter-rouge">org.springframework.boot:spring-boot-starter-test</code>에 추가되어 있는 <code class="highlighter-rouge">JUnit4</code>를 제외해야 합니다.</li>
-      <li>(2) : <code class="highlighter-rouge">org.junit.jupiter:junit-jupiter-api</code> 모듈은 테스트 코드 작성에 사용되는 모듈입니다.</li>
-      <li>(3) : <code class="highlighter-rouge">org.junit.jupiter:junit-jupiter-engine</code> 모듈은 테스트 실행에 사용되는 모듈입니다.</li>
-    </ul>
-  </li>
+  <li>(2) : <code class="highlighter-rouge">org.junit.jupiter:junit-jupiter-api</code> 모듈은 테스트 코드 작성에 사용되는 모듈입니다.</li>
+  <li>(3) : <code class="highlighter-rouge">org.junit.jupiter:junit-jupiter-engine</code> 모듈은 테스트 실행에 사용되는 모듈입니다.</li>
 </ul>
 
 <p>그리고 추가로 <code class="highlighter-rouge">useJUnitPlatform</code>을 선언합니다.</p>
