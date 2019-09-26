@@ -4,7 +4,7 @@
   <generator uri="https://jekyllrb.com/" version="3.7.4">Jekyll</generator>
   <link href="/tag/google/feed.xml" rel="self" type="application/atom+xml" />
   <link href="/" rel="alternate" type="text/html" />
-  <updated>2019-09-26T16:32:08+00:00</updated>
+  <updated>2019-09-26T17:32:46+00:00</updated>
   <id>/tag/google/feed.xml</id>
 
   
@@ -38,7 +38,7 @@
       <updated>2017-11-02T04:48:18+00:00</updated>
       <id>/jekyll/add-blog-to-search-engine</id>
       <content type="html" xml:base="/jekyll/add-blog-to-search-engine">&lt;h1 id=&quot;개요&quot;&gt;개요&lt;/h1&gt;
-&lt;p&gt;이 포스팅에서는 검색엔진에서 페이지 검색이 가능하도록 등로갛는 방법에 대해 소개하고자 합니다.&lt;/p&gt;
+&lt;p&gt;이 포스팅에서는 검색엔진에서 페이지 검색이 가능하도록 등록하는 방법에 대해 소개하고자 합니다.&lt;/p&gt;
 
 &lt;h1 id=&quot;왜-이런-일을-해야-하나요&quot;&gt;왜 이런 일을 해야 하나요?&lt;/h1&gt;
 &lt;p&gt;기본 옵션의 GitHub Pages는 일반 포털사이트의 블로그와 달리 검색엔진에서 검색이 되지 않는다. 즉, 검색엔진에 등록하지 않으면 혼자만 사용하는 홈페이지가 되는 것이다. 다양한 사람과 소통하기 위해 만든 홈페이지라면 검색엔진에 등록하는 것이 필수이다.&lt;/p&gt;
@@ -112,7 +112,7 @@
       
 
       
-        <summary type="html">개요 이 포스팅에서는 검색엔진에서 페이지 검색이 가능하도록 등로갛는 방법에 대해 소개하고자 합니다.</summary>
+        <summary type="html">개요 이 포스팅에서는 검색엔진에서 페이지 검색이 가능하도록 등록하는 방법에 대해 소개하고자 합니다.</summary>
       
 
       
