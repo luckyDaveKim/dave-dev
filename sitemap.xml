@@ -1,141 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url>
-<loc>/git/create-github-pages</loc>
-<lastmod>2017-11-01T14:32:43+00:00</lastmod>
-</url>
-<url>
-<loc>/jekyll/install-jekyll</loc>
-<lastmod>2017-11-02T04:45:30+00:00</lastmod>
-</url>
-<url>
-<loc>/jekyll/add-blog-to-search-engine</loc>
-<lastmod>2017-11-02T04:48:18+00:00</lastmod>
-</url>
-<url>
-<loc>/environment/make-windows-booting-usb</loc>
-<lastmod>2017-11-18T17:06:00+00:00</lastmod>
-</url>
-<url>
-<loc>/environment/install-jdk-with-setting-at-windows</loc>
-<lastmod>2018-01-28T06:53:25+00:00</lastmod>
-</url>
-<url>
-<loc>/javascript/what-is-the-ecmascript</loc>
-<lastmod>2018-02-07T11:30:04+00:00</lastmod>
-</url>
-<url>
-<loc>/vuejs/create-vuejs</loc>
-<lastmod>2019-09-09T10:20:55+00:00</lastmod>
-</url>
-<url>
-<loc>/kotlin/create-kotlin-spring-boot</loc>
-<lastmod>2019-09-25T10:05:34+00:00</lastmod>
-</url>
-<url>
-<loc>/categories/</loc>
-</url>
-<url>
-<loc>/</loc>
-</url>
-<url>
-<loc>/about/</loc>
-</url>
-<url>
-<loc>/tag/github/</loc>
-</url>
-<url>
-<loc>/tag/github_pages/</loc>
-</url>
-<url>
-<loc>/tag/jekyll/</loc>
-</url>
-<url>
-<loc>/tag/search_engine/</loc>
-</url>
-<url>
-<loc>/tag/google/</loc>
-</url>
-<url>
-<loc>/tag/naver/</loc>
-</url>
-<url>
-<loc>/tag/windows/</loc>
-</url>
-<url>
-<loc>/tag/windows10/</loc>
-</url>
-<url>
-<loc>/tag/booting_usb/</loc>
-</url>
-<url>
-<loc>/tag/jdk/</loc>
-</url>
-<url>
-<loc>/tag/jdk8/</loc>
-</url>
-<url>
-<loc>/tag/javascript/</loc>
-</url>
-<url>
-<loc>/tag/js/</loc>
-</url>
-<url>
-<loc>/tag/ecmascript/</loc>
-</url>
-<url>
-<loc>/tag/es5/</loc>
-</url>
-<url>
-<loc>/tag/es6/</loc>
-</url>
-<url>
-<loc>/tag/es2015/</loc>
-</url>
-<url>
-<loc>/tag/es2016/</loc>
-</url>
-<url>
-<loc>/tag/vuejs/</loc>
-</url>
-<url>
-<loc>/tag/vue_cli_3/</loc>
-</url>
-<url>
-<loc>/tag/frontend/</loc>
-</url>
-<url>
-<loc>/tag/kotlin/</loc>
-</url>
-<url>
-<loc>/tag/spring_boot/</loc>
-</url>
-<url>
-<loc>/tag/rest_api/</loc>
-</url>
-<url>
-<loc>/tag/junit5/</loc>
-</url>
-<url>
-<loc>/category/kotlin/</loc>
-</url>
-<url>
-<loc>/category/javascript/</loc>
-</url>
-<url>
-<loc>/category/vuejs/</loc>
-</url>
-<url>
-<loc>/category/jekyll/</loc>
-</url>
-<url>
-<loc>/category/git/</loc>
-</url>
-<url>
-<loc>/category/environment/</loc>
-</url>
-<url>
-<loc>/naver035bac36eba3d395476e505b358ee258.html</loc>
-<lastmod>2019-09-26T18:16:51+00:00</lastmod>
-</url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+<url> <loc>https://luckydavekim.github.io/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/development/create-github-pages</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/front-end/install-jekyll</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/front-end/add-blog-to-search-engine</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/development/make-windows-booting-usb</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/development/install-jdk-with-setting-at-windows</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/front-end/what-is-the-ecmascript</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/front-end/create-vuejs</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/back-end/create-kotlin-spring-boot</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/github/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/github-pages/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/jekyll/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/search-engine/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/google/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/naver/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/windows/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/windows-10/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/booting-usb/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/jdk/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/jdk-8/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/javascript/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/js/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/ecmascript/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/es-5/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/es-6/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/es-2015/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/es-2016/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/vuejs/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/vue-cli-3/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/frontend/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/kotlin/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/spring-boot/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/rest-api/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/junit-5/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/about/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 </urlset>

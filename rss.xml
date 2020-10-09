@@ -1,0 +1,1729 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[DevDave]]></title><description><![CDATA[The blog for dave]]></description><link>https://luckydavekim.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Fri, 09 Oct 2020 08:51:06 GMT</lastBuildDate><item><title><![CDATA[Kotlin과 Spring Boot로 REST API 서비스 구축]]></title><description><![CDATA[개요 이 포스팅에서는 Kotlin 언어와 Spring Boot 프레임워크로 REST Api 서비스를 구축하는 과정을 담고자 합니다. 만약 Kotlin…]]></description><link>https://luckydavekim.github.io/back-end/create-kotlin-spring-boot</link><guid isPermaLink="false">https://luckydavekim.github.io/back-end/create-kotlin-spring-boot</guid><pubDate>Wed, 25 Sep 2019 01:05:34 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+&lt;p&gt;이 포스팅에서는 &lt;a href=&quot;https://kotlinlang.org/&quot;&gt;Kotlin&lt;/a&gt; 언어와 &lt;a href=&quot;https://spring.io/projects/spring-boot&quot;&gt;Spring Boot&lt;/a&gt; 프레임워크로 REST Api 서비스를 구축하는 과정을 담고자 합니다.&lt;/p&gt;
+&lt;p&gt;만약 Kotlin에 대해 자세히 알고 싶으시면 &lt;a href=&quot;https://kotlinlang.org/docs/reference/&quot;&gt;참고 문서&lt;/a&gt;를 읽어보시고, &lt;a href=&quot;https://play.kotlinlang.org/koans/overview&quot;&gt;웹 튜토리얼&lt;/a&gt;을 통해 쉽게 배우실 수 있습니다.&lt;/p&gt;
+&lt;h1&gt;목표&lt;/h1&gt;
+&lt;p&gt;새로운 기술을 재미있게 공부하기 위해서는 &lt;strong&gt;토이 프로젝트&lt;/strong&gt;가 제격이라고 봅니다.&lt;br&gt;
+이번 토이 프로젝트는 &lt;strong&gt;&lt;a href=&quot;https://github.com/luckyDaveKim/vue.kt&quot;&gt;Vue.kt&lt;/a&gt;&lt;/strong&gt;로써 Front-end는 &lt;strong&gt;Vue.js&lt;/strong&gt;를 사용하고, Back-end는 &lt;strong&gt;Kotlin&lt;/strong&gt;을 사용하여 처음 시작하는 사람도 쉽게 접근할 수 있는 &lt;strong&gt;Web Service Starter&lt;/strong&gt; Todo List를 만들어 보려고 합니다.&lt;/p&gt;
+&lt;p&gt;그 중 이번 포스팅에서는 Kotlin과 Spring Boot로 Back-end REST Api 서버를 구축하는 기본 과정을 그려보려 합니다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;이번 포스팅에서 진행하는 모든 과정은 &lt;strong&gt;&lt;a href=&quot;https://github.com/luckyDaveKim/vue.kt&quot;&gt;Vue.kt&lt;/a&gt;&lt;/strong&gt; github에 담아두었습니다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1&gt;구성&lt;/h1&gt;
+&lt;p&gt;다음과 같은 기술들을 사용합니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Kotlin&lt;/li&gt;
+&lt;li&gt;Spring boot&lt;/li&gt;
+&lt;li&gt;Gradle&lt;/li&gt;
+&lt;li&gt;JUnit5&lt;/li&gt;
+&lt;li&gt;H2&lt;/li&gt;
+&lt;li&gt;JPA&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;프로젝트 생성&lt;/h1&gt;
+&lt;p&gt;Spring 사이트에서 Spring Frameworks를 구성을 도와주는 웹 페이지 &lt;a href=&quot;https://start.spring.io/&quot;&gt;Spring Initializr&lt;/a&gt;를 통해서 기본적인 Spring Boot 프로젝트를 생성하도록 하겠습니다.&lt;br&gt;
+웹 페이지에 접속 후, Build Tool로 &lt;strong&gt;Gradle&lt;/strong&gt;을 선택하고, 개발 언어로 &lt;strong&gt;Kotlin&lt;/strong&gt;을 선택, 프로젝트 group명과 artifact를 입력하면 손쉽게 Spring Boot 프로젝트를 생성 할 수 있습니다.&lt;br&gt;
+Dependencies 같은 경우 추후에 필요 시 추가할 수 있기 때문에 지금은 아무것도 입력하지 않았습니다.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 984px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/a170e5bb3146b95f28d3f874fc7facbc/61b91/spring-initializr.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 65.8%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAANCAIAAAAmMtkJAAAACXBIWXMAAAsSAAALEgHS3X78AAABHUlEQVQoz52S226DMBBE8/8/1h+o1IdKrVSS1hCvDfi2vkA6sV+aFNSoiwSy4XhnZjk8fz699S/Hj1PXv39RZ60rpVweq0MnX2kaiJQkOZwHKSXgZVlyzvVecsrrum7Daj6nWJg5peSs01qDiTEGH7Ajx0HIE+ewDdMkmPGpDyFopSVRqWX9NFpKOHjZdQG4v8K1SJJSqnVmrJmdcxBVcqkryMO2+w37eZ6FEK1zihF3GMarhEcpOA4uOAXPdgOGW6Q1jiOiMsZ47/dy2oAh6qq2JgcS4teduoFjhZttYJgNYofa/8CIB8rR/yG4pd0CQ9p1TgYW/v7D7jqj0DWwg30MGRLuAOzU5CNC2YSzc95YXKbN+Ud4F0zR14Kvb6gF9vzRgJ5jAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;spring-initializr&quot;
+        title=&quot;spring-initializr&quot;
+        src=&quot;/static/a170e5bb3146b95f28d3f874fc7facbc/61b91/spring-initializr.png&quot;
+        srcset=&quot;/static/a170e5bb3146b95f28d3f874fc7facbc/0eb09/spring-initializr.png 500w,
+/static/a170e5bb3146b95f28d3f874fc7facbc/61b91/spring-initializr.png 984w&quot;
+        sizes=&quot;(max-width: 984px) 100vw, 984px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;이렇게 생성된 프로젝트 압축 파일을 원하는 경로에 풀고 각자의 개발 IDE로 실행하면 기본적인 준비는 끝났습니다. 저는 &lt;strong&gt;&lt;a href=&quot;https://www.jetbrains.com/idea/&quot;&gt;IntelliJ&lt;/a&gt;&lt;/strong&gt;를 통해 개발하도록 하겠습니다.&lt;br&gt;
+IntelliJ로 프로젝트를 열어보면, Spring Boot는 다음과 같은 구조를 갖고 있습니다.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 566px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/0dbca4372dafc16c949d875c8942d29a/7ef45/spring-boot-architecture.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 102.2%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAIAAAAC64paAAAACXBIWXMAAAsSAAALEgHS3X78AAABv0lEQVQ4y5XR6W7bMAwAYD/W6lOyLuq2bDlHkSAbtvxY9yTrgK2PPDrp9qNAnRT4QNCSacpUUVEh8mfmdx3kUqQFHxbXfIGPaSHSA4si7Knd8LAjZi64VGGznabkox1SAmOEUlcSQGJUlwiKS0kY6zm/WJKioyR4OGTwvgTolUT0PVIg8i+Som7b6OAwCWfLZVWuefOtomo70HreZOsM6SmhH1CUTUd6Nsw7qU3VNGXTVncrasJrZns96uMPlw+d8A13F5j4dlXRqkmefonjM3z5mZ/+TN9fMnp6CeffuC5PzyuKuqOopRyPLY2zcQTjlHECdENY3fUrXouR0nrc7KW2D3W7aLr/W+95La7wVUJDziEtnfEc6HZx1ZKmoxwsN46Dws5CaYxcwu3ilvUiKDvH8bwZ96P0ijnJncQovBIBVhSEM7u1OkPYu835uP36+PhtMZ9mv/O4taJoKGV4zBRMdDxGNUSH+YC8dLoHsWL5Zxy6T3NMk3ORMvFpmXaHyobg7orLwEjvhhzHGeeEeUPo1X3TJkynSeOEQNwseHvPbc8hZeO1dg6sx+b3FuMli5jsMBkfXUgCTNfzO4v/AnwkR+nw2HYkAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;spring-boot-architecture&quot;
+        title=&quot;spring-boot-architecture&quot;
+        src=&quot;/static/0dbca4372dafc16c949d875c8942d29a/7ef45/spring-boot-architecture.png&quot;
+        srcset=&quot;/static/0dbca4372dafc16c949d875c8942d29a/0eb09/spring-boot-architecture.png 500w,
+/static/0dbca4372dafc16c949d875c8942d29a/7ef45/spring-boot-architecture.png 566w&quot;
+        sizes=&quot;(max-width: 566px) 100vw, 566px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;간단하게 살펴보시면, 최상위에 src로 source root가 위치하고 있으며, 그 내부에 &lt;em&gt;main&lt;/em&gt;과 &lt;em&gt;test&lt;/em&gt;가 있습니다.&lt;br&gt;
+&lt;em&gt;main&lt;/em&gt;에는 핵심 source가 들어갈 예정이며, Spring Initializr에서 입력한 프로젝트 group명과 artifact로 패키지가 생성되어 있습니다.&lt;br&gt;
+기본 패키지 아래를 보시면, &lt;em&gt;artifact명 + Application.kt&lt;/em&gt;로 메인 클래스가 위치하고 있습니다.&lt;br&gt;
+또한, main 아래에 &lt;em&gt;resources&lt;/em&gt;는 정적인 파일들이 관리될 예정입니다.&lt;/p&gt;
+&lt;p&gt;여기까지 간단하게 Spring Boot의 기본 구조를 살펴보았습니다.&lt;br&gt;
+이제 본격적으로 Spring Boot를 활용해 보도록 하겠습니다.&lt;/p&gt;
+&lt;h1&gt;Hello Todo 출력하기&lt;/h1&gt;
+&lt;p&gt;프로젝트도 생성 했겠다. 기본적인 “Hello Todo”를 프린트하지 않고 넘어갈 수 없겠죠?&lt;/p&gt;
+&lt;h2&gt;Api 생성&lt;/h2&gt;
+&lt;p&gt;기본적인 Todo API를 만들어 보겠습니다.&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;com.backend.vuekt.todo.api&lt;/code&gt; 패키지에 &lt;code class=&quot;language-text&quot;&gt;TodoApi.kt&lt;/code&gt; 클래스를 생성하였습니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;$xslt&quot;&gt;&lt;pre class=&quot;language-$xslt&quot;&gt;&lt;code class=&quot;language-$xslt&quot;&gt;package com.backend.vuekt.todo.api
+
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
+
+@RestController &amp;lt;=== (1)
+@RequestMapping(&amp;quot;/api/v1&amp;quot;) &amp;lt;=== (2)
+class TodoApi {
+
+    @GetMapping(&amp;quot;/&amp;quot;) &amp;lt;=== (3)
+    fun readTodo(): String { &amp;lt;=== (4)
+        return &amp;quot;Hello Todo&amp;quot;
+    }
+
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;(1) : class 상단에 &lt;code class=&quot;language-text&quot;&gt;@RestController&lt;/code&gt; Annotation을 선언하였습니다.&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;@RestController&lt;/code&gt;는 &lt;code class=&quot;language-text&quot;&gt;@Controller&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;@ResponseBody&lt;/code&gt;를 한번에 선언해주는 Annotation으로 해당 class의 모든 하위 함수에 &lt;code class=&quot;language-text&quot;&gt;@ResponseBody&lt;/code&gt;를 명시적으로 붙여주지 않아도 자동으로 설정해준다.&lt;/li&gt;
+&lt;li&gt;(2) : calss 상단에 &lt;code class=&quot;language-text&quot;&gt;@RequestMapping&lt;/code&gt;를 선언하여 해당 class의 모든 하위 함수 Url Mapping값 앞에 &lt;em&gt;/api/v1&lt;/em&gt;을 적용하였습니다.&lt;/li&gt;
+&lt;li&gt;(3) : 함수 상단에 &lt;code class=&quot;language-text&quot;&gt;@GetMapping&lt;/code&gt;을 선언하여 &lt;em&gt;get&lt;/em&gt;으로 접근하는 request를 매핑하도록 하였습니다.&lt;/li&gt;
+&lt;li&gt;(4) : &lt;em&gt;readTodo&lt;/em&gt;라는 함수를 선언하고 requset요청 시 &lt;em&gt;Hello Todo&lt;/em&gt;를 반환하도록 하였습니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;프로젝트를 빌드 및 실행 후, &lt;em&gt;localhost:8080/api/v1/&lt;/em&gt;로 get request를 날리면 &lt;em&gt;Hello Todo&lt;/em&gt;가 출력되는 것을 확인할 수 있습니다.&lt;/p&gt;
+&lt;h2&gt;Unit Test&lt;/h2&gt;
+&lt;p&gt;생성한 Api를 테스트하는 간단한 unit test를 작성해 보겠습니다.&lt;/p&gt;
+&lt;h3&gt;JUnit5 Dependencies 설정&lt;/h3&gt;
+&lt;p&gt;테스트를 작성하기에 앞서 의존성 모듈을 설정하도록 하겠습니다.&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;build.gradle.kts&lt;/code&gt; gradle 설정 파일에 다음과 같이 dependencies를 변경해 줍니다.&lt;/p&gt;
+&lt;h4&gt;As-Is&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;$xslt&quot;&gt;&lt;pre class=&quot;language-$xslt&quot;&gt;&lt;code class=&quot;language-$xslt&quot;&gt;dependencies {
+	implementation(&amp;quot;org.springframework.boot:spring-boot-starter-web&amp;quot;)
+	implementation(&amp;quot;com.fasterxml.jackson.module:jackson-module-kotlin&amp;quot;)
+	implementation(&amp;quot;org.jetbrains.kotlin:kotlin-reflect&amp;quot;)
+	implementation(&amp;quot;org.jetbrains.kotlin:kotlin-stdlib-jdk8&amp;quot;)
+	testImplementation(&amp;quot;org.springframework.boot:spring-boot-starter-test&amp;quot;)
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;To-Be&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;$xslt&quot;&gt;&lt;pre class=&quot;language-$xslt&quot;&gt;&lt;code class=&quot;language-$xslt&quot;&gt;dependencies {
+	implementation(&amp;quot;org.springframework.boot:spring-boot-starter-web&amp;quot;)
+	implementation(&amp;quot;com.fasterxml.jackson.module:jackson-module-kotlin&amp;quot;)
+	implementation(&amp;quot;org.jetbrains.kotlin:kotlin-reflect&amp;quot;)
+	implementation(&amp;quot;org.jetbrains.kotlin:kotlin-stdlib-jdk8&amp;quot;)
+	testCompile(&amp;quot;org.springframework.boot:spring-boot-starter-test&amp;quot;) {
+		exclude(module = &amp;quot;junit&amp;quot;) &amp;lt;=== (1)
+	}
+	testImplementation(&amp;quot;org.junit.jupiter:junit-jupiter-api&amp;quot;) &amp;lt;=== (2)
+	testRuntimeOnly(&amp;quot;org.junit.jupiter:junit-jupiter-engine&amp;quot;) &amp;lt;=== (3)
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;(1) : &lt;code class=&quot;language-text&quot;&gt;org.springframework.boot:spring-boot-starter-test&lt;/code&gt; 모듈은 &lt;code class=&quot;language-text&quot;&gt;JUnit4&lt;/code&gt;에 대한 의존성을 가지고 있습니다.&lt;br&gt;
+그래서 &lt;code class=&quot;language-text&quot;&gt;JUnit5&lt;/code&gt;를 사용하기 위해서는 &lt;code class=&quot;language-text&quot;&gt;org.springframework.boot:spring-boot-starter-test&lt;/code&gt;에 추가되어 있는 &lt;code class=&quot;language-text&quot;&gt;JUnit4&lt;/code&gt;를 제외해야 합니다.&lt;/li&gt;
+&lt;li&gt;(2) : &lt;code class=&quot;language-text&quot;&gt;org.junit.jupiter:junit-jupiter-api&lt;/code&gt; 모듈은 테스트 코드 작성에 사용되는 모듈입니다.&lt;/li&gt;
+&lt;li&gt;(3) : &lt;code class=&quot;language-text&quot;&gt;org.junit.jupiter:junit-jupiter-engine&lt;/code&gt; 모듈은 테스트 실행에 사용되는 모듈입니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;그리고 추가로 &lt;code class=&quot;language-text&quot;&gt;useJUnitPlatform&lt;/code&gt;을 선언합니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;$xslt&quot;&gt;&lt;pre class=&quot;language-$xslt&quot;&gt;&lt;code class=&quot;language-$xslt&quot;&gt;tasks.withType&amp;lt;Test&amp;gt; {
+	useJUnitPlatform() &amp;lt;=== (1)
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;(1) : &lt;code class=&quot;language-text&quot;&gt;useJUnitPlatform()&lt;/code&gt;은 테스트 실행시 JUnit 플랫폼이라는 것을 명시합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Unit Test 작성&lt;/h3&gt;
+&lt;p&gt;의존성 모듈을 모두 설정하였으니 이제 본격적으로 unit test를 작성하도록 하겠습니다.&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;com.backend.vuekt.todo.api.todoapi&lt;/code&gt; 패키지에 &lt;code class=&quot;language-text&quot;&gt;ReadTodoTests.kt&lt;/code&gt; 클래스를 생성하였습니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;$xslt&quot;&gt;&lt;pre class=&quot;language-$xslt&quot;&gt;&lt;code class=&quot;language-$xslt&quot;&gt;package com.backend.vuekt.todo.api.todoapi
+
+import com.backend.vuekt.todo.api.TodoApi
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+
+@WebMvcTest(TodoApi::class) &amp;lt;=== (1)
+class ReadTodoTests(@Autowired val mockMvc: MockMvc) { &amp;lt;=== (2)
+
+    @Test
+    fun `Assert get right contents`() {
+        /* when */
+        val actions = mockMvc.perform(get(&amp;quot;/api/v1/&amp;quot;)) &amp;lt;=== (3)
+
+        /* then */
+        actions.andExpect(status().isOk)
+                .andExpect(content().string(&amp;quot;Hello Todo&amp;quot;)) &amp;lt;=== (4)
+    }
+
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;(1) : &lt;code class=&quot;language-text&quot;&gt;@WebMvcTest&lt;/code&gt;은 MVC를 위한 단위 테스트 annotation으로 &lt;code class=&quot;language-text&quot;&gt;@SpringBootTest&lt;/code&gt;보다 가볍습니다.
+그렇기 때문에 테스트할 특정 클래스를 명시 해야합니다.&lt;/li&gt;
+&lt;li&gt;(2) : 주입된 &lt;code class=&quot;language-text&quot;&gt;MockMvc&lt;/code&gt;는 테스트시, 모든 의존성을 로드하는 것이 아닌 &lt;code class=&quot;language-text&quot;&gt;@WebMvcTest&lt;/code&gt;에 설정한 클래스와 관련된 Bean만 로드합니다.&lt;/li&gt;
+&lt;li&gt;(3) : &lt;em&gt;Given/When/Then&lt;/em&gt; 테스트 패턴(DBB:Behavior-Driven-Development)중 &lt;code class=&quot;language-text&quot;&gt;When&lt;/code&gt;으로 테스트의 행위를 기술합니다.&lt;/li&gt;
+&lt;li&gt;(4) : &lt;code class=&quot;language-text&quot;&gt;Then&lt;/code&gt;은 테스트의 결과를 검증합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;줄이며…&lt;/h1&gt;
+&lt;p&gt;지금까지 Kotlin-Spring Boot 프로젝트 생성부터 간단한 REST Api 작성 및 테스트를 진행하였습니다.&lt;br&gt;
+다음에는 DB 연결을 진행하도록 하겠습니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Vue.js 사용하기]]></title><description><![CDATA[Vue CLI란? Vue CLI는 커멘드라인 인터페이스 기반의 Vue 프로젝트 생성 도구이며, 사용자가 어플리케이션 개발에 집중할 수 있도록 프로젝트 구성을 도와준다. Vue CLI…]]></description><link>https://luckydavekim.github.io/front-end/create-vuejs</link><guid isPermaLink="false">https://luckydavekim.github.io/front-end/create-vuejs</guid><pubDate>Mon, 09 Sep 2019 01:20:55 GMT</pubDate><content:encoded>&lt;h1&gt;Vue CLI란?&lt;/h1&gt;
+&lt;p&gt;Vue CLI는 커멘드라인 인터페이스 기반의 Vue 프로젝트 생성 도구이며, 사용자가 어플리케이션 개발에 집중할 수 있도록 프로젝트 구성을 도와준다.&lt;/p&gt;
+&lt;p&gt;Vue CLI 3의 목표는 다음 두가지 &lt;a href=&quot;https://github.com/vuejs/vue-cli/issues/589&quot;&gt;문제점&lt;/a&gt;을 해결하는 것 이다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;템플릿에 빌드 설정이 포함되어 다음의 문제가 존재한다.&lt;/li&gt;
+&lt;li&gt;일단 프로젝트가 생성되면 템플릿의 의존성 업그레이드가 어렵다.&lt;/li&gt;
+&lt;li&gt;github에서 직접 가져오는 방식은 npm를 통한 버전관리에 취약하다.&lt;/li&gt;
+&lt;li&gt;빌드 설정이 복잡하여 진입 장벽이 높다.&lt;/li&gt;
+&lt;li&gt;선택 사항이 너무 많다.&lt;/li&gt;
+&lt;li&gt;초보자가 어떤 템플릿이 현재 프로젝트에 적합한 템플릿인지 선택하기 어려우며, &lt;strong&gt;webpack&lt;/strong&gt; 템플릿의 linter 또는 테스팅 도구는 진입 장벽이 높다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1&gt;일단 따라해보자!&lt;/h1&gt;
+&lt;p&gt;Vue CLI를 통한 Vue 프로젝트를 생성해보자.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;선행 작업으로 &lt;strong&gt;node.js&lt;/strong&gt; 설치가 필요하다.&lt;br&gt;
+필자가 사용한 node 버전은 v10.16.3 이다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Vue CLI 설치
+&lt;strong&gt;npm&lt;/strong&gt; 혹은 &lt;strong&gt;yarn&lt;/strong&gt;을 설치 후 다음 명령어를 통해 Vuee CLI를 설치한다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;&amp;gt; npm install -g @vue/cli
+# 혹은
+&amp;gt; yarn global add @vue/cli&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Vue 프로젝트 생성 (CLI 사용)
+프로젝트 명을 명시해서 생성할 수 있고, 혹은 현재 경로에 바로 생성할 수 있다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;&amp;gt; vue create my-project
+# 혹은
+&amp;gt; vue create .&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;위 명령어 실행 시, 기본값으로 자동 프로젝트 생성 혹은 사용자 정의 프로젝트 생성이 가능하다.&lt;br&gt;
+기본값 생성으로는 &lt;strong&gt;babel&lt;/strong&gt;과 &lt;strong&gt;eslint&lt;/strong&gt;가 포함되어 있다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 352px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/ef260cf6efa1933579a96ce753fd04c4/3a2f8/vue-create-default.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 30.681818181818183%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAGCAIAAABM9SnKAAAACXBIWXMAAAsSAAALEgHS3X78AAAA2ElEQVQY04WPSXLEIAxFfZtm8ABYEpMAkyz6/jeKHFcllVXeQmgofX2WELsn3j0eZ3JpujhOfkup1Esbba01xmitzS9S3f11XZeAUNvV+syFiRK3KeEEJMRI0TnvfZBcHgA4BTgRwTknMsvuNkjEc9bRqZQ5W6vAnHvnz4/OBTBiShkAc84ih0S1lhDCvbwezhLplEyMRo4k956BaHdh63z0egT0L6Uftw9KKdkU54tY58pzjM5cSiGi1q+SsyRjXJV7Y/ZeTN6f/MF+s2zbZh6dPxMJxv7HF0nXRi7rqLvfAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;vue create default&quot;
+        title=&quot;vue create default&quot;
+        src=&quot;/static/ef260cf6efa1933579a96ce753fd04c4/3a2f8/vue-create-default.png&quot;
+        srcset=&quot;/static/ef260cf6efa1933579a96ce753fd04c4/3a2f8/vue-create-default.png 352w&quot;
+        sizes=&quot;(max-width: 352px) 100vw, 352px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;
+사용자 정의 생성으로는 다음 항목들에 대해 선택이 가능하다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 935px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/eb31e3cdd3cae9876709e17ce067336a/487e7/vue-create-manually.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 28.599999999999998%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAGCAIAAABM9SnKAAAACXBIWXMAAAsSAAALEgHS3X78AAAAh0lEQVQY05WOQQ7DIAwE+U5IwMaAA0b9/7e6QA+VemlG1mq0kg2u20ubqSrlHERikig5MF8hzLkQn9zy7U7HqGVRK4tILlIKpwSPIkwED4TLOSWBMKOACsTZGForEaXVovLH4b0/12x+ZeO69RgDxcn+z/k3zsx67wiszdtPcFW1tRvPPt0Eb0AMQJk4q8jHAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;vue create manually&quot;
+        title=&quot;vue create manually&quot;
+        src=&quot;/static/eb31e3cdd3cae9876709e17ce067336a/487e7/vue-create-manually.png&quot;
+        srcset=&quot;/static/eb31e3cdd3cae9876709e17ce067336a/0eb09/vue-create-manually.png 500w,
+/static/eb31e3cdd3cae9876709e17ce067336a/487e7/vue-create-manually.png 935w&quot;
+        sizes=&quot;(max-width: 935px) 100vw, 935px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;디렉토리 구조
+디렉토리 구조는 다음과 같이 구성되어 있다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 393px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/7c12dd399cc85afecf432028b3d1d67e/52621/vue-directory-structure.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 118.57506361323153%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAYCAIAAAB1KUohAAAACXBIWXMAAAsSAAALEgHS3X78AAACPElEQVQ4y5VT227TQBDNR0Fp48ve196dvdiJ08ZOnZC+IKQ2BVUCiSJalQeekJpGiN9lk5QWJGhc6ezojDRnz45mtpeoASsnTBdE+USYA6oC9jdxTcg9eYXzUJC5EVZ+TfwoFdAT9Qf/5pufX9vX11nzmdeXor6UzSUff+IbIgKv16meXvmTG91+gemVmX9F1ceen13PL37MLn7O3i+PF7eTxe3x+bI9X9Wnq2axat+t6rO7ZnE3Ob8bny7rs9vmbBlQvV3CyfeeZHFVqrYdl65f2D1vXnrzwinkNLWaQI6UiLWMlbyPW0BIRdTrJ4hnejCeuMFIGx+lJEY0QiSQdUQh/Tf6Ke7FCMcpDgmUI6DMcgaMpfi/mgdEW3GCaYwJ1MZJ4Tl3jCeomzicTMGwbqVRSbgoxV1sH8XBxxaDqpkp44XSBymOuou3CebSDKvQsMaEYRJ1F0sFrjpSxlltCueFzPZ/X7pbjCmXYFnpnYYCAGSWEYowjbqIQ9GeFCyTQIgiRBCaUYaenPP9qLZMD13JmOMcY3oQdgDtaPvBmUqlp4egOMsJ7TLkP0aFadVMwXpCWHhI1F28rk6xr8ZeiCHnwHj6LOfA2iMY5sJsei5FJ/2j8+DwkIHEihHNUfilXcWbZZRHM5vnjjMneE7ZM54dJXhvOAchC8YUof1du/WXsywLVQyMdUobCP9SQ5SiqMt6xkmaT05UOXK+1NZbX4QNV2AzpZ/Wb51RnFskFWFiDS4QFVRkhMudzr8AQ+iER5v8qSwAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;vue directory structure&quot;
+        title=&quot;vue directory structure&quot;
+        src=&quot;/static/7c12dd399cc85afecf432028b3d1d67e/52621/vue-directory-structure.png&quot;
+        srcset=&quot;/static/7c12dd399cc85afecf432028b3d1d67e/52621/vue-directory-structure.png 393w&quot;
+        sizes=&quot;(max-width: 393px) 100vw, 393px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Vue 프로젝트 생서 (GUI 사용)
+다음 명령어를 통해 GUI를 사용하여 프로젝트를 생성할 수 있다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;&amp;gt; vue ui&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 595px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/d550d99a8f0f6c0490723eac91e42c4a/5acb4/vue-create-gui.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 120.8%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAYCAIAAAB1KUohAAAACXBIWXMAAAsSAAALEgHS3X78AAACjElEQVQ4y6VTWXPaMBDm//+RPvW50zYpDR1Cjk5pc5DEYGwCPrB8yZIlW776YRLDJGSame583tmVd7WnemfEeIJnjDzjnJg/bO2bOTk2J0f6dX9xdzS/AYauPvLmwM6eGD1YP8E3LwJgMXSmg5UGN2CwfOjjovktrv4ZPl745s6emL2hpw/X+qmv9/Xp8b12stC/GjcfzgfHi9sT6+HE1qB+X91D/jgefZ79GbjTjUuL3oKHW2grcm96muVrxL1amnrsGQnRI+/Bt+cUsj9xHmeha7Kgc+k1/0G9ummAqq6FkDwVCeNFUdY1DuvtrxatvKXdYfMUGYckTlpQKkReFXso1TMgl3W1i9xJJOFRKqiUiZQZfOqNKQBZlqpD8doZaacyY6nkIsuyPOGCcgGVMiHzommTBEUy5Srv1F3kqqrLClTjK0qEKMEBnHQ2qjyUNmpWuSpaqves/9Ht57AVoTFhkc8olUKUiuUySjmSTIsdmMrQtgM1B3nqZYzk3JMJkYnNotnadlMKtYOTxrjiQM3voXbMh9LO8lxgRlX1wrqjN2tGUxPGVkhTiO2eMc7BlSr2YxqPqyhJOnUX2fW8xdJy155lu0vLXjngjueHYUyJH1DGYdY/vTRt56UzlO2cFGJtvkK1csuLfDPFTZNxBao7sJ7VG4W9a87IjwShkKDNhgKv++zG4ToIDtQc0cSPaRDTtR9ACJOkbCos4xZFuxvjpX6t69s092puGp7neE94VRBiIYVSeI/YJ6yrqku14VV1cM4gpmSYpySlayypYJB5kenEurJmd65555gTxxgvNSf2X6YN8jNuicgI11PimNS3RQz/S3PyZXI2mP4ezMYn2q9Pt6OZt+qc/wIAUFx5bJoMnAAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;vue create gui&quot;
+        title=&quot;vue create gui&quot;
+        src=&quot;/static/d550d99a8f0f6c0490723eac91e42c4a/5acb4/vue-create-gui.png&quot;
+        srcset=&quot;/static/d550d99a8f0f6c0490723eac91e42c4a/0eb09/vue-create-gui.png 500w,
+/static/d550d99a8f0f6c0490723eac91e42c4a/5acb4/vue-create-gui.png 595w&quot;
+        sizes=&quot;(max-width: 595px) 100vw, 595px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;끝으로…&lt;/h1&gt;
+&lt;p&gt;여기까지 Vue CLI를 사용하여 기본 프로젝트를 생성하는 방법에 대해 알아보았다.&lt;br&gt;
+다음에는 생성한 프로젝트의 구조에 대해 좀더 자세히 알아보도록 하자.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[ES6?! ES2015?! ECMAScript란 도대체 무엇인가?]]></title><description><![CDATA[ES6은 뭐고 ES2015는 뭐야?! 가끔씩 볼때마다 헷갈리는 ECMAScript 버전!! 도대체 어떻게 버전관리를 하는거야 ㅠㅠ.
+다음부터 헷갈리지 않게 한번 정리해놔야겠다. 자바스크립트(JavaScript) 잘 알고있니? ECMAScript…]]></description><link>https://luckydavekim.github.io/front-end/what-is-the-ecmascript</link><guid isPermaLink="false">https://luckydavekim.github.io/front-end/what-is-the-ecmascript</guid><pubDate>Wed, 07 Feb 2018 11:30:04 GMT</pubDate><content:encoded>&lt;h1&gt;ES6은 뭐고 ES2015는 뭐야?!&lt;/h1&gt;
+&lt;p&gt;가끔씩 볼때마다 헷갈리는 ECMAScript 버전!! 도대체 어떻게 버전관리를 하는거야 ㅠㅠ.
+다음부터 헷갈리지 않게 한번 정리해놔야겠다.&lt;/p&gt;
+&lt;h1&gt;자바스크립트(JavaScript) 잘 알고있니?&lt;/h1&gt;
+&lt;p&gt;ECMAScript를 알기전에 우선 친숙한 자바스크립트에 대해 알아보자.&lt;/p&gt;
+&lt;p&gt;우리(내게)에게 친숙한 자바스크립트는 웹브라우저(클라이언트)에서 멀고먼 서버에 데이터를 보내기 전, 데이터 유효성 검사 등을 처리하는 스크립트 언어였다. 이 자바스크립트는 1995년 넷스케이프(Netscape)의 Brendan Eich에 의해 개발된 언어이고, Mocha -&gt; LiveScript -&gt; JavaScript의 네이밍 변천사를 갖고있는 아이이다. 그리고 사실 우리가 알던 자바스크립트는 &lt;code class=&quot;language-text&quot;&gt;ECMAScript&lt;/code&gt; + &lt;code class=&quot;language-text&quot;&gt;BOM(Browser Object Model)&lt;/code&gt; + &lt;code class=&quot;language-text&quot;&gt;DOM(Document Object Model)&lt;/code&gt;라는 1개의 코어와 2개의 모델로 이루어져있다는 것만 인지하고 있자.&lt;/p&gt;
+&lt;h1&gt;ECMAScript란?&lt;/h1&gt;
+&lt;p&gt;그렇다면! 다시 본론으로 돌아가서 ECMAScript(이하 ES)란 무엇인가?&lt;/p&gt;
+&lt;p&gt;ES는 자바스크립트를 이루는 코어(Core)스크립트 언어로써, 다양한 환경에서 운용될 수 있게 확장성을 갖고 있기때문에 사용처가 웹환경으로 국한되어있지는 않다. 즉 위에서 말한 우리가 아는 자바스크립트는 웹브라우저에서 돌아갈 수 있도록 &lt;code class=&quot;language-text&quot;&gt;BOM&lt;/code&gt; 과 &lt;code class=&quot;language-text&quot;&gt;DOM&lt;/code&gt;을 함께 사용하는 확장성이 되겠다. 이러한 확장성들은 ES 버전에 따른 문법과 기능의 확장을 가능하게 한다.&lt;/p&gt;
+&lt;h1&gt;그렇다면 ES의 버전관리는 어떻게 되는거야?&lt;/h1&gt;
+&lt;p&gt;ES는 다음과 같은 버전 히스토리를 갖고있다.&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;ES3&lt;/code&gt; -&gt; &lt;code class=&quot;language-text&quot;&gt;ES5&lt;/code&gt; -&gt; &lt;code class=&quot;language-text&quot;&gt;ES6&lt;/code&gt;(ES2015) -&gt; &lt;code class=&quot;language-text&quot;&gt;ES7&lt;/code&gt;(ES2016)&lt;/p&gt;
+&lt;p&gt;뭐야…! 헷갈리게 넘버링과 년도가 따로있네, 그렇다 ES5 != ES2015 였던 것이다. 그렇다면 각 버전에 대해 좀더 자세히 알아보자.&lt;/p&gt;
+&lt;h2&gt;ES3 (1999)&lt;/h2&gt;
+&lt;p&gt;대중적으로 알고있는 그냥 자바스크립트라고 보면 된다.
+&lt;code class=&quot;language-text&quot;&gt;함수 단위의 스코프&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;호이스팅&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;클로저&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;프로토타입&lt;/code&gt; 등… 우리가 익히 알고있는 자바스크립트의 기본적인 특징들을 갖고있다. 대부분의 브라우저에서 지원하며, IE8까지 크로스브라우징을 지원하는 환경이라면 &lt;code class=&quot;language-text&quot;&gt;ES3&lt;/code&gt;을 쓰고 있다고 보면 된다.&lt;/p&gt;
+&lt;h2&gt;ES5 (2009)&lt;/h2&gt;
+&lt;p&gt;ES4는 너무 시대의 흐름을 앞서갔는지 거절되고, 그 후에 점진적인 개선을 목표로 ES5가 나왔다고 한다. 아무리 그래도 10년만에 버전업이라니 너무한것 같지만 ㅁ낳은 편리한 기능이 추가되었다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;배열
+배열과 관련하여 편리한 메소드들이 다수 생겼다. &lt;code class=&quot;language-text&quot;&gt;forEach&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;map&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;reduce&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;filter&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;some&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;every&lt;/code&gt;와 같은 순환 메소드들이 생겼다. 이 메소드들은 개발 시 불필요한 중복 코드를 줄여주어서 가독성은 높이고 버그율은 낮추는 효과가 있다.&lt;/li&gt;
+&lt;li&gt;객체
+객체는 프로퍼티에 대한 설정을 할 수 있게 되었다. 객체를 생성, 수정, 복사하는 표준 메소드 &lt;code class=&quot;language-text&quot;&gt;Object.Create()&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;Object.defineProperty()&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;Object.freeze()&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;Object.assign()&lt;/code&gt; 등 과 &lt;code class=&quot;language-text&quot;&gt;getter&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;setter&lt;/code&gt; 등이 추가되었으며, &lt;code class=&quot;language-text&quot;&gt;Object.keys()&lt;/code&gt; 메소드를 이용하면 for in 메소드도 대체할 수 있게 되었다.&lt;/li&gt;
+&lt;li&gt;strict 모드
+문법을 좀 더 깐깐하게 체크하는 모드이다. 너무 자유분방하였던 기존 ES를 안전하고, &lt;code class=&quot;language-text&quot;&gt;개발자가 인지할 수 있는 범위 안에서&lt;/code&gt; 개발할 수 있도록 사용하기 위해 등장했다. &lt;a href=&quot;https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Strict_mode&quot;&gt;Strict mode - JavaScript | MDN&lt;/a&gt;에서 자세한 특징을 확인 할 수 있다.&lt;/li&gt;
+&lt;li&gt;bind() 메소드
+this를 강제로 바인딩 시켜주는 메소드이다. 좀 더 명확하게 this 스코프를 지정 할 수 있게 되었다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;ES6 (ES2015)&lt;/h2&gt;
+&lt;p&gt;ES6보다 ES2015라고 많이 불리우며, ES6 Harmony라고도 불리운다고 한다. ES2015에서 다음과 같은 문제점들이 해결되었다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;호이스팅이 사라진 것 같은 효과&lt;/li&gt;
+&lt;li&gt;함수 단위 스코프에서 블록 단위 스코프로 변경&lt;/li&gt;
+&lt;li&gt;this를 동적으로 바인딩하지 않는 화살표 함수&lt;/li&gt;
+&lt;li&gt;모듈화 지원&lt;/li&gt;
+&lt;li&gt;콜백 지옥에서 구원해줄 Promise&lt;/li&gt;
+&lt;li&gt;Default, Rest 파라미터&lt;/li&gt;
+&lt;li&gt;해체 할당, Spread 연산자&lt;/li&gt;
+&lt;li&gt;템플릿 리터럴&lt;/li&gt;
+&lt;li&gt;클래스
+이 외에도 추가된점이 너무 많아서 이부분에서 사람들이 진입장벽을 느끼는 것 같다.
+브라우저(특히 MS 계열)에서 지원해주지 않는 경우가 많아 &lt;code class=&quot;language-text&quot;&gt;바벨(Babel)&lt;/code&gt;이라는 트랜스파일러를 써야하는데 이 바벨은 웹브라우저가 아닌 &lt;code class=&quot;language-text&quot;&gt;Node.js&lt;/code&gt; 위에서 돌아가고… Node.js를 설치하려면 &lt;code class=&quot;language-text&quot;&gt;NPM&lt;/code&gt;을 알아야하고… 또 모듈화를 사용하려면 &lt;code class=&quot;language-text&quot;&gt;웹팩(WebPack)&lt;/code&gt;같은 모듈 번들러를 알아야하고…&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;이런 다양한 장벽 때문에 사람들이 ES2015를 쉽게 접근하지 못하는 경향이 있는 것 같다.
+하지만 우리는 언제나처럼 도전할 것이다!&lt;/p&gt;
+&lt;h2&gt;ES7 (ES2016)&lt;/h2&gt;
+&lt;p&gt;이번에는 다행히? ES2015때처럼 큰 변화는 없었다. 비교하자면 ES2015의 1/10 정도도 안되는 분량? 휴.. 다행이다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;제곱 연산자(**) 등장&lt;/li&gt;
+&lt;li&gt;Array.includes 배열에 해당 요소가 존재하는지 확인하는 메소드 등장&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;ES8 (ES2017)&lt;/h2&gt;
+&lt;p&gt;ES2017에서는 Promise 급의 중대한 변화인 &lt;code class=&quot;language-text&quot;&gt;async&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;await&lt;/code&gt;등이 발표되었습니다!&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;async&lt;/li&gt;
+&lt;li&gt;await&lt;/li&gt;
+&lt;li&gt;객체
+객체의 좀더 심화된 메소드가 등장했습니다. Object.keys()에 대응되는 메소드인 &lt;code class=&quot;language-text&quot;&gt;Object.values()&lt;/code&gt;, Object.keys()와 Object.values()를 합쳐 놓은 &lt;code class=&quot;language-text&quot;&gt;Object.entries()&lt;/code&gt;, Object.getOwnPropertyDescriptor의 복수 형태인 &lt;code class=&quot;language-text&quot;&gt;Object.getOwnPropertDescriptors()&lt;/code&gt;로써 상속받지 않은 속성들의 설명만 보여줍니다.&lt;/li&gt;
+&lt;li&gt;문자열
+단순 편의기능이 추가되었습니다. 문자열 앞부분에 공백을 넣어 자리수를 맞춰주는 &lt;code class=&quot;language-text&quot;&gt;String.padStart()&lt;/code&gt;, 문자열 뒷부분에 공백을 넣어 자리수를 맞춰주는 &lt;code class=&quot;language-text&quot;&gt;String.padEnd()&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;매개변수 마지막에 콤마를 붙이는걸 허용&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;이제 좀 명쾌하네~!&lt;/h1&gt;
+&lt;p&gt;ES3에서 ES5까지 10년, ES6까지 7년의 공백 때문에 많은 변화가 있었는데, 앞으로 매년 표준을 제정하며 그런 혼란을 줄일 예정인 것 같다. 또한 이후에 나올 ES를 통칭해서 ES.Next라고 부른다. 다음 ES9(ES2018)은 어떨까..?
+이번에는 전반적인 ES에 대해 알아보느라 메소드 하나하나 자세히 알아보지는 못한것 같다. 다음 시간에는 각 메소드를 자세히 알아보도록 하자.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[윈도우에서 JDK 8 설치 및 환경설정]]></title><description><![CDATA[개요 이 포스팅에서는 JDK 8 설치 및 환경설정하는 방법에 대해 소개하고자 합니다.  JDK 다운로드 JDK 다운로드를 클릭하여 JDK를 다운로드 하거나, 혹은 다음 절차를 따라 다운로드 한다. Oracle…]]></description><link>https://luckydavekim.github.io/development/install-jdk-with-setting-at-windows</link><guid isPermaLink="false">https://luckydavekim.github.io/development/install-jdk-with-setting-at-windows</guid><pubDate>Sun, 28 Jan 2018 06:53:25 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+&lt;p&gt;이 포스팅에서는 JDK 8 설치 및 환경설정하는 방법에 대해 소개하고자 합니다.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 785px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/edf0f0e56e1ae56c4963dc10220ccd2d/775d5/jdk-java-development-kit.jpg&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 57.00000000000001%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAALABQDASIAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAAAQADBf/EABQBAQAAAAAAAAAAAAAAAAAAAAH/2gAMAwEAAhADEAAAAe2Ogkyf/8QAGRAAAgMBAAAAAAAAAAAAAAAAARACESJC/9oACAEBAAEFAr0DJdL/xAAUEQEAAAAAAAAAAAAAAAAAAAAQ/9oACAEDAQE/AT//xAAUEQEAAAAAAAAAAAAAAAAAAAAQ/9oACAECAQE/AT//xAAWEAADAAAAAAAAAAAAAAAAAAAAICH/2gAIAQEABj8CKv8A/8QAHBABAAIBBQAAAAAAAAAAAAAAAQARQRAhMWFx/9oACAEBAAE/Id6DBxLBh5L6YBfX/9oADAMBAAIAAwAAABBb3//EABYRAQEBAAAAAAAAAAAAAAAAABEQMf/aAAgBAwEBPxBNn//EABURAQEAAAAAAAAAAAAAAAAAABBx/9oACAECAQE/EIf/xAAdEAACAgEFAAAAAAAAAAAAAAABEQAhQRAxUcHR/9oACAEBAAE/EGLGKAGeYJROSNwP2COS28Gv/9k=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;jdk-logo&quot;
+        title=&quot;jdk-logo&quot;
+        src=&quot;/static/edf0f0e56e1ae56c4963dc10220ccd2d/775d5/jdk-java-development-kit.jpg&quot;
+        srcset=&quot;/static/edf0f0e56e1ae56c4963dc10220ccd2d/953fe/jdk-java-development-kit.jpg 500w,
+/static/edf0f0e56e1ae56c4963dc10220ccd2d/775d5/jdk-java-development-kit.jpg 785w&quot;
+        sizes=&quot;(max-width: 785px) 100vw, 785px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;h1&gt;JDK 다운로드&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html&quot;&gt;JDK 다운로드&lt;/a&gt;를 클릭하여 JDK를 다운로드 하거나, 혹은 다음 절차를 따라 다운로드 한다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.oracle.com&quot;&gt;Oracle 홈페이지&lt;/a&gt;에 접속한다.&lt;/li&gt;
+&lt;li&gt;상단 메뉴를 클릭 후 &lt;strong&gt;Java &gt; Java SE&lt;/strong&gt;를 클릭한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 707px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/0751aaf2ff2419380d6a059c7ca84c1b/e9ffe/java-se-download-menu.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 81.4%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAIAAACZeshMAAAACXBIWXMAAAsSAAALEgHS3X78AAADZ0lEQVQoz2P4bGf3SVv7k5HRJx2dT6qq3/fsef/k6bvbd9/fvvvtxcvvv359//79x8+fQAQEX75+/fL126+fv36CEcN/Obn/0lL/lRT/y8v94+b+v3HjnSs3nt668/3583/PX/wHgn///sPAz18gPXAuQ6W+SbmscrmcSrmieqmsUltVc0VtV01la0/HpI5JsztnLGqbOn/y4rWLtuybv2HXgk17Fm7as2jTnnkb967dsYOBzdqF1d6dxc6d2cqFwcZV3inIMSpb0z1SxsZPxtJb1sJb2szTNCg1o2VKSFFLUFFLQEGTX169R05TSnkZg4KZnbyZnZyJrayhlaSRlYV/bHRetW9igWN4ulNUpnNUlrF3jEdKacnEBcV9c4t656Q0TIir6o6q7C1qbmMQ1bMU1bcWM7IV1bPg0zTR84oIzCz3SynyBuqPSHeOzNR1C/eMy6/vnV3ZNjWrvj+hDoh6Y+sm5NS1MDiHJ9gExVgGRBl6BDqHxnqFJidlV0ZnVYTkVFkGJZsFJhn5xteXN+9dvWnTolUbF65cvvMgEK3ed3z28pUMnjEp7jEpbtEpjhEJPuFxeUn59cWNSWllwYWNYYWNEcXNPlnV8SUtzX1zgKiud3Zu5/T0pomZ7dOTyxoYorOLTL1CnCMSLf3DA5Oz3UKTolOKAlOKQjPLfZMKnSIz9NzDneLyo2r6wio6Iyq6Iis6Iys6Iqp64vOrGbTsPeXNHWTNHZVs3FTt3E38Y4OyKu3C0qyCkiwCEg29ovXcI9wSChNq+2Iqu2KrumOre2Kru2Nq++OL6xlcIxO941Ldo5NdIpIcw+NtQ5LCgJpD0/Q8IoE6jX1i9d0jXBMK42v7oiu7Yqq6QaiyK662PySngsHQ1U/X0cvA1VfP1VfD3t3MLyYgtcQ1JtvENw4YSbg0x9b2h+VVMVx5/OL289fXnry4/OjZ7RevM2s6bENTddwiDDyjgAifzbmVDFU9k2p6J1f1Tq4Ekv3TfIExnFTgGZ/nFpMDjGSsmoGM+Nr+gOwKBj4NY15NUx4dM15dM05NY0PvyNCsSt/kIpvgFFO/eAzNPUAUXdkdB9EsZ+UqZ+0mZ+0qa+0qbe1m6BPtGpNj6hcHdLO+Z5SRdwwwqpzjC4AhHFnWFlneDkJlbcBg98ssBQBDXKjPVoZ4DgAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Java SE 다운로드 메뉴&quot;
+        title=&quot;Java SE 다운로드 메뉴&quot;
+        src=&quot;/static/0751aaf2ff2419380d6a059c7ca84c1b/e9ffe/java-se-download-menu.png&quot;
+        srcset=&quot;/static/0751aaf2ff2419380d6a059c7ca84c1b/0eb09/java-se-download-menu.png 500w,
+/static/0751aaf2ff2419380d6a059c7ca84c1b/e9ffe/java-se-download-menu.png 707w&quot;
+        sizes=&quot;(max-width: 707px) 100vw, 707px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;하단의 &lt;strong&gt;Get Started&lt;/strong&gt;에서 &lt;strong&gt;Download Java SE for Developers&lt;/strong&gt;를 클릭한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1015px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/e2fcde860d9cf88d98b37bcba400ef2b/4d2c8/java-se-get-started.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 21.2%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAECAIAAAABPYjBAAAACXBIWXMAAAsSAAALEgHS3X78AAAAu0lEQVQI12P4+PHjq1evHj9+/OTpk89fPv/////fv3//iQMMLx8+vHbm7OWTp84dOXrvxq2Pr99+e/vu0duPN16/v/36/Z03H4DkzVfvgOS9tx9vgQWB6OqLt+++fmd4ef/RyfNXz1++CUT3bt69c/3254ePWzYfDFm8LX75jsSVu+JW7AxfsjVj7d7CTQcil22PW74jYcVO77kbtt24z7DkzFXPmWvCF24Knr/h49dvIFf/+QN3GH4vAACo+NAYcOhoHAAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Java SE 다운로드 메뉴&quot;
+        title=&quot;Java SE 다운로드 메뉴&quot;
+        src=&quot;/static/e2fcde860d9cf88d98b37bcba400ef2b/4d2c8/java-se-get-started.png&quot;
+        srcset=&quot;/static/e2fcde860d9cf88d98b37bcba400ef2b/0eb09/java-se-get-started.png 500w,
+/static/e2fcde860d9cf88d98b37bcba400ef2b/1263b/java-se-get-started.png 1000w,
+/static/e2fcde860d9cf88d98b37bcba400ef2b/4d2c8/java-se-get-started.png 1015w&quot;
+        sizes=&quot;(max-width: 1015px) 100vw, 1015px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;JDK 8버전을 받을 것이므로 해당 버튼을 클릭한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 557px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/02ea05a32878bbb2adc53ff4c1395f00/5b443/jdk-download.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 62.2%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAIAAADtbgqsAAAACXBIWXMAAAsSAAALEgHS3X78AAABvElEQVQoz4VSW2vbMBj1/4c9jMEe9t6xMTrSt46wC6MPSxuzUqeu09aOHdvxXZFkyZatiyc7FLKysmN0kJCPvqPzySiq6mpl/7Is01kvLftqdbsJ/CDwoyjeJWmwDbyNrxFM3zgJQvfRrTFWShl5ni7My6V56dzaj+t727pZO+vVytK4sx3X9aqySpO0KIssy7OiyPcorSpEiBoGo2lZRSgiVHIulZLj0IdONE2GY3A+1Hio0YCgoI0hhaCMbQFKIE72OMdEToKDSD1BSqmXxLlfXpiz2fn3rwto2aMYEBoCGAOIGRtewMEC8vzTT/PPZz9P3p8nN3ejGNFGV45hDWjbCdlwrpl2fdv3z1wLPTo6MDK0tVTSEEKwrt+VpbsNvSjWvIl2mrM9grSVT+pDZdqyd2c/3p7OX334kpRorNx0fQpRAmCG0K4Cse4eqp/bnrhhnfkQX2+yhRPCmho6CbDfe4HvhVuAiVADl/I4s79si9F4S7Dg41+G0DEqlUP0kJVuVvbT9kuBYcpOvv1+/XH+ZnaRgtrgunVKaeeoZYi2XOjT/g3dL51OkIGoRH5a6fuPgR2/BPU/HF/hDw0lpLxiVw+nAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Java SE 다운로드 메뉴&quot;
+        title=&quot;Java SE 다운로드 메뉴&quot;
+        src=&quot;/static/02ea05a32878bbb2adc53ff4c1395f00/5b443/jdk-download.png&quot;
+        srcset=&quot;/static/02ea05a32878bbb2adc53ff4c1395f00/0eb09/jdk-download.png 500w,
+/static/02ea05a32878bbb2adc53ff4c1395f00/5b443/jdk-download.png 557w&quot;
+        sizes=&quot;(max-width: 557px) 100vw, 557px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Accept License Agreement&lt;/strong&gt;를 클릭 후, 자신의 윈도우 비트에 맞는 JDK를 클릭하여 다운로드한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 560px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/21845e9fef9f84cf592be77b2c1bc998/6d7b8/jdk-windows-download.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 55.60000000000001%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAIAAADwazoUAAAACXBIWXMAAAsSAAALEgHS3X78AAACGklEQVQozz2QW2/aQBCF/f//RaU8NY3aBqGEmBAlNFGgBtt78Q3bYHt9WbM44AbhK+6aSt2HWa3mnJ1vjnA8HtM03V7OLsvc9do0DQAB1jTTskxd1zWMETQ0jd80SbiMMcYteZ4L/PH6+vr+/v729jabTu/uxe+D4c3tgNev1zdX326u78Wf4mQwngyfniUA57/nXD+d/vL9QCjLgv/0kec70/LFR0ucrMYTcySao4eXL1fqYEjC0FjZ7sazHEc3TYxxGIa73Y4jC6fTibGtZhgrWUEP4nwwVEUxkhUKIBo/4qfnLI65P6bUtu2ZtDBtO80+9odDURRCylKEgApUqGPNNFWIsvzQnM9t19muM1sCBhCy10ZEjYBI9kYPYuARn2Vt2wh0SxUgU5rWdV2cTmVR1FXV1HVVFBoCiyXcqlCxHExi3Q8lN/BYVlZVUVVt2/Zm3s32+67rzufz/8qzAECWZJAuFdmwYRAZJFpsAj6TK5qm6c1RRJbywvN8EgRRFCUJTSjlEVZViRHiZgYRn4xIArwQkVjeBPTwh691MSfhEirINDwSJEly/Dx+9udYV6Wh46WKmAoAx44S6BEURBqJk/2h+ocdSxJ+efZm83rLOG3P0xO1fLJhaArUGM9w5eoR1fxQJzHnL8o+FK4U0vuRdXfn/rjNIW66jqdVXxp8Z9dxHNf7sF07iPiqTpyuKXPp9vNUNE2v+QsbTkLj1Q93pwAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Java SE 다운로드 메뉴&quot;
+        title=&quot;Java SE 다운로드 메뉴&quot;
+        src=&quot;/static/21845e9fef9f84cf592be77b2c1bc998/6d7b8/jdk-windows-download.png&quot;
+        srcset=&quot;/static/21845e9fef9f84cf592be77b2c1bc998/0eb09/jdk-windows-download.png 500w,
+/static/21845e9fef9f84cf592be77b2c1bc998/6d7b8/jdk-windows-download.png 560w&quot;
+        sizes=&quot;(max-width: 560px) 100vw, 560px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1&gt;JDK 설치&lt;/h1&gt;
+&lt;p&gt;위에서 다운로드받은 JDK 파일을 다음 절차에 따라 설치한다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Next&lt;/strong&gt; 클릭한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 500px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/fc6d89f003361eb7ef8a47d6fcff04e1/0eb09/jdk-install-agreement.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 76.2%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAPCAIAAABr+ngCAAAACXBIWXMAAAsSAAALEgHS3X78AAACIklEQVQoz6VQTW8SURSdP+Wi7cbEX2JMFLTY+gPcaetCo1TiTjfdGIGSxlajoVgj6dTYFg0EKG0oMMxM5/O9mWE+3nvz4R1gp5umJyf3nXtuzp2b4faOO92L8flI7vRHnXPhbCCC7vbHZ0NpKGu9wXgo6acXY3NCsMdmRC5zA3bU17lsvvj47cdHb7Zyr4vLGx+WN6AWH+RTkQM9FdDmCqWHKcvAXKG8WijdyW9zN1de3n76LvN8cyX//tbqi4XM2lL2GXAxs76UXZ/ptM2ug7Nwb23GxbtPbtx/xZW+HVVq/Of6cfWwUa4elKs8cGuPr9QOp23KrdrUrPLb33/t1k92642vfGNz7zfHQsZ8N6QBCzzfcRjxGPEjSiLwiUd9F5iEhHouDfw4jpIkiWMoiWgxznR827KxZSMMBaSDkAXCMBFC2JqObNtJR5ZjmkjXDZ8QCA/MgBNkrdNuN5utfv8CwwJsmaYJj2HACwswSpdZGM9HAMoYhEeIci6dXpJcAbOzBQxhAuE4iq+AaJq+fvg6Z6umLYmSLF9qqgZQFfXyUlEUVZIkqJqqgmPohqnrsihpYClqEJD5D1ORLYwEZ+JSSgABMAXx/bTOHBbHYZKQMKRxRCkLw2j+ZeR4IaNB4Ae+F0DiH/qea3d7uNWx2l2r0/Ms7EwmxHNOZcydibqoGIJijP9LDQlDcb+8X9zhK59+ftk57B4c1U+ajT/NH63RX3u8EYZOokYAAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;JDK 설치 동의&quot;
+        title=&quot;JDK 설치 동의&quot;
+        src=&quot;/static/fc6d89f003361eb7ef8a47d6fcff04e1/0eb09/jdk-install-agreement.png&quot;
+        srcset=&quot;/static/fc6d89f003361eb7ef8a47d6fcff04e1/0eb09/jdk-install-agreement.png 500w&quot;
+        sizes=&quot;(max-width: 500px) 100vw, 500px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;원하는 JDK 설치 경로를 지정한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 500px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/e40894bf19ced8e098645dc5df503a55/0eb09/jdk-install-path-setting.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 76.2%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAPCAIAAABr+ngCAAAACXBIWXMAAAsSAAALEgHS3X78AAACuUlEQVQoz3VSa0/TYBTuvzLx8sHEX8InuUX87jcNoIkGWPhogspFYGQwUGfGuG2MjW3d2rVrO7aO3q9v6QpsjN08HUQTjU+ePD3vOe9zTntSLJZj2JpcETWGF5mKdHauQMzy8pmgCprF1WRRR5CEI9BttIEX1+3rm3aWt7HnM+uvPoYn5jfG59ZGZ+85MrMKOja3PtA/yfFAEDgWCL4IrA/NbmFPJ2aGphZG3i+9DKw+m/jwcHjqyei7xyNvgYNg+tHwtH8c9TODeHAcnnwwPod9/na0vBNbjxxuxo4Xw7HF7b1PW1HQpZ29L1u7X38crnw/8OPw7p0CFzajy9vR+VAcq52L+GmaJkmGJHimWGWKHJmvcCxF5GmiUGFZvsJxNEkRBbFWdZF9YZumptZNrSSYmKTbCCHLsqqSnikr2bKcZiVRNRwHQcG0bBs5pmmRYCfIfL7AsJxpocaVR0sIExTT87xk4mg5knwdxN8Es5NhuixZnXar0WjeDKAoynHyJJk8iR/FU6nTk5NUtcyVwKwYqNftJI4TJYrSJMExjf4/AHMqlc5ksul0OpvNQReGKpYkxzdDudlsdjqdbq/f7fe63d5fUFVlf28fBuI5PB6PJxJJ+PjBZNMBc6//X0ArG9m6phuGaRiGrmmGbjQ8lxIsTNKs29vbVuu2fY/O7wiSwOZNC5YGe6kD4NFsXvrLaNCqi1FsBcdxWVY1VQMosqLrOvQGdV33YgAHgJADAZRyuJjJIaJApIoYL6ocx50Byr4w8KcD+JogCP401/XnXV15V5de66Yuy+JGKLMW5CMRPBTFNMuBfL3uwk3Pfy+47BvAhmyAhSzbYDidoHSSMqiSc37uSNKlJBRZEauoSLUcWNsdZQOBqtaFoJo0Vz3O5IkCfbDyM7gWCwX3o8EDNltIEHSBZhKs8gu9JOVvWlQ5igAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;JDK 설치 경로 설정&quot;
+        title=&quot;JDK 설치 경로 설정&quot;
+        src=&quot;/static/e40894bf19ced8e098645dc5df503a55/0eb09/jdk-install-path-setting.png&quot;
+        srcset=&quot;/static/e40894bf19ced8e098645dc5df503a55/0eb09/jdk-install-path-setting.png 500w&quot;
+        sizes=&quot;(max-width: 500px) 100vw, 500px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;JDK 설치완료!
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 500px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/29789c5d081090cb3040bdcbfc22f24f/0eb09/jdk-install.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 76.2%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAPCAIAAABr+ngCAAAACXBIWXMAAAsSAAALEgHS3X78AAABYElEQVQoz9WNW0vCYBiAvz9VSjf+ku7yUKkUdFXWjRp0UGpKN0FEBUHTArsqMAgsI8kUq1nTedo8buXUHdzm1loRdaXSVS8PLw8v38MHwndIOodnihUEKyKZEponVE9jOFoo5ysNtEA8Y3jkNp4vkzQnUW3+jRGodpfhxYcKAyY34cWd09mtY7sPtkGwFYJtPngaOtIkYNUuFu+huu3+oHr52P7gjD8wAYWAwe4dd24bV3et3gODbWXU6NSZXXqzW6di+hK9ZVn1H7jHTK6RqQ0QiiQvY8hVHI2lsIubp3D0sS9n16nzaHw/nAC8JGSrL5RItpVWR2kx/egoNC9ziqIQtAhyzfpSwjOfWHMk1xf64Uh65u6X9zInapx75QAj9FSTlSFG1l6XmsJnLEuy3BsYSau/4z/9/P9iVhwq/B1TdIfjGIZl2IFRR+qyaJUGKEESdQqvDUGpStVIKpZtvAMdxA/TCpDL3gAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;JDK 설치&quot;
+        title=&quot;JDK 설치&quot;
+        src=&quot;/static/29789c5d081090cb3040bdcbfc22f24f/0eb09/jdk-install.png&quot;
+        srcset=&quot;/static/29789c5d081090cb3040bdcbfc22f24f/0eb09/jdk-install.png 500w&quot;
+        sizes=&quot;(max-width: 500px) 100vw, 500px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;원하는 JRE 설치 경로를 지정한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 502px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/d4e7e162f153b607bfcf7b42501355ff/c1d3e/jre-install-path-setting.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 75.8%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAPCAIAAABr+ngCAAAACXBIWXMAAAsSAAALEgHS3X78AAACT0lEQVQoz5WQW1PTQBTH862Yofrsp/ARrQN1Rn3z1RlEHkRBfeLJ8UFtpw4FRGjTlpslUKktF9MChWKSJpvdzSbpJr0kjUu4PDCMo//89sye/5mTs7vc/rFSrUsNFe4enOwfNqy2b9AucXpXmK7XRBay22zPIqviVhfbzp5scvdffX46nXr0LhmbjMemGIkLJhMjk/GR0Hz4JsFgZpgmzpyp+NDrL9yt2Mu7z6aHxt8/eRu/83hi4N5oJDo2GB2LPHhxe3icwTaD0eeDoXlFJDo6MDzBJfjs12V+YSWfF9bn8tkZPp3KZmZzfHLp26f5uY9zs8mlxdlchpmpHH/OTI6fz2c+LOY4tSnaSLRQjUCxhWs2rlmo6ppH8kmxXFyq/EjLJ9uUHFpQNC8hukixeHQqctAklolUVQJAbqq/oa4gDFiq600AFIwBQhqCKiGQUtJqXdBxSQNgzu0FDnVkhZVNWWliBCEydB0aBgFAZ4kOEUbYoW7A1A9DGEHLY819x6G2bXc63eAv6vWsyo60IdRXV7XST6dS1mCLc71AB+CgVpMkSWej2HcmdkgnHNIPVxC021DYPFhb201n6oJgCIKmEo52fVZuM7kugzpn6nQ6nuddH85+R8zAtn3DCFwKqBc2/6PCI/QvLh5odo81e5fODVyX7zN8j83ra1aXc7rB/+r8tTXqcxqQbaJYxs0QpEAgqfKx2mxg9dSsbGubBWXju1naOiwUuXK1UqtXqkc3wPwdcWd791d+vZAXiqUNYW8xvZ5d4VMLpcLWcnLhDz/hBa+4julIAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;JRD 설치 경로 설정&quot;
+        title=&quot;JRD 설치 경로 설정&quot;
+        src=&quot;/static/d4e7e162f153b607bfcf7b42501355ff/c1d3e/jre-install-path-setting.png&quot;
+        srcset=&quot;/static/d4e7e162f153b607bfcf7b42501355ff/0eb09/jre-install-path-setting.png 500w,
+/static/d4e7e162f153b607bfcf7b42501355ff/c1d3e/jre-install-path-setting.png 502w&quot;
+        sizes=&quot;(max-width: 502px) 100vw, 502px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;JRD 설치완료!
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 502px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/fc918a6cab92dff0e4d1b75c831be472/c1d3e/jre-install.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 75.8%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAPCAIAAABr+ngCAAAACXBIWXMAAAsSAAALEgHS3X78AAACzElEQVQoz42Sy08TURTG5+9gx1JX7ErELTEkuGWDMaAoTbQVExK1ktRNNcFELBhdGNtENCJ9KW2krW2H8IgatOm0Ci2PUkpnpjNlOs8771Jvq5AYF3rzy73fyTnfyc29B9nYIwp7lRJR+/Y9TzCioDZYoHOycQKvmCQjMKIKNdxhlhE1UTG2aRkZfTzveP7+5tPA9el524zPNuP/G/uTFlBcn/5V4LPP+K64Q8hZ26OLLs/Iw5fjz/znxqcsV1091gdn/kXP6H3LtSnEn0iFIouxxBKKLr8LRxdSifBSMoy2WToG/VOgyQ9LiVcxFCGJzWgp4Nt/PZv3zO/M7h1kavg2Ud6oVjYh5EELCi/QxNYJFL5VrxZ2ynnkkOMybG659uUzl85pBZqvMYeMJEk8z7McKwg8x3MURZFwVUmCJCiagtQP6RJdRyStofKyCUyVU8L+hfX1r/vlssfrRVF0dW01HInE4nGarmma3mg0NF0HsgxkBUgCyauIqOoC/CBdlWTpzl2H1WqNRmOdnZ19fX0DAwPd3Zb+/vMOh8Plcjmd9+x2eyaDNZtNIPI4K0OzIQNgmCbD1J1Op9vtTqfTg4ODsG54eNjeWrahoSF4wL4TExPwRm2zgLNKy6zIAMalUmlsbCwQDEJeeDyBQCAej09OTr6Zm8MwzBcMhiKRUDhcIUlYrKnyb7OuaTBmWTYaXUylUmgqGY/HkomPWQxbW10J+v1YJrOSTPq93rcez0E+31RVQ1PbZkU3DAPwNMnA+TvSzYZiNLSjptpoAt2U29o0TKG3lz99SrRYiI4OvKvLoKuEaCBAO4IvWRfkKhxgTgKKyvASpMaKrAAgh5woiUC6dVsYvCBeHpGGLwH7Db1eJyUToWhcZHGBxSWOEDmCr7fCFjA8FjALu/Ei1UKgOIkGPFHEKwhWyG4Vs4Xd/wNWFnP53exOMfvpR+4nU022u4d+V2kAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;JDK 설치&quot;
+        title=&quot;JDK 설치&quot;
+        src=&quot;/static/fc918a6cab92dff0e4d1b75c831be472/c1d3e/jre-install.png&quot;
+        srcset=&quot;/static/fc918a6cab92dff0e4d1b75c831be472/0eb09/jre-install.png 500w,
+/static/fc918a6cab92dff0e4d1b75c831be472/c1d3e/jre-install.png 502w&quot;
+        sizes=&quot;(max-width: 502px) 100vw, 502px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;Java SE 설치완료!
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 500px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/7db4acf4f33b3df8b57f204e8b853b71/0eb09/java-se-installed.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 76.2%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAPCAIAAABr+ngCAAAACXBIWXMAAAsSAAALEgHS3X78AAACIklEQVQoz5WQy27TQBSG/VIs2i5Y8CJISDQF0vYFWKFCJRBqIGIHmyAiUgoNFGgFJQHUiiZFDSCR+JJ7YjvxJfbYM3Z8ZcZOU5ACEr8+n/nnjM+cmaH2v1ZrzR7XEaqNTpXrsq0+9rVGj23zbUGim72OqDDNHt3sasiNGUEX2u5xQ6aWUpvXH71affA8eX/z2r0JV1M5HJPE50g+lcOZ5fRWTDK9tZp+dimVp84v37249jBxO7Oykb2wcmdu8ebC0i3MfGJ9IYEjIcqszy2uTZm/fOPclQ0q/7my8+l49/CkUP7x8mM5XyxvF0t5YkrbhSOcIdNi6UXh6PXBydvDCubNQeXdl0rmwzfKDQIHQcsApqbZpuGNLQh0x4IOMsfQsKFhGTo2UNeCIIwVm77uUsD2sPNxKiYg+EFATDgxcfR8P8b1yO8t1aag40ebzVYYTrv97knsas5pcThbQXySP7fwo0iKVYA4huXYeq1Gt1rtOldnaJbjuDr5GjwvyLLE86IoCKI4wBLxMJQmxQA5pgGgCQEAug5URZVlRdM0XSMhOruP5XkeGaIZdpNiw3YNAIZDSZYkwzD8aOHfOrsz7iwIAk0zDM3gU7muO30/3Gh61cn7RXXB9M7IDcL/1FlnRTMtCKFpYhCECM1Aa7TUn4xaY0cMh4AOEfTGiBV1iu3L/aHSG/wFadRp8++zu5kne4+zeztP97vfq11FH0hKuS79AoSNFHceW23XAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Java SE 설치&quot;
+        title=&quot;Java SE 설치&quot;
+        src=&quot;/static/7db4acf4f33b3df8b57f204e8b853b71/0eb09/java-se-installed.png&quot;
+        srcset=&quot;/static/7db4acf4f33b3df8b57f204e8b853b71/0eb09/java-se-installed.png 500w&quot;
+        sizes=&quot;(max-width: 500px) 100vw, 500px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1&gt;JDK 환경변수 설정&lt;/h1&gt;
+&lt;p&gt;다음 절차에 따라 JDK 환경변수를 설정한다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;키보드에서 &lt;strong&gt;Windows + Pause Break&lt;/strong&gt;를 눌러서 시스템창을 띄운후, 좌측의 &lt;strong&gt;고급 시스템 설정&lt;/strong&gt;을 클릭한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1125px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/9e435e03e3dd65780c41fbcdf5640192/b1bc2/system.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 56.400000000000006%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAIAAADwazoUAAAACXBIWXMAAAsSAAALEgHS3X78AAABUklEQVQoz3VS20rEMBDN/z/7E/6IT4KID4KsoCCt7SZtkuY6uXnSXdBd1sPQJumcOWeaYbP2LsTVBGPdZqxxPlLKtVGuVxFSdoF6QiqBkjKehZgidrWmlMRqtAmbjThsQK0XsR+1Vk4r7Ygd3j/lontibZwvYpGoRYRSqZ4JHZC9f+YH7qVPCOXT6hL7enySL6+JL8gw2+asc95Za40xRJRzRpVWi6d89zA+D/Zj8W9Hh+e0Ecvor5S6e1kWoZQCgXM+z7OUElW8951/CyyV3826rlIqpM5TBxdCawUynOQMhXpuv3feFxfkYRim7wlqXHAkIh2UvKN724E0H4J28VoZVqHW/2Q3f9vqrnnq8oJc0fM4jkJwpTfjkwkZQfms+Re4DRyz0p2cr4Qo9P6Mxqv9D/SzT0pjXPnjurmYQ6qxVCqNMF6lhVwjpqoP1o2g/esP7S6BExsD4xwAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;윈도우 시스템 화면&quot;
+        title=&quot;윈도우 시스템 화면&quot;
+        src=&quot;/static/9e435e03e3dd65780c41fbcdf5640192/b1bc2/system.png&quot;
+        srcset=&quot;/static/9e435e03e3dd65780c41fbcdf5640192/0eb09/system.png 500w,
+/static/9e435e03e3dd65780c41fbcdf5640192/1263b/system.png 1000w,
+/static/9e435e03e3dd65780c41fbcdf5640192/b1bc2/system.png 1125w&quot;
+        sizes=&quot;(max-width: 1125px) 100vw, 1125px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;하단의 &lt;strong&gt;환경 변수&lt;/strong&gt;를 클릭한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 479px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/b49ded538a649b278607faf44fe2f669/001e3/system-properties.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 111.27348643006263%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWCAIAAABPIytRAAAACXBIWXMAAAsSAAALEgHS3X78AAACnUlEQVQ4y41UaXObMBDl//+hTj+2kyZpjsZubOMkPkDcCJAAiUMC0RXEjuNpMnmjWQvGq7f79iHDSdne8VAQ57Vs1VB3qpJDJSGqph9g1Z1eXKjjYkK1sp8javhR4rmO57oJxjiKIOaUlEVR5DmOozgKU4xJllWcHxdnXDb8ySfGzvFt20IIeb6PkO04DqG05Jzm1LIsGyHXdYIgZIyVBxRF2VZs7REjK2sphO+5QRh6nheGAcaJ7wdxHOE4DgLYxGXJhhP0SscdZgZhDSEZoaSTnRCi7zspu77v27YVUnQdPMLLXp2gG7On5Jqz0g+AEIdRGAQ+UPm+h5MkjrFGksDLNMuOzGpijpmRFhXsgFNTaUxRSGDUcdy0rS6hV2XVlLxmjYQTNPOUrIbPoEYunzbfr5ffft5dLO2UtSjlWjDRNpxpwAyG98VBWj8CflrZUS7zShJ+YKa8pTTbbje7vWVbFowhTVMYB2iY57Su6+mICWOJ02bsGZg7KTKi/1vkFIQJwwjE12LBkBg7lv2hYJ/3PKFpms1ms1wuwU5KtvuEH5LPOjzZHAoeYBwwM4QcnKRDL3eYa5OURR5GETgUzj6m/RcHh5303NYVuAKKyfPcB2cGOoBs8A4n+K3Lj3ruD7Uda9Y27LpXqSDCo5Rs/Cz0RFWny/6SScZYC7F8Wt8+zOwg6JXcY22SkflNmnffgBr7kxg35rpZP4vnF/GyqVbmYO13YfGarNRnI8qufm9N88/l1d3Fr783t/vtlsxnm3vzC8nAbKN6ZVarNV+ugLYyn4bNyw4lRpQVTV3z6hxgdRAfrqNSm56XhJSUchCMahvWZb5yM8OLM0rJGbIsg1ttPgPM4WJyEJrPZ4vFwnXdxePj5dX1w93Nj3vzH+RQ52YchWKCAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;시스템 속성&quot;
+        title=&quot;시스템 속성&quot;
+        src=&quot;/static/b49ded538a649b278607faf44fe2f669/001e3/system-properties.png&quot;
+        srcset=&quot;/static/b49ded538a649b278607faf44fe2f669/001e3/system-properties.png 479w&quot;
+        sizes=&quot;(max-width: 479px) 100vw, 479px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;시스템 변수&lt;/strong&gt;에서 &lt;strong&gt;새로 만들기&lt;/strong&gt;를 클릭한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 618px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/07ff8c94174e66f8c34b719873b2359e/bbf35/local-path-setting.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 94.60000000000001%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAATCAIAAAAf7rriAAAACXBIWXMAAAsSAAALEgHS3X78AAACSElEQVQ4y5VTSW/UMBTO7+YGB24VAokL/wPKVkoqwak7pTPJZLcdb3FsZ2mTzmSGly4j0UZIPH2yX2J/frsTYcGk6lbrflj3qw0o18thAjePYZorh4qC0hwRSihFOOdCamNKbTTAmHvdmLoCsX/BWifLOU3DSolGCyvyWonNzdXQNeu+HdG18Lm6boQQd29tAeIkuXznpq8O5Isv/PmnfGcPvT2gr136xs0BO9/Is/f45cd4HkR1ZfUd6UEcwotjL7vIykB2c1r/OA+/H80PTgP3yAfFPVnsHXqHPsEkt+axODlXOUokZ5vNZhgGJVjX1qv+er3sh2V3p6zXgyqUfkqmsoQN/MEYzz3P832EsRAyiqI4SUBJ0zQMQ8aYmSSXqpBSIoSAu/D9NEk5Z+GtcM6TJAqCAC5MkDETSQw2UqXK9kGqqq7rBmCshbWpGzidJEuMUNte9f2NtZbmVGsNNe36vutgga2HlyAWOH2SMKGyJEEZkkJC6N5slDAIIFQMTUMIeA6OQMImLAOZEpIhXI/GeyHHDlNaS1kAAbBcrqAQSsE/PUFWpRJQx/Nz8uuC/r7UQWjipFAlcI2xcAzZYoxPWGayrNrGRHH8+evJ7u7Zh11/36X7rje7DBae4DRY+JezGbTnRMysKMcyl6XG2BAyAuOCsgCLWYgCzGFWMEaUsQm3eaHvH6xryDLANrXQ9nhBfp55J0EeIwLFhy74J1nrLWACmsq2TdXcjt44jdZOxCyUriz0wmNsxW7x5I6T8RL4/P8Bmf4DBZoUhI5k6+oAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;새로운 변수 추가&quot;
+        title=&quot;새로운 변수 추가&quot;
+        src=&quot;/static/07ff8c94174e66f8c34b719873b2359e/bbf35/local-path-setting.png&quot;
+        srcset=&quot;/static/07ff8c94174e66f8c34b719873b2359e/0eb09/local-path-setting.png 500w,
+/static/07ff8c94174e66f8c34b719873b2359e/bbf35/local-path-setting.png 618w&quot;
+        sizes=&quot;(max-width: 618px) 100vw, 618px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;변수 이름&lt;/strong&gt;에
+&lt;code class=&quot;language-text&quot;&gt;JAVA_HOME&lt;/code&gt;을 입력 하고, &lt;strong&gt;변수 값&lt;/strong&gt;에 JDK 설치 경로 &lt;code class=&quot;language-text&quot;&gt;C:\Program Files\Java\jdk1.8.0_161&lt;/code&gt;를 입력후 &lt;strong&gt;확인&lt;/strong&gt;버튼을 클릭한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 653px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/1d688f0b1b562005fa75052b7c6fcdba/ffe7f/new-java-home-local-path.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 25.2%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAFCAIAAADKYVtkAAAACXBIWXMAAAsSAAALEgHS3X78AAAA+0lEQVQY023L3UrDMAAF4L7/awheCHqhMARRBOkEp+0cI8narLW/aZO0tUnWZLautuzWw8e5OHCsopaEMsob3Z/0OJpx1L+nzgyd6ec+/uNghp9+wKW08oKRPOUVF5Ryx6EfbgvR4WiU0ROptRTiTLTt2VSdEjivrCDOwiBgVS0IiS8uo6trcrdg603huNRxGwClUvNHSaX1QWulu2kxnfJSbu2/Yuz7aZblSZK+rbC99F/s3eNTZC/L1XsNoJBy8k1ZsoHBJ8iAz4qi4hTFzMJhBAGAUxBKCfF2HkIIY1yU5fxRsmmaVimKw/XN/evtw3bxHEIUhvttkP8BjkMOTbRTwLAAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;JavaHome 변수 추가&quot;
+        title=&quot;JavaHome 변수 추가&quot;
+        src=&quot;/static/1d688f0b1b562005fa75052b7c6fcdba/ffe7f/new-java-home-local-path.png&quot;
+        srcset=&quot;/static/1d688f0b1b562005fa75052b7c6fcdba/0eb09/new-java-home-local-path.png 500w,
+/static/1d688f0b1b562005fa75052b7c6fcdba/ffe7f/new-java-home-local-path.png 653w&quot;
+        sizes=&quot;(max-width: 653px) 100vw, 653px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;시스템 변수&lt;/strong&gt;에 &lt;strong&gt;Path&lt;/strong&gt;를 찾아 선택 후 &lt;strong&gt;편집&lt;/strong&gt;을 클릭한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 618px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/6386688592a4c345b621408b79b93350/bbf35/local-path-edit.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 94.60000000000001%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAATCAIAAAAf7rriAAAACXBIWXMAAAsSAAALEgHS3X78AAACUUlEQVQ4y5VTSW8TMRjNv+aAuMEBERaJVnDhR1SiYmmLONCq4pCQNk0YZzz74mUWezyTZJYkfBNVUVJGQnx6sixb7317z/AY4fGyWZerddls4LKoVx2oHkLk8x5hEQn9IAgICcPA55xJIQ4gW6gMTB5Ayp7jU8uyKGOUMt8PGIuWy2VRzHdWFEWWKfhNhdgHWC+gkWngKIqrqspzZW7N83zbsm3LArk8L9I0BQcSAji0XsBi33Pheb1el2VpmSZCyDAMfabPEMLYAC3GOeQl/rKW7NhWEISbzWbVNJQQpdRisQAhiH8+X8BZ1w2E1kEOebKNRnqep2kaQjO4MMbBIYTKOXccG2NMCBGyi5zEccS567pI0yBUyBb8Y6wDKKWWaei6Diodnr2QgTA2LR4nWV60UHkKxVEKkECbMgWdAf0uMo3SONo0FaDKlaCkzrN1uWxf6nJTw1mtmppHXWQfGR/efX7UP3/y5vvjl2fP+h+f9k9fvP3aPzp7dXT2+vj8+dHF++Mv7hRlSkHPDnMO6PB6eHk5Go/NGQp+Xo9ufmmTqXU3tScTe/rbvrvFju5zQrtaxZNUJGkaU0riGPrpweAtYi5dJ/PceRjmhYI6wwh2kAm0SkqIBnozGAxuRiOkG96Pq+nJCTr9RC6+zTTtbjJhjHVMGIkSkd7b7jNiHGvW5FbTdTegzHPdkJAHCbdkKPaOs1VoZ4ElcmCEV2M8xKHp+tB8mIJ/kHcmRZpnolAylwJWr91GKTtyZnGayful3cee0MFi76Pn0AT49P8Blf4DEJwQZ+p/qBkAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Path 변수 편집&quot;
+        title=&quot;Path 변수 편집&quot;
+        src=&quot;/static/6386688592a4c345b621408b79b93350/bbf35/local-path-edit.png&quot;
+        srcset=&quot;/static/6386688592a4c345b621408b79b93350/0eb09/local-path-edit.png 500w,
+/static/6386688592a4c345b621408b79b93350/bbf35/local-path-edit.png 618w&quot;
+        sizes=&quot;(max-width: 618px) 100vw, 618px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;시스템 변수&lt;/strong&gt;에 &lt;strong&gt;Path&lt;/strong&gt;를 찾아 선택 후 &lt;strong&gt;편집&lt;/strong&gt;을 클릭하여 &lt;code class=&quot;language-text&quot;&gt;%JAVA_HOME%\bin&lt;/code&gt;을 입려하고 확인을 클릭한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 527px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/77e7f7752c84026b9c4ab423015fdb3d/c6c03/local-path-add.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 95%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAATCAIAAAAf7rriAAAACXBIWXMAAAsSAAALEgHS3X78AAADH0lEQVQ4y3VTW4/bRBj1D0UIXnmjPACC34OokFao2pZWtC90pVa73SZxEl/G9tx9v8aOnYTcOE54WCHx6ZM9Hs+Zc77zzRg0zOM41WFcr9rj+fz34bg/nq55OJ2PT/JwPA/703A+D/g8nz/r1tBZ7ahiKQpblSRqbF1hYKvKUeVClFNezi45ZYWl67YoKtNMp9NuPpt9XBq2Lr5/Ib77XX57w5/dsB9exj/9kfz4Kvn5dfLNTfjlr/qr5/rr5/qLX/Sz21DM5s7ty49v3y3f/Xn32xsjzivmExb4kjNrMU+j6Pw/MQxDEATJYmG+fiPu3j9OPCPKKik4DaiQkjFm206Rl7vdbrvdrtf94XC8BsDrvg8oFVqbts0FfQhSIykaybnn+VLgzQkhnksw0EoXRXl6wtz3PaWUuI45X1Bi37uhERc1mEHIKIMqa2lhhRCCc5FlWRiGURTFUVyWVdd1WBDH8XQyCYj7yYuNKB9l+55PKcPKOE66bg2e/X4P5Rf9eOygHMwAV1UVJ+mqyqcsv9TMmUc83/fTNG3bFr+rutrvD/8x7CqbM7q0LN+1H0g0ui0A9kaw67i25diWbVkWLFBacco54xCPveA2wL7vzcy5s5x/sOS1ZgGs4CLUOsBP4sE2fHLGiOu6DsG+h8NhsxlbxSi1LDtwrQ+2Gt2GEsd2BBNXcnjmex67BA2wWwDz8jyv6xpGFkWRpFlTZmPNycVtEAgusTFIHceFVFiISbQAR0ApTVxSlXXTNIvl4nEymT7e383Zv+CrTqUUMMR2sfQC89F1FA+8lGq1akG+QrTttm9NUY6yURzUCsallGAjDoEEYCDbcRyMMee5XpblaMMlmqFbmaIYmYXAIldyCUI6VsiVQvtg7MU+QtACNP90OqFgKMcWQ9eMzDqrtA6lGg+IkDoMY62jcDxUCS650iESk22Hkz6ksKpZ4eYP6xb31CjqBgVs1t2m77b9+Nys2zH7djtOtruhC/N66YvJ0vNUmqUJC7wqUSZNjE+0wKVHAdecP8nrzEIW753s1Wfx4j54u4gfSPzXLHh05e0k/AfAQ/LMM25SFwAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Path 변수 추가&quot;
+        title=&quot;Path 변수 추가&quot;
+        src=&quot;/static/77e7f7752c84026b9c4ab423015fdb3d/c6c03/local-path-add.png&quot;
+        srcset=&quot;/static/77e7f7752c84026b9c4ab423015fdb3d/0eb09/local-path-add.png 500w,
+/static/77e7f7752c84026b9c4ab423015fdb3d/c6c03/local-path-add.png 527w&quot;
+        sizes=&quot;(max-width: 527px) 100vw, 527px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1&gt;JDK 설치 확인&lt;/h1&gt;
+&lt;p&gt;JDK 설치 및 환경변수 설정이 완료되었는지 다음 절차를 따라 확인한다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;키보드에서 &lt;strong&gt;Windows + R&lt;/strong&gt;을 눌러 &lt;strong&gt;실행창&lt;/strong&gt;을 띄운후, &lt;code class=&quot;language-text&quot;&gt;cmd&lt;/code&gt;를 입력하고 &lt;strong&gt;확인&lt;/strong&gt;버튼을 클릭한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 443px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/7316568c5a68a97c13e3a64313082a2e/4d697/running.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 44.92099322799097%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAJCAIAAAC9o5sfAAAACXBIWXMAAAsSAAALEgHS3X78AAABdUlEQVQoz5WQy47TMBiF/f5Pw2KgCxAVg8RwEbQTKNOmSZwmsXOr46R243uC0xkhthx9i89nYf/+QUj0PkVpUQk7M2k9XDmu7D+4W7nwItoNo6rIAJh0szPW6Pm/Mi0B1UU/tUppE8cJzFJ4yjFGdd3UTYNRiRFqz20M4emUlmWVFQVCKIEwihNKe1D0elsKbW0Shni/F4xb6+fQ1hit1LMoKdXNl2appZLCGAO6nglG5Xgdn45kF15/h0Ia/39hphs38ce/jZ2lna960nYCLWVn0o2MXb4Hhw9f6LctF5q5mdsFpibPRboXUc7DtOu49hcB6jdmjdJaMCZIJzjnLeFtx5uONUSMQviRtR6F9PjVPONVSgmKmtBuCfUbGHkT/Pq8+vTu1dv13frh7j7++JBk6eN2k2WnPM9+Bo+b7cYHQkgIAbilw9DTvu8pHTg778Pd6j548z5YrXev19nXH6iuouMRY1yVZRxFURwfDoc8z/1jfwAz0fdRfRKh0wAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;실행창&quot;
+        title=&quot;실행창&quot;
+        src=&quot;/static/7316568c5a68a97c13e3a64313082a2e/4d697/running.png&quot;
+        srcset=&quot;/static/7316568c5a68a97c13e3a64313082a2e/4d697/running.png 443w&quot;
+        sizes=&quot;(max-width: 443px) 100vw, 443px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;cmd&lt;/strong&gt;창이 뜨면 &lt;code class=&quot;language-text&quot;&gt;java -version&lt;/code&gt; 및 &lt;code class=&quot;language-text&quot;&gt;javac -version&lt;/code&gt;을 입력하여 설치한 JDK 버전이 뜨는지 확인한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 579px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/8ac6c66aae2eb4e0a11c0a52cf39005a/ff2d6/cmd.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 66%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAANCAIAAAAmMtkJAAAACXBIWXMAAAsSAAALEgHS3X78AAABaElEQVQoz8WQSU/CQBTHp6XTTgrd6SKrhC3IyZYWEEzAxMQl8Vtx5MDiV/LoySOgTTVEFCEghsSLgyRykqgX/3nzz5vM+733MuDq+qY3cAfufd/1+nfewH3o3Xre8Ol1+T5bLCezxXg6n87fHp8nOMFXHMPReDSevswWwHTKjmM7RadcOTALVrFUsm27YFmH1Wq9XjPNfcs08/m9VCqZTmNL4pPNZHRNu+x2QVRS47wQ5XmdQZEAp7MsDSFFQQJ8K4qisDcaDXCRzp3E4qe7ieNw5DyRPIvEksaOKMuKovA8L4riOqFpmmGYNQYhxN7pdICmhzRFNlQVl6vBoCyvOGySJAUCAQwLgsBxnN/vxy0QQl+TW60WOIolKopaD4VrmiGyLIMQbsyyLEmS29dewRkjnA0Gc7qRkmSR532fD9u1gQGNAEEAggQkiUmfz/cLmIQIf+w6fqgNTEAEfqn/htvt9t/hZrP5AdoPY6rXUO9PAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;커맨드창&quot;
+        title=&quot;커맨드창&quot;
+        src=&quot;/static/8ac6c66aae2eb4e0a11c0a52cf39005a/ff2d6/cmd.png&quot;
+        srcset=&quot;/static/8ac6c66aae2eb4e0a11c0a52cf39005a/0eb09/cmd.png 500w,
+/static/8ac6c66aae2eb4e0a11c0a52cf39005a/ff2d6/cmd.png 579w&quot;
+        sizes=&quot;(max-width: 579px) 100vw, 579px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;/ol&gt;</content:encoded></item><item><title><![CDATA[윈도우10 부팅 USB 만들기]]></title><description><![CDATA[개요 이 포스팅에서는 윈도우10 부팅 USB 만드는 방법에 대해 소개하고자 합니다. 준비물 USB (최소 8GB) MediaCreationTool USB 포멧 USB를 삽입한다. 내컴퓨터에서 삽입된 USB…]]></description><link>https://luckydavekim.github.io/development/make-windows-booting-usb</link><guid isPermaLink="false">https://luckydavekim.github.io/development/make-windows-booting-usb</guid><pubDate>Sat, 18 Nov 2017 17:06:00 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+&lt;p&gt;이 포스팅에서는 윈도우10 부팅 USB 만드는 방법에 대해 소개하고자 합니다.&lt;/p&gt;
+&lt;h1&gt;준비물&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;USB (최소 8GB)&lt;/li&gt;
+&lt;li&gt;MediaCreationTool&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;USB 포멧&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;USB를 삽입한다.&lt;/li&gt;
+&lt;li&gt;내컴퓨터에서 삽입된 USB항목을 [오른쪽 클릭] -&gt; [포멧]을 클릭한다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;시작&lt;/strong&gt;버튼을 클릭한다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1&gt;MediaCreationTool 설치&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.microsoft.com/ko-kr/software-download/windows10&quot;&gt;Microsoft 홈페이지&lt;/a&gt;에서 MediaCreationTool을 다운로드 한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1305px; &quot;
+    &gt;
+      &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 49.8%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAKCAIAAAA7N+mxAAAACXBIWXMAAAsSAAALEgHS3X78AAABqklEQVQoz4VRv0vDQBiN4Obo5uAijqKgk4OICCqKf4A4ODiIkyLo7CC6OImDtAj+QDv4a1LQRZ1qsdbF1iZBKbXWXJNckqZN7nKXeBerIgo+Ph7vvrvH3fdOuIqnFg+SS4d3Z9eJ20Q8fsORTCbvfyKVSt39BGsKsiQ+S5nXp+yTnBXFrCSKEmNJkqUa5FDm83moq1ADUFUMDQClyJoC9YMyDiwcVLzAJbwQ5UzYRgjf5yLzKEW2Ypv7x1v7J+vR2OnFJWsKPiWODpChOZZRVEoKUN9ACai6qukahLZtW6bFzkUi0bqWgcb+hbrxWP3M2eD0MjeXgLl6lF45ety7ELHrYIwRQh/sui4hhGlu3og2dXa0js0Lk+cNyw8jc2vcXK2iexmmc2auYLI3Br/A/Ix3tne7e7t6Rofauoeb2/smpma5OTT44WwBIr5HfUxq5YVLLxzecaosL1PTbKNkQ1ApGywLwcNY0a2cjgsQ5XT0YqA3ExeMWhVDDSteGVEb82grn9Hymykhlu2YDnE9wm6n/je+NEueUOoRXoQxpWz58ezwP/4c9z+8A8mEDoDkvmTpAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;media-creation-tool-download&quot;
+        title=&quot;media-creation-tool-download&quot;
+        src=&quot;/static/0e53f222d52d78001fe9b20a2e0f6a7a/2851b/media-creation-tool-download.png&quot;
+        srcset=&quot;/static/0e53f222d52d78001fe9b20a2e0f6a7a/0eb09/media-creation-tool-download.png 500w,
+/static/0e53f222d52d78001fe9b20a2e0f6a7a/1263b/media-creation-tool-download.png 1000w,
+/static/0e53f222d52d78001fe9b20a2e0f6a7a/2851b/media-creation-tool-download.png 1305w&quot;
+        sizes=&quot;(max-width: 1305px) 100vw, 1305px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;다운로드한 MediaCreationTool을 실행한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 702px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/7f369a0a00375cb1d753daa5c92ce4c4/198ed/create-media-init.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 78.99999999999999%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAIAAACZeshMAAAACXBIWXMAAAsSAAALEgHS3X78AAABW0lEQVQoz2PYf/Lm8eNXT5++eezo5aNHL12+8vDGzec3bjwDouvXn8IZN28+v3Ll0dWrj4Hsa9eeAMnLlx8yKHBHK3KGK3BGAJEiGMmzhytwgBBQXJ49DMKGMIAkMmIQYQy2Us/Rk0g0kU+3UMmy1ylwMigyU8qwVs+x08ozkk0zU8zUFI4TZPAVYwwUZQhARgwSzGFybGEyLCFABGTIsYUrcUcpcEXKc4TLsoYqghnSLCHiDIESDEFoiEGSNVyaOVicIQgoDUFiYITGxtQJ0izBGibFFIxVjiBikGAJk8Bh8KjmgdIMjE5p5hAggjMg8RwOkmYMxoMkGYMFGfx4GXz4GXwFGPz4GHyASJwRqJkJaLCvBIMfLiTJ6C/M4B3sUFaY0JHgVxfpWpkb25Ye2qzIFcIgIZwqwZ8oIZCEC0kKJonyJtjb1gYFd3q4Nzs7NgQEdPj4tMmJpwEAoBe/zC65uacAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;create-media-init&quot;
+        title=&quot;create-media-init&quot;
+        src=&quot;/static/7f369a0a00375cb1d753daa5c92ce4c4/198ed/create-media-init.png&quot;
+        srcset=&quot;/static/7f369a0a00375cb1d753daa5c92ce4c4/0eb09/create-media-init.png 500w,
+/static/7f369a0a00375cb1d753daa5c92ce4c4/198ed/create-media-init.png 702w&quot;
+        sizes=&quot;(max-width: 702px) 100vw, 702px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;원하는 작업을 선택한다.
+(다른 PC용 설치 미디어(USB 플래시 드라이브, DVD 또는 ISO 파일) 만들기)
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 702px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/c844b95633a0dab4dd85c23e9803537a/198ed/create-media-choose-work.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 78.99999999999999%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAIAAACZeshMAAAACXBIWXMAAAsSAAALEgHS3X78AAABuElEQVQoz2PYf/Lm8eNXT5++eezY5aNHL12+/PDmzec3bjy7fv0pCN14CmQDEVDwypVHV68+Bgpeu/YESAJVMihwRyuwhytyRsizhQFJRa4IeY5wefZwJe5IBU4gIwzIBiI59jAFDggXgRhEGIMt1XKc9Ap0xZN0JVNcjIoddfJ1xBId9QoddAstVTJNFNINpVNEGPxFGQLQEIM4cyjISI4IBc4IKaZgoIXKPFFAy2VZQ2XZwoBcWdYwaZYQCYYgTMQgzRGhIxavJhCjLhirJRKvLZogzRIszhAAkRZjCAQxGAMlmYKlGEFIghFJsyRbmJ5knIF0EhAZyiQDkYFMoqlCqp5Egr5Ukp5kgq54vK5EAhAZySYDEdAV4hATgZolWMIkgRzGIEmgqWAhIANoD4hEQhAFcDUIzRIwkwgicTQ/k6RZYkRpBqYfaeYQIJJiCoEwwJpZw8HJIBgPAsaQAIMvL4MPH4MPnCHOCNTMBDTYV4LBDxeSZPQXZvCOdK0uTu5OC2kJcm9Mie6KC+uS5wxlkBBOleBPlBBIwoUkBZNEeRKcHRpCgrt8vNpsHVtcfTpdvLplxNMBdUDFORmUM18AAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;create-media-choose-work&quot;
+        title=&quot;create-media-choose-work&quot;
+        src=&quot;/static/c844b95633a0dab4dd85c23e9803537a/198ed/create-media-choose-work.png&quot;
+        srcset=&quot;/static/c844b95633a0dab4dd85c23e9803537a/0eb09/create-media-choose-work.png 500w,
+/static/c844b95633a0dab4dd85c23e9803537a/198ed/create-media-choose-work.png 702w&quot;
+        sizes=&quot;(max-width: 702px) 100vw, 702px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;부팅 USB로 만들 Windows 정보를 선택한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 702px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/e10f1d8c1527faa7f49bf0b3e78487cb/198ed/create-media-choose-version.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 78.99999999999999%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAIAAACZeshMAAAACXBIWXMAAAsSAAALEgHS3X78AAACGUlEQVQoz2PYf/Lm8eNXT5++eezo5aNHL1++/PDGjWfXrz8FkiAGmA1EN28+v3Ll0dWrj4Hsa9eeAEmgSgYF7mhFzggFjnAFDiAZocQVocgFYsizhwEFgVIgxAXlAklkxCDCFGKskG6hlKElGm+plm2llm2vnQ9kWKhm2WjlGUonW6pmmyikCzH4iTEGiDKgIAYJljA1/hgNwVhl3mgV3mhJpmAp5hBZtjBp5lAxhkBhBn+gNiCSZAiSwEAgzUrckdIsISIM/oYySUkhLSmhHSAU1p4c0p4U3JYe2eVnUw6UlWQMxqJZgTNCmhmk2UA6MTEYohmkE0y2ZUR1+eLRrMofo8gdDnSbqWJqRnR7ZnRHUepECCpMmVCePSXco04Y6HKsmoGBqcIbJcIQoCeZEOZRHeFZFx/QAkFx/s1AJ3hZlGK3WZw5VIkrUl0wBmi2kWxSYlAj0NtZsb1ZMT1AlBndnZfYH+RYJYxVsyxnpJ54kjRjtDJnogxLNB+DHxeDByeDOxxxMLjxMnhLMgRjD20ppmCgqUBpKXA8SWMgoLgErqiSYAjEKkcQEasZaDnMFVDngDWzhoOkgYGBGwE9JcDgy8vgw8fgA2eIMwI1MwEN9pVg8MOFJBn9hRm8I12ri5O700JagtwbU6K74sK65DlDGSSEUyX4EyUEknAhScEkUZ4EZ4eGkOAuH682W8cWV59OF69uGfF0AHx94w0o6i9fAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;create-media-choose-version&quot;
+        title=&quot;create-media-choose-version&quot;
+        src=&quot;/static/e10f1d8c1527faa7f49bf0b3e78487cb/198ed/create-media-choose-version.png&quot;
+        srcset=&quot;/static/e10f1d8c1527faa7f49bf0b3e78487cb/0eb09/create-media-choose-version.png 500w,
+/static/e10f1d8c1527faa7f49bf0b3e78487cb/198ed/create-media-choose-version.png 702w&quot;
+        sizes=&quot;(max-width: 702px) 100vw, 702px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;USB 플래시 드라이브를 선택하여, 부팅 USB 만들 준비를 한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 702px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/e4c7b686793157ffd744160fb2d256f0/198ed/create-media-choose-media-type.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 78.99999999999999%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAIAAACZeshMAAAACXBIWXMAAAsSAAALEgHS3X78AAABs0lEQVQoz2PYf/LmieNXT5++eezo5aNHL12+8vDGzWc3bjy7fv0pkISjmzefX7ny6OrVx0Dxa9eeAMnLlx8yKHBHy7OFybOHK3JGKHBEKIDIcCBXiTtSnj0MGYHFUUQYhBmD9SSTXI1KHPUKDaRTLNVzzRTTdcSTHHQK5DjChBn8xRgCxRgCIKQoKmKQYAlT5o7SFIrTFI5X5olS5YtWF4jVEIwFkip80Yqckcq80YpckUApeY5wCYYgZMQgyRqmxBOuJhijyh+tyh+lxh8lwQiVk2QMlmIKBpJwhEWzpnCMsXyqoUyKvmQiEEmzBIszBALlxMFIAjdikOaI0JdKAnpblS9GiilEhjVMli0MaKEEXm1QzUA/K3KGK/FEgcKZM0KRK0KBK0KGJZRYzZDAFAcjcKgGihOhE6pZAuxDMtDg1wwMf2nmECACxgiEAdbMCk43wASAGwGThwCDLy+DDx+DD5whzgjUzAQ02FeCwQ8XkmT0F2bwjnStLk7uTgtpCXJvTInuigvrkucMZZAQTpXgT5QQSMKFJAWTRHkSnB0aQoK7fLzabB1bXH06Xby6ZcTTAXXXwy+8w4iEAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;create-media-choose-media-type&quot;
+        title=&quot;create-media-choose-media-type&quot;
+        src=&quot;/static/e4c7b686793157ffd744160fb2d256f0/198ed/create-media-choose-media-type.png&quot;
+        srcset=&quot;/static/e4c7b686793157ffd744160fb2d256f0/0eb09/create-media-choose-media-type.png 500w,
+/static/e4c7b686793157ffd744160fb2d256f0/198ed/create-media-choose-media-type.png 702w&quot;
+        sizes=&quot;(max-width: 702px) 100vw, 702px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;부팅 USB로 만들 드라이브를 선택한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 702px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/04a72c1a7cf2600b68ea0fc414f3b860/198ed/create-media-choose-drive.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 78.99999999999999%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAIAAACZeshMAAAACXBIWXMAAAsSAAALEgHS3X78AAABp0lEQVQoz2PYf/LmieNXT5++eezo5aNHL1+58ujmzefXbzwDohtA8vpTIAIygIJAqatXHwO51649AZKXLz9kUOCOlmcLk2cPV+AAISBDnh3EVeQEMRQ5I5S4IsAiYWDZMGTEIMoUoikSZySX5qRf5KRbaCiTYiCdYqmaZamabSiTaqqYYaGaJcrgL8YQAESiqIhBgiVMgTNclT9aSyReQyhWhT9GTSBGlS9aXTAWJCgcry4Qq8gVqcQNQsq8UTIsIeIMQRJgxCDJGibHGiHFEC7JECbDFCHFFCwBk4MgScZgZIQsxSDGFKIvmRzoUONpWmqunAWUFkfVjAcxiDKGaAjGRHvXR3nXelmWiDMEShCvWZIlDBge3Aye3AxefAzexOsEaQYGmCRDkDRzCBBhepiwZglSnDq0NAODAxYuIRAGWDNrOEgaGPu4ETDyBRh8eRl8+Bh84AxxRqBmJqDBvhIMfriQJKO/MIN3pGt1cXJ3WkhLkHtjSnRXXFiXPGcog4RwqgR/ooRAEi4kKZgkypPg7NAQEtzl49Vm69ji6tPp4tUtI54OAABWxMU13SRTAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;create-media-choose-drive&quot;
+        title=&quot;create-media-choose-drive&quot;
+        src=&quot;/static/04a72c1a7cf2600b68ea0fc414f3b860/198ed/create-media-choose-drive.png&quot;
+        srcset=&quot;/static/04a72c1a7cf2600b68ea0fc414f3b860/0eb09/create-media-choose-drive.png 500w,
+/static/04a72c1a7cf2600b68ea0fc414f3b860/198ed/create-media-choose-drive.png 702w&quot;
+        sizes=&quot;(max-width: 702px) 100vw, 702px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;Windows10 다운로드를 진행한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 702px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/e304173eb7a3c776c4121118e9e689ef/198ed/create-media-install.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 78.99999999999999%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAIAAACZeshMAAAACXBIWXMAAAsSAAALEgHS3X78AAABZklEQVQoz2PYf/LmieNXz5y5dezYlWPHLl++8vDGzWc3bjy7fv0pkLwBIW88u3nz+ZUrj65efQwUv3btCZC8fPkhgwJ3tDxbmCxLqAwYyXOEK3CEy7OHKXJFANmKnBFANgRBxJERgyhTiI54or5Usr5UkqZIvJZovIlCurV6jo1Grr5UiqVqthhDgCgOxCDBEqbME6nMG6UmEKvCF63EEyXLFqrEHQl0hTRziBxHuARDEC4E0izDEqIuGKvKFyPFHAwUEmcIBNoGJCGIgGYppmAV3ihlnigp5hBx3EqxawYaD/QA2DYSdEI1S+B126hmsjQDoxOYZoAIzgBrZgWnIcZgPEiSMViQwY+XwYefwVeAwY+PwQeIxBmBmpmABvtKMPjhQpKM/sIM3sEOZYUJHQl+dZGulbmxbemhzYpcIQwSwqkS/IkSAkm4kKRgkihvgr1tbVBwp4d7s7NjQ0BAh49Pm5x4GgAOhL8dsnxWKQAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;create-media-install&quot;
+        title=&quot;create-media-install&quot;
+        src=&quot;/static/e304173eb7a3c776c4121118e9e689ef/198ed/create-media-install.png&quot;
+        srcset=&quot;/static/e304173eb7a3c776c4121118e9e689ef/0eb09/create-media-install.png 500w,
+/static/e304173eb7a3c776c4121118e9e689ef/198ed/create-media-install.png 702w&quot;
+        sizes=&quot;(max-width: 702px) 100vw, 702px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1&gt;부팅 USB 생성 완료&lt;/h1&gt;
+&lt;p&gt; SB를 열어보면 다음과 같이 부팅 Windows USB가 생성되어있다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 642px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/728537a5c531fdb8f90af64fc9737d75/58a74/booting-usb.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 39.2%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAICAIAAAB2/0i6AAAACXBIWXMAAAsSAAALEgHS3X78AAAA5UlEQVQY041QwVbEIAzk///Nm3d11bqvW6DQkAQoxdmt7ntWD+YEM5lMMkZYFhIiYmZVba1t36WaKXGtFSBrBtJ7ZxYRLaXknE3fCsVzqSuInb5XYomUVBT6uCwQAMTsura9wawlhPEhcfktJlqwjnOWOY3jaK3rP8vUHMg+stQ/nLE0SwhBVabJej8fxVnlPDwPwwcuOXAIIsbovL/5O3zvFIYiCKM5Xy729HKKcTmIUyLYeu8REabg8h3HY5omHG+klKfh/e30ikiOYvoSw9l7eDvkf82stdnPV+db29b/V4dQPgEvbtNY1RcPBQAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;booting-usb&quot;
+        title=&quot;booting-usb&quot;
+        src=&quot;/static/728537a5c531fdb8f90af64fc9737d75/58a74/booting-usb.png&quot;
+        srcset=&quot;/static/728537a5c531fdb8f90af64fc9737d75/0eb09/booting-usb.png 500w,
+/static/728537a5c531fdb8f90af64fc9737d75/58a74/booting-usb.png 642w&quot;
+        sizes=&quot;(max-width: 642px) 100vw, 642px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[검색엔진에서 페이지 검색 가능하게 하기]]></title><description><![CDATA[개요 이 포스팅에서는 검색엔진에서 페이지 검색이 가능하도록 등록하는 방법에 대해 소개하고자 합니다. 왜 이런 일을 해야 하나요? 기본 옵션의 GitHub Pages…]]></description><link>https://luckydavekim.github.io/front-end/add-blog-to-search-engine</link><guid isPermaLink="false">https://luckydavekim.github.io/front-end/add-blog-to-search-engine</guid><pubDate>Thu, 02 Nov 2017 04:48:18 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+&lt;p&gt;이 포스팅에서는 검색엔진에서 페이지 검색이 가능하도록 등록하는 방법에 대해 소개하고자 합니다.&lt;/p&gt;
+&lt;h1&gt;왜 이런 일을 해야 하나요?&lt;/h1&gt;
+&lt;p&gt;기본 옵션의 GitHub Pages는 일반 포털사이트의 블로그와 달리 검색엔진에서 검색이 되지 않는다. 즉, 검색엔진에 등록하지 않으면 혼자만 사용하는 홈페이지가 되는 것이다. 다양한 사람과 소통하기 위해 만든 홈페이지라면 검색엔진에 등록하는 것이 필수이다.&lt;/p&gt;
+&lt;h1&gt;검색엔진에 등록하기에 앞서…&lt;/h1&gt;
+&lt;p&gt;검색엔진에 등록하기 전 다음과 같은 사전 준비가 필요하다.&lt;/p&gt;
+&lt;h2&gt;&lt;strong&gt;sitemap.xml&lt;/strong&gt; 추가&lt;/h2&gt;
+&lt;p&gt;sitemap.xml이란 검색 로봇이 홈페이지에서 어느길로 가야할지 알려주는 이정표와 같은 역할을 한다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/luckyDaveKim/luckyDaveKim.github.io/blob/master/sitemap.xml&quot;&gt;sitemap.xml 내용&lt;/a&gt;과 동일하게 &lt;strong&gt;sitemap.xml&lt;/strong&gt; 파일을 추가한다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;주의사항!!!&lt;/code&gt; - 루트 디렉토리에 존재하는 _config.yml 파일 내부의 url에 자신의 홈페이지 url &lt;code class=&quot;language-text&quot;&gt;url: https://luckydavekim.github.io&lt;/code&gt;을 입력해야 sitemap.xml이 정상 동작한다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;&lt;strong&gt;robots.txt&lt;/strong&gt; 추가&lt;/h2&gt;
+&lt;p&gt;robots.txt는 검색 로봇이 접근 범위를 지정해주는 역할을 한다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/luckyDaveKim/luckyDaveKim.github.io/blob/master/robots.txt&quot;&gt;robots.txt 내용&lt;/a&gt;를 참고하여 &lt;strong&gt;robots.txt&lt;/strong&gt; 파일을 추가한다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1&gt;Google 검색엔진에 등록하기&lt;/h1&gt;
+&lt;p&gt;Google 검색엔진에 등록은 Google 웹마스터 도구(Search Console)를 통해 등록할 수 있다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.google.com/webmasters/tools/home?hl=ko&quot;&gt;Google 웹마스터 도구&lt;/a&gt;에 접속한다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;속성추가&lt;/strong&gt;를 클릭하여 자신의 홈페이지 주소를 입력한다.&lt;/li&gt;
+&lt;li&gt;좌측메뉴에서 크롤링 &gt; &lt;strong&gt;Sitemaps&lt;/strong&gt;를 클릭한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 299px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/c8495adb6b53860355c1c2e4f3f3187e/1413b/google-goto-check-sitemap.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 154.51505016722408%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAfCAIAAABoLHqZAAAACXBIWXMAAAsSAAALEgHS3X78AAACtklEQVQ4y41UaW/TQBDN//+MVAnEZyggPoK4pJYS2gKiQiWozWE7h2Ov7fW53steh3HsOk1ipx2t1rZ2n9/Mm6fprVqjKMr1UPTqZ56x0Q2bjJmhM12Tjs2nU25oTJswTSuU6gBXDIXKPEfMZxKhDOOcJNJ1Mg9JayltuxNc3MVW1rtF3A/V7D2xnJfHeZ5TqqQspFRZtj5Vm1VdVwpubTGT76clWAp6M6C6zrWxIqTWbI8f9sD3RhPNRZbj4p5czDbywsrzrgorMEni2XyBkB3Fca02ABCyPD8gadrc2wer7f/2Gp5MyjzrpG1k44xHUZSmNG6YheBhGCaEpITAi24YGOOdFKp3H+OrXz+HY200GtVgzlkURpQyEsdQjGEYruvug3fTvmMWkAzwAjP2cUJaKq/AjSnKPtdgzsIA1KJJHAdBkFL2gGBr/IaZUkoIgZ0xRqpWP6h29WCMRnEEdWLsRSV52KW2lCJJSmUymdVg+GWSJMhBcNDdqpJ2uZgPBv+ur//M54sanKbE89zpdOoHwQGTQORZJsD/SoEves0ZfLuuY1nLKErAfSmlrTVXgm+pXY6DPEc2AlgYRYHvcy5a+wxyDoe3/f63wWCwxWzb1sJcYA8jy6JMtDJzzh0H6boOPBuwFAKYgTP0ofAA7ImQI2S226qiEBz6msJ+L+1ihdM04jyRAnbwmWXZLeDVyl6aw9uh7+FeYxcxHi+/nFinZ/j8wrm4BOo4SaSUB02y/lajSXT0zPzwyXv3Hn38TI7fyJOzYq3EPriZZvX0VLoRPzmav35rvTievXyFnz7nX/td4G17Vmmb5qx/7v8doN9Xsx+Xlm3vjLtOb5ca5jnPcyYlh+nZZrJOMBw4CPm+D0o6jlN0jKEO5kfEAWa1NE1wJ7hnYZp52xg8xCyryCQY8JGj9z/DvwwjvEoNgwAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;google-goto-check-sitemap&quot;
+        title=&quot;google-goto-check-sitemap&quot;
+        src=&quot;/static/c8495adb6b53860355c1c2e4f3f3187e/1413b/google-goto-check-sitemap.png&quot;
+        srcset=&quot;/static/c8495adb6b53860355c1c2e4f3f3187e/1413b/google-goto-check-sitemap.png 299w&quot;
+        sizes=&quot;(max-width: 299px) 100vw, 299px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;우측 상단의 &lt;strong&gt;SITEMAP 추가/테스트&lt;/strong&gt;를 클릭한다.&lt;/li&gt;
+&lt;li&gt;자신의 홈페이지 sitemap.xml 주소&lt;code class=&quot;language-text&quot;&gt;https://luckydavekim.github.io/sitemap.xml&lt;/code&gt;를 입력한다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1&gt;Naver 검색엔진에 등록하기&lt;/h1&gt;
+&lt;p&gt;Naver 검색엔진에 등록은 Naver 웹마스터 도구를 통해 등록할 수 있다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;http://webmastertool.naver.com/board/main.naver&quot;&gt;Naver 웹마스터 도구&lt;/a&gt;에 접속한다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;사이트 간단 체크&lt;/strong&gt;를 통하여 자신의 홈페이지 등록 가능 여부를 확인한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 942px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/26e09b87b8355cbfa83fcb35310ec309/8aec5/naver-check-site.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 90.4%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAASCAIAAADUsmlHAAAACXBIWXMAAAsSAAALEgHS3X78AAABx0lEQVQ4y5VUS67UMBDMUbkRF2DBNZDYvTMgsWPBAs1zPrYTf/rjhGpbjIAZJF6P43Tsrq52uTVTKSWGkFIK3qeUr7fY1FpjEVHFI4qvptpfv9l5ns/BJaXldlud2+Z5c857v3VbV6y52/waj/36F/hSvUq5arUBp7U3lI2aC9VClKvNpVZF4ael+Jbnd18/fvjxAr89I58aYlmUWYjhCPPZ7Ie9Ww3vv3/+tH6Bf17PwFGKo7jwgTHz7jmtnPjU/yq7CO1cds4YkYs0aC5dfntlrpUJTnumxYTYsAW/+rwnalKVY4zzskD2ChW6wUEuzNhCR4ybwzxZ+oz7yojB8SFMbUzKiP6LByvM1hPj08BMvC6bIUWzUFHOKR3HAZ6c4ZoPcoRiPrqBH7tWNk5ndZElRWdhADBKhRHRKH50Hv8y+J2Z2bnZ+ziYqzHnEMJAYnfgW0+67ztoMY/i7czBQ4YsrEBCs5H1UVtkGQdBrhEAZpndchwZFYPZBC/oNBqS3A2fgKHncQtgvoPZveJqNqqchLKiVysWH5lBG7sBPAKMOcYjhFjQ3CrUe+Txnu5l/6k2i98CqgEzwNx06HQ+mP1tdNoBxspPWC0cGY36YqIAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;naver-check-site&quot;
+        title=&quot;naver-check-site&quot;
+        src=&quot;/static/26e09b87b8355cbfa83fcb35310ec309/8aec5/naver-check-site.png&quot;
+        srcset=&quot;/static/26e09b87b8355cbfa83fcb35310ec309/0eb09/naver-check-site.png 500w,
+/static/26e09b87b8355cbfa83fcb35310ec309/8aec5/naver-check-site.png 942w&quot;
+        sizes=&quot;(max-width: 942px) 100vw, 942px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;사이트 체크를 통과하였을 경우 하단의 &lt;strong&gt;조회한 사이트 소유확인 하기&lt;/strong&gt;를 클릭한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 514px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/4735d50901708087bc81c4356e7ef98e/1cbe9/naver-goto-check-site-own.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 26.200000000000003%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAFCAIAAADKYVtkAAAACXBIWXMAAAsSAAALEgHS3X78AAAArElEQVQY03WQyw7CIBBF+/9fpcaFGwGxjY+lC0WLCOHVggWntXbTeHKZnExyZ0GRU+oDfGXKjPRj2hTwfIzSOxffum1NDBZmCC8pjdbee6WU1tpam2YXi9wldTpzWsrDkWECArnTveCcMcbr+jHAORdCGGNAnHNjuaNVvV5eS8R2W07xBW9uFXquFh6TkHNomjgQAmjv0AQfy0kIj5AjxA9xGMNsEYb9+BH/+QAsIhyVxwBFRgAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;naver-goto-check-site-own&quot;
+        title=&quot;naver-goto-check-site-own&quot;
+        src=&quot;/static/4735d50901708087bc81c4356e7ef98e/1cbe9/naver-goto-check-site-own.png&quot;
+        srcset=&quot;/static/4735d50901708087bc81c4356e7ef98e/0eb09/naver-goto-check-site-own.png 500w,
+/static/4735d50901708087bc81c4356e7ef98e/1cbe9/naver-goto-check-site-own.png 514w&quot;
+        sizes=&quot;(max-width: 514px) 100vw, 514px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;HTML 파일 업로드, HTML 태그 중 원하는 인증 방식을 선택하여 인증한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 821px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/7cc84af8b4a2cbc332128d6a35b0baed/809bd/naver-check-site-own.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 70.2%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAOCAIAAACgpqunAAAACXBIWXMAAAsSAAALEgHS3X78AAABbElEQVQoz51Si07kMAzs/38hCwvbZSHdPtPm0ebpMKZwhxAg7qypO3Vkq55MVUrJmWKMKaWcc4gBpPwuKjzOu3me1aKMMdMsF6X4hIixkx+ag/ebMavWSspNaxC7x7oqrbUxIPmrEdxMOBtHmqYsJQ09zZK8J+dQZwJsWwmheF+c4xzj32aUqG3z0zMJkYWgZ5EvT5+QLpdXgnyhvt93qUpK/ubQ390N58eurrdxjMtCxhRri13fMwNFBn7zkQdxMxmb6rPctnGaunGYlQI81IfyKSED+HQh0Af98umMvSqyNtbnVk6NEKJprtdr27bDMHR9z6zrgCu/OyklrmO1Vnvvjvdl3SooEQ+3UjTTMABd08zjCPFx9diIkfNOUGHADG2bTvWbYFlr/3Dy9w+YZw+3yO54jKca63wJlvZV8Ao7YKuFr9OU38eb2kwIPgkhpBhD5KDdXt8Bi/xphpkhBhy6wlJKIf+Dt/87XgCMISxS6h8kKgAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;naver-check-site-own&quot;
+        title=&quot;naver-check-site-own&quot;
+        src=&quot;/static/7cc84af8b4a2cbc332128d6a35b0baed/809bd/naver-check-site-own.png&quot;
+        srcset=&quot;/static/7cc84af8b4a2cbc332128d6a35b0baed/0eb09/naver-check-site-own.png 500w,
+/static/7cc84af8b4a2cbc332128d6a35b0baed/809bd/naver-check-site-own.png 821w&quot;
+        sizes=&quot;(max-width: 821px) 100vw, 821px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;/ol&gt;</content:encoded></item><item><title><![CDATA[Jekyll로 홈페이지 만들기]]></title><description><![CDATA[개요 이 포스팅에서는 Jekyll을 설치하고 GitHub에 적용하는 방법에 대해 소개하고자 합니다.  필요한 Software Ruby
+— Ruby
+— RubyDevKit
+— Jekyll
+— Rouge Python
+— Pygements Ruby…]]></description><link>https://luckydavekim.github.io/front-end/install-jekyll</link><guid isPermaLink="false">https://luckydavekim.github.io/front-end/install-jekyll</guid><pubDate>Thu, 02 Nov 2017 04:45:30 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+&lt;p&gt;이 포스팅에서는 Jekyll을 설치하고 GitHub에 적용하는 방법에 대해 소개하고자 합니다.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 600px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/c9cd6e473e96bddbbe1f12a8631fe769/dface/github-jekyll-logo.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 38.4%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAICAYAAAD5nd/tAAAACXBIWXMAAAsSAAALEgHS3X78AAACP0lEQVQoz2OQk5Xj0FRTtQr1chWICfDi09fWMlJWVBRnAAJVZSXGz58/g5gMX79+ZWSAgv///zM8fPiQ4cmTJ0xfv3xifPj4CVNYeIQEWFJPW0tCSkrqs7Cw6AcgfishLvFfSUEhCCQXEhzMsnTpUrhhIIOAmIcBDayfv1Bo44aNX3fs3FnAICoiGuZqa/m/KDHif2FC2P+4IJ//CnJy82CK16xeDXMVx4sXL+ovXrzoAeIDXc757PnzwP/fvkqcu3Fz+sPnL/5fPHvWnoFXQjJkw9TO//9vHf3//87Bn68Pb/3v6WS7AqTp3NkzGteuXWMFsR89etR08uTJZCCTEUiz3Lt3L+benTsx91++LDy7cdP/i3PnnQTbXGhla9uSn949v63i8az6gv9zO6o3cbGzy3/48EH0/LlzTceOHQu/cOFC+OnTp7uB7ITLly8XAQ0sOnvmTNr1GzccDx45mndEV/f/+YCAQrCBmwz0ZaR5+YPUNTTPm5qa/gcKKYHET506lXjmzJnFmzZtcj948GD2zp07g44cOWJ+/Pjx6UB+wY4NG5yPPXoUvTU5ZfEZc/N/R+7fl4QHavWGw14BkbGPQ8LC/0fnlVVdvPsofOf27SFguepqlq6uLt758+cLHDp0SH/Pnj0RDIjoZjpkY/vjnJPTehD3CwMDE8Pme285pl95s7BizclXxYv3v+/Zc/naqrPXQ2GxCgJAgxjnzp0rsXbtWm0tLS0mkNiZMLAShr1FxeVba2pNwey+PiYA6SsZ2xV8swMAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;github-jekyll-logo&quot;
+        title=&quot;github-jekyll-logo&quot;
+        src=&quot;/static/c9cd6e473e96bddbbe1f12a8631fe769/dface/github-jekyll-logo.png&quot;
+        srcset=&quot;/static/c9cd6e473e96bddbbe1f12a8631fe769/0eb09/github-jekyll-logo.png 500w,
+/static/c9cd6e473e96bddbbe1f12a8631fe769/dface/github-jekyll-logo.png 600w&quot;
+        sizes=&quot;(max-width: 600px) 100vw, 600px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;h1&gt;필요한 Software&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Ruby
+— Ruby
+— RubyDevKit
+— Jekyll
+— Rouge&lt;/li&gt;
+&lt;li&gt;Python
+— Pygements&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;Ruby 설치하기&lt;/h1&gt;
+&lt;h2&gt;Ruby 설치&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;https://rubyinstaller.org/downloads&quot;&gt;Ruby 홈페이지&lt;/a&gt;에서 PC환경에 맞는 Ruby 설치파일을 다운로드한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 463px; &quot;
+    &gt;
+      &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 69.54643628509719%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAOCAIAAACgpqunAAAACXBIWXMAAAsSAAALEgHS3X78AAABkUlEQVQoz5WRS2+bQBSF+f+/o122SuS0m6hRpZDEGJuHg4nUyHbUMMMMYIbXvIEJySpVN/jcxV1cfTpH51oYpbZtr13XD97HvrvdeB4hhDFGP4uxrq5RGILVCrgbHEV1Xli06zbr9fL+LvC9bRC6K8ff+EIIY8w4juaTRq2bOK4eI+IFJNxKUllaqYbRVoiW81aKmrGa8bIsIQAQplmGAUiyLE8SkBcFJmVRN3lVlW3NlbaEUnB/SLzguHb3SyeNYgVgL6XWvVJKa62m6ael+r4Xgiup1HRVchgGywiRXiz+Xt+IhyV9cLjj8ltbO+5H0H9i/y/LEPL8/SJ+OUqUsZLQDFeHg7z5PQ8eBni5OH752n67bBc/2PUvevVT++E82JgjhHH8JFDOCZm60kKaeXqHXwB82sUCpCzPZVUNSp0BT867KBIppnlBMVaUnQMDGD1OMGKnQjbt2A/nxJ6cdzsBMZ+e/5rIuvloax68T5JtuBUAdTivnv9QhAet5zoXpEyTV5kVvCRdCilC/HSaA78BA08bzmjuuWwAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;ruby-download&quot;
+        title=&quot;ruby-download&quot;
+        src=&quot;/static/94b8cc6935e416b3cd8f55f58393e7a9/11b02/ruby-download.png&quot;
+        srcset=&quot;/static/94b8cc6935e416b3cd8f55f58393e7a9/11b02/ruby-download.png 463w&quot;
+        sizes=&quot;(max-width: 463px) 100vw, 463px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;I accept the License&lt;/strong&gt;를 선택 후 &lt;strong&gt;Next&lt;/strong&gt;를 클릭하여 설치한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 499px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/a90db5fa58257d391252377e34befb0c/f80a3/ruby-install.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 77.55511022044088%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAIAAACZeshMAAAACXBIWXMAAAsSAAALEgHS3X78AAACPUlEQVQoz32SWW/UMBCA8+ORkKiKxAMPvCEeqCohxB+AVipLET3Z7W43cbJx1jmcxHHs3FcTJtsFtuX4NLLH8oxnPDOK5dAwTtduEPCEsphGcTMMTT9Ud0PR9LuSlm1WdWnZgV42zbuZVFYGwqZJiO0QyxxZWdhcmYZP/eERfT/KMIg4zWZnH26YUtdVVdfNBthALcuyqqq2bYfhT/fR+Qqzj8d7B9eGUhZFlmV5nqdpKoSANdkgJJxisSHewGM4StjApL8r3l9HioXx6enXyWTyfTpVVU3XDV3XNQ0hTRsVVdNUFY2Lqi6XOtJvb28tYpeZPDhzlcCnhrFCCGFseZ5H4PcjDojv+/E26gP8IKgycXhOFZtYV5fX8/l8MV+AP+ecUuq4buAHYNf3d4/oum5lmkUSH15QJYTnY9E0LVzc1+P/gA1ELlMxOnuuG4bhX2v7L6C8ozOkzRgjDqU+w2tbN6Hd1Fo7a5sSm9qO57kUigDt+NUnIEmzrXMYRSgoTN5gXmthtWK14eealy/dPJRV17XQf/jRbmQhk23anJCK0o7zJmQtYxVj0POiLGBOmp/UD2FRtHW2X7+ZPXk63Xu+2H9x82yfvHwlGOPbpojdIfmNkFUmN2lbWDv5PD86RpMvi6Nje6nKJIk53zWWMM0wdFImcvOYTOo8OTz3FDHepCLL4nuRku8QcS5ijt3waolnaK0R33VdhPTAs99+cxQpx7QeyA5wgGi6E3260E6mxgyHMHrT6cwjGMbzB2Ioc8JrBH9tAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;ruby-install&quot;
+        title=&quot;ruby-install&quot;
+        src=&quot;/static/a90db5fa58257d391252377e34befb0c/f80a3/ruby-install.png&quot;
+        srcset=&quot;/static/a90db5fa58257d391252377e34befb0c/f80a3/ruby-install.png 499w&quot;
+        sizes=&quot;(max-width: 499px) 100vw, 499px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;RubyDevKit 설치&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;https://rubyinstaller.org/downloads&quot;&gt;Ruby 홈페이지&lt;/a&gt;에서 PC환경에 맞는 RubyDevKit 설치파일을 다운로드한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 369px; &quot;
+    &gt;
+      &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 54.47154471544715%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAIAAADwazoUAAAACXBIWXMAAAsSAAALEgHS3X78AAAB3ElEQVQoz3VRWY/aMBDm/0vta6X+gkqVKvVhJVoW2CxbroUNRy62UtXlSCCH4/hOgu06gNqnfhqPvs/j8czYLa01YxQjxIUwPgeANKBClCaklVLNUlf6F/qCllmB743HI8d1l8tlv3vv+r4fbOJTcsv9P1omnENYFDCOEwhAlibH+IQxATDPMoAQTrNsdzikACRxfIqOAABzgDF+q0wp5ZxhQhFCBSpSkBUYF0ZiTBmDCCVZBgkpEAIgNyFzr5nxlmzQbn9b2LaZviZUMn6m1JjkXAohOWt2MJFcqEZyI1Vd/0ueTKevQcD3O7oPWRThty0LQxGfRJqKOGZhRLY7EafilIg0JtGxwvg2M8a4Uso8LpMS1xWsSmE2z2cqJW9Ijauq1CovBZGKSFlJqS+f0FSGOQT2SzQYRtZjaFlvvd7xaXgajo6DYf482z9Y4eNTMX3+1bk3ZNvtZ+OJTtJb2+rHaPbh4+/vHe0HyvW050vXU45ruFwb7xterxztb5TjKc8/e3759U7uD01yfdf+8u79sN1G8zmY2XCxBLN5bi+KxYoEG7x24HIFZy/I8fK5XazXhefjT5/l689LZYTkaHK2BmW3X3Ufysb6V171Gln1rIZfpbFOtzYNav0Hrh9bOL+hpEUAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;rubydevkit-download&quot;
+        title=&quot;rubydevkit-download&quot;
+        src=&quot;/static/137d0c7ebe32be1995a570d0754c8c76/d8ad8/rubydevkit-download.png&quot;
+        srcset=&quot;/static/137d0c7ebe32be1995a570d0754c8c76/d8ad8/rubydevkit-download.png 369w&quot;
+        sizes=&quot;(max-width: 369px) 100vw, 369px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;RubyDevKit을 &lt;code class=&quot;language-text&quot;&gt;C:\RubyDevKit&lt;/code&gt;에 설치한다.&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;CMD창에서 RubyDevKit을 초기화 한다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;$ &lt;span class=&quot;token builtin class-name&quot;&gt;cd&lt;/span&gt; C:&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;RubyDevKit
+$ ruby dk.rb init
+$ ruby dk.rb &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;Jekyll 설치&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;CMD창에서 gem을 이용하여 jekyll을 설치한다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;$ gem &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; jekyll&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;Rouge 설치&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;CMD창에서 gem을 이용하여 rouge를 설치한다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;$ gem &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; rouge&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1&gt;Python 설치하기&lt;/h1&gt;
+&lt;h2&gt;Python 설치&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.python.org/downloads&quot;&gt;Python 홈페이지&lt;/a&gt;에서 PC환경에 맞는 Python 설치파일을 다운로드한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 686px; &quot;
+    &gt;
+      &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 69%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAOCAIAAACgpqunAAAACXBIWXMAAAsSAAALEgHS3X78AAACuklEQVQoz4XRS08aURgG4PkTXTQpF2sdmFEBRQWGqhVviCh3dEAYwJk5cwG5eeWi4FBsgwZbodpGbNJuuu3KjV016bZJ0/6A7prGfbc9SGLdNXny5f1O8p6zOIhialU+v/5wKqKcjPTaAWZju2di3dNR+UT4v5B+/1bjfSGaiTv4ylJKcgolX1KCt8iehJUWSn5DcYf8TkBU1ggJlnAbrbaxqJWWWSjlZFQxGZFNUA8mKDhvc3u1tNfbjODBCsa2dPzZACScEanzx+mWXnhtTrXGs2/hhBmejKYvxjMXprVzvfh69GY1Jc8RjCzp2Bea1Xp/rI5H6sPgxMg1cKpu4BqEeDrENfpixyN80yA0CfGVjjnBo8cGHuamUThBuqx81yynnOFQO9B6WczZNuBrT42T1jro/kVW46C1TrrfQRt8qyPedkZtrGwaIN32ZM9CSmlPm9ziJhdaY8NpEE4yYS5KhQTGG+cWWM4fB5Cd4f0iIOOATAAiIPa6s0jPYkbtyNyfW98Ihf58In9drvy+DF5fha4/Ln194//xGXy/Yr5dsT+/MB/ecfems/Bfu+xZuS1jDKwjqGtD5dpQODady4lWWXhZ4Ju7QmOXP82D4k4ydxAvSKD4lJOeg7UiP0alDcEs6t5AXZuoax1ReXcg1LODLefNsbwpWjBGiwYq3xcoylylHnde7cuhnlyPJ6f25oaC2zpyu1OBELW/AKl8BQ1ZtMUrVlGa4aVZQbIAaYytGmJVYrVqjB2YY6UZdmtoJf/IU8RuKhCCLZcg1VJJFyovrJXnE+U5sWwVy3OJspmWdKHKYLiij1T1lDRMFYdCu73kXqcCIXhAgjByXxuumsGhkakR7KGJOSTAkZGuEUzNxNTM4Ihgno0xe9Pc3mB4HyOlTgvpDUodeACe7ndmB07+y23wjZvObeUvBYYpLO563+YAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;python-download&quot;
+        title=&quot;python-download&quot;
+        src=&quot;/static/f08497bcd15fbe3484ec496115a73d96/3a6ec/python-download.png&quot;
+        srcset=&quot;/static/f08497bcd15fbe3484ec496115a73d96/0eb09/python-download.png 500w,
+/static/f08497bcd15fbe3484ec496115a73d96/3a6ec/python-download.png 686w&quot;
+        sizes=&quot;(max-width: 686px) 100vw, 686px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;Pygments 설치&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;CMD창에서 pip를 이용하여 pygments를 설치한다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;$ pip &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; Pygments&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1&gt;Jekyll 실행하기&lt;/h1&gt;
+&lt;h2&gt;Jekyll 사이트 생성&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;CMD창에서 Jekyll 사이트를 생성한다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;$ jekyll new C:&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;jekyll&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;다음 내용을 &lt;code class=&quot;language-text&quot;&gt;C:\jekyll\config.yml&lt;/code&gt;파일 끝에 추가하여 Jekyll 사이트 환경설을 한다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;encoding:utf-8
+highlight:rouge
+highlighter:Pygments&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Jekyll을 실행한다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;$ jekyll serve&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;Browser에서 &lt;a href=&quot;http://127.0.0.1:4000/&quot;&gt;실행한 Jekyll 홈페이지&lt;/a&gt;로 접속한다.&lt;/li&gt;
+&lt;/ol&gt;</content:encoded></item><item><title><![CDATA[GitHub Pages 생성]]></title><description><![CDATA[개요 이 포스팅에서는 GitHub Pages를 생성하는 방법에 대해 소개하고자 합니다.  GitHub 계정생성 GitHub 홈페이지에서 계정생성한다. GitHub Pages 생성 Pages를 위한 Repository 생성 GitHub…]]></description><link>https://luckydavekim.github.io/development/create-github-pages</link><guid isPermaLink="false">https://luckydavekim.github.io/development/create-github-pages</guid><pubDate>Wed, 01 Nov 2017 14:32:43 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+&lt;p&gt;이 포스팅에서는 GitHub Pages를 생성하는 방법에 대해 소개하고자 합니다.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 600px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/8cfa82956cbe9d35446eed860d4382bf/e224a/github-pages.jpg&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 58.4%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAAMABQDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAMEBf/EABQBAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhADEAAAAd2S1Y0A/8QAGRAAAgMBAAAAAAAAAAAAAAAAAQIEEBIR/9oACAEBAAEFAm7mMWNqua//xAAUEQEAAAAAAAAAAAAAAAAAAAAQ/9oACAEDAQE/AT//xAAUEQEAAAAAAAAAAAAAAAAAAAAQ/9oACAECAQE/AT//xAAaEAABBQEAAAAAAAAAAAAAAAABAAIQMXER/9oACAEBAAY/Ajy0SXF2zZOx/8QAGxAAAQUBAQAAAAAAAAAAAAAAAQAQESExUXH/2gAIAQEAAT8h8CpARdMVggscKubOm//aAAwDAQACAAMAAAAQkA//xAAUEQEAAAAAAAAAAAAAAAAAAAAQ/9oACAEDAQE/ED//xAAUEQEAAAAAAAAAAAAAAAAAAAAQ/9oACAECAQE/ED//xAAcEAEBAAEFAQAAAAAAAAAAAAABETEAECFBUaH/2gAIAQEAAT8QKNRMXjONFZoIQFsnTxsaQpTJk1N0bAz5t//Z&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;github-pages-logo&quot;
+        title=&quot;github-pages-logo&quot;
+        src=&quot;/static/8cfa82956cbe9d35446eed860d4382bf/e224a/github-pages.jpg&quot;
+        srcset=&quot;/static/8cfa82956cbe9d35446eed860d4382bf/953fe/github-pages.jpg 500w,
+/static/8cfa82956cbe9d35446eed860d4382bf/e224a/github-pages.jpg 600w&quot;
+        sizes=&quot;(max-width: 600px) 100vw, 600px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;h1&gt;GitHub 계정생성&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com&quot;&gt;GitHub 홈페이지&lt;/a&gt;에서 계정생성한다.&lt;/p&gt;
+&lt;h1&gt;GitHub Pages 생성&lt;/h1&gt;
+&lt;h2&gt;Pages를 위한 Repository 생성&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/new&quot;&gt;GitHub Repository 생성&lt;/a&gt;에서 repository를 새성한다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Repository name&lt;/strong&gt;에 자신의 github 계정명.github.io &lt;code class=&quot;language-text&quot;&gt;luckyDaveKim.github.io&lt;/code&gt;를 기입한다.&lt;/li&gt;
+&lt;li&gt;(선택) &lt;strong&gt;Description&lt;/strong&gt;에 repository 설명 &lt;code class=&quot;language-text&quot;&gt;Dave dev Blog&lt;/code&gt;을 기입한다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Public&lt;/strong&gt;을 선택한다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Create repository&lt;/strong&gt;를 클릭한다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1056px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/77a285d1f9f8d4e6dace89e161e3cdaf/cb866/create-github-repository.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 78.2%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAIAAACZeshMAAAACXBIWXMAAAsSAAALEgHS3X78AAABu0lEQVQoz3VSuW7bQBDl/ySFY8RyfEiGZEBRABf+vPxAitT5ipRuksJwYckWr1C8lnsfeStSlGBTD8PhYHfezM4RTG6/Lu7ux7P55HZxPZ1DxtP5+fX0y3j6+WJydnlzMZlBn46uPpycffw0gsAYXd3MFt+CMIrCKI7i5HW9fl6uVi+vy9XLcrmK4jhOUnxJmkLBbR2GvUQRGHHgdmCM5Zu8qqo8L4qiFEIaY/QW1lo3hMDuACd44wi28vDkHnYI+8yENlmOzIQxnv4DMkoZ4kmt3BEckBuC4pM0qwmpa1KUVVGW3m4IZaxu6oYSLvgwuaE022xIQ5XWraAOpTREooadqIMW7MlcyBx9kgp3ZgB2K13978icJ0lMKRVbcO41Mrnj2JONlqQu0S3RsfHJY0N6S4Z7gi5nGSpvf0jrAwjZAaYQ6MQA2WorieK1fzC6jLHlFRHb1ql2V3zzVLsLezIaAf07e/j+9PPH869MFO2qDD718NiTrfMHIU0eNn//FI9M8zZiy+/3aaBmPMMXJpV/DhyMw7CU7lz7xUYkKoxQBrfYegiMoJuq9Ym08XIwSNdPFUp3o3Y7N/cfFER680/BeVcAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;create-github-repository&quot;
+        title=&quot;create-github-repository&quot;
+        src=&quot;/static/77a285d1f9f8d4e6dace89e161e3cdaf/cb866/create-github-repository.png&quot;
+        srcset=&quot;/static/77a285d1f9f8d4e6dace89e161e3cdaf/0eb09/create-github-repository.png 500w,
+/static/77a285d1f9f8d4e6dace89e161e3cdaf/1263b/create-github-repository.png 1000w,
+/static/77a285d1f9f8d4e6dace89e161e3cdaf/cb866/create-github-repository.png 1056w&quot;
+        sizes=&quot;(max-width: 1056px) 100vw, 1056px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;h2&gt;HTML, Javascript, CSS 파일 추가&lt;/h2&gt;
+&lt;p&gt;1.Bash 명령어를 통해 github 저장소를 clone 한다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;$xslt&quot;&gt;&lt;pre class=&quot;language-$xslt&quot;&gt;&lt;code class=&quot;language-$xslt&quot;&gt;git clone https://github.com/luckyDaveKim/luckyDaveKim.github.io&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;2.HTML 소스를 작성한다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;$xslt&quot;&gt;&lt;pre class=&quot;language-$xslt&quot;&gt;&lt;code class=&quot;language-$xslt&quot;&gt;github 테스트 페이지&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;3.작성한 소스를 commit 및 push 한다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;$xslt&quot;&gt;&lt;pre class=&quot;language-$xslt&quot;&gt;&lt;code class=&quot;language-$xslt&quot;&gt;git add *
+git commit - m &amp;quot;init blog&amp;quot;
+git push&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;자신의 GitHub Pages에 접속&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;https://github&quot;&gt;https://github&lt;/a&gt; 계정명.github.io &lt;code class=&quot;language-text&quot;&gt;https://luckyDaveKim.github.io&lt;/code&gt;에 접속하여 생성된 github pages를 확인한다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1&gt;테마 선택&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Settings&lt;/strong&gt;탭을 선택한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1056px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/fb03403bb1d8a1d9a9c74bffddd5647a/cb866/repository-setting.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 29.400000000000006%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAGCAIAAABM9SnKAAAACXBIWXMAAAsSAAALEgHS3X78AAABHUlEQVQY03VO207CQBDt/3iJmBSkSqGSplH0QT7aRB68NUGqRWhLS9uEwLbby+52dx3RB188mZzMTM6ZM8qlNbq+vRtaI8O86g+tnmHqhqlq+tmFoXZ1VetD0z4ftLr6kaodttrHp52DE7XTG9yMx8pi6U/d4H0Rvrmr55n/MvNfHd8LomidrMJ1GEHFURh92Lb9+DT/XE5nDrDjzj3fV7iQFWlq2pQVrSnPSwIjpayqSdNwRhmVkngBerjHk4mApZRCCHCBRiFVWRaYc85YA0uMMUKIwgDg/JuFYChjScrTFERCSi6AJKFUIYRsUAVGuQcuiu1uB4FynyD/B2NMoY3ISsgQP1KU5WEYx0mKixLSUV5sthmc+a0/gGe/AOY5LDyfZu9DAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;repository-setting&quot;
+        title=&quot;repository-setting&quot;
+        src=&quot;/static/fb03403bb1d8a1d9a9c74bffddd5647a/cb866/repository-setting.png&quot;
+        srcset=&quot;/static/fb03403bb1d8a1d9a9c74bffddd5647a/0eb09/repository-setting.png 500w,
+/static/fb03403bb1d8a1d9a9c74bffddd5647a/1263b/repository-setting.png 1000w,
+/static/fb03403bb1d8a1d9a9c74bffddd5647a/cb866/repository-setting.png 1056w&quot;
+        sizes=&quot;(max-width: 1056px) 100vw, 1056px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;GitHub Pages&lt;/strong&gt;에서 &lt;strong&gt;Choose a theme&lt;/strong&gt;를 클릭한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 796px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/3ff46febf5bef47e0c771818c546f849/c0214/github-pages-setting.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 60.4%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAIAAADtbgqsAAAACXBIWXMAAAsSAAALEgHS3X78AAABV0lEQVQoz41Sa0/DMAzc//9zMDZNewBfNhBrmnccJ62T4bQbSCAep5PrOrpe5N4ipaSN8d6HEEqpl3+DhYsYk+iNUrZ761LK40jjMDKHiXR7bZgnRLN4GIYFjqPApBKqaFU0OloJmhsZ1NRY4WTvVZuAFk5pdFhzvow554WqdpV2azwsYfcQD/dwXMbTPZzu4LRKp6fLy3fu6/FYu8TiTIMMOhJiwVgSE6hx7tkE61w/mdi5Ds25EJ3fhNbWGBc8eOchQASMAVrTKgb+cP66yybmBfTKnIXseiWk7rXhKW/nz21PzqVI5yQb8kqJ2m0mcW241PqrmGLs1xu12drdPvQSMAFfNgD/eB8pIP2kb+Lh8Vks193+6bzZ5s223sDH86P5f9QbryEha/12x7awP1Rj/pOtWd9CQqW8iv6166S1gMg5dc75Ka7uipbceRgALVBILWTWuXeV47WgWdZx2gAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;github-pages-setting&quot;
+        title=&quot;github-pages-setting&quot;
+        src=&quot;/static/3ff46febf5bef47e0c771818c546f849/c0214/github-pages-setting.png&quot;
+        srcset=&quot;/static/3ff46febf5bef47e0c771818c546f849/0eb09/github-pages-setting.png 500w,
+/static/3ff46febf5bef47e0c771818c546f849/c0214/github-pages-setting.png 796w&quot;
+        sizes=&quot;(max-width: 796px) 100vw, 796px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;원하는 테마를 클릭 후 &lt;strong&gt;Select theme&lt;/strong&gt;를 클릭한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1057px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/111d4ccb1085d0e3ac78263eb17c6bc2/c3ac1/choose-repository-theme.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 61.199999999999996%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAIAAADtbgqsAAAACXBIWXMAAAsSAAALEgHS3X78AAAC50lEQVQozwHcAiP9AERJTU1RVEtNUkhJUERITEZMUENJTjxBRkFISzk/QzxARTxBRTg9QTM3PDI3PDM3OzY5Pjk9QTtCQmxwcgD39fKzxdhViaNvrqWbpaVsbnKElqPY0NC0qbDa1NTa2trQzs7k5eTa2tvb2tnBy9R7lq2FnbXf5Ojq6ugA////n73XEmt9Lpl0u83Mvru8z9PSybe7f25/0sLDnaipb3+E1dbX7u/t3+Dk7uzTzMFu1Mua+Pn8+vr5AP///+vy+Mbe49Pq4/z+/f///////////////v///+/r7OTi5Pf29v/////+/v/////59uTkytbfxfTw7gC9z+K4zeHD1OXL2ufC1uHB1t/B19/B2N/E2uDB2t7H4OLK4+PE3t3A3NrB3NnC4Ny60MhyondinmnAz8AADlWTD1iQDVmNDFyKDV+HDWKECGJ/B2R8Bmd4CGp2B21zBW9uBnNsCXdsDXxsDX9oDoNnHYhtDYJfV6uOABZdlRZekxZhkBZljRVnihlriTWAlTaCkzmGkzGFjDaKjD6RjjePiCmKfRSBbhaFbBaIaReMZwaHWVqujgAVXZMVYJAVYo4VZYsUaIgabog3g5VTlqFNlJxDkZRAkZBOnJZMnZM3k4QUg2wVhmoViWcYjWYHiVdar40AFV+RFWGPFWSMFWaJFmqHIXSKGHGDFnOAFnV8GXl7GHx4FX1zFoBxHIVyH4pxFIdnFYtlGI9lB4pWWrCLABdhkRdkjhdnixdqiRZshih5jDODkC2CiieBhDSLiSyJgyWHfDSSgjGTfiGNcRaKZxeNZRqRZQmNVluyiwAOXYsOYIgOY4UOZoMOaIATboAWc34UdHoTdncVe3UUfXITf24Vg20VhmsRh2UOiGEOi14Rj10Aik5VsIYAMnacMnmZMnyWMn2UMoCRMYKPMYSMMYeJMYmGMYuEMY6CMZGAMZJ9MZV7MZh5Mpt3Mp11NaF0JZ1nbbyWCeZt7swBOQEAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;choose-repository-theme&quot;
+        title=&quot;choose-repository-theme&quot;
+        src=&quot;/static/111d4ccb1085d0e3ac78263eb17c6bc2/c3ac1/choose-repository-theme.png&quot;
+        srcset=&quot;/static/111d4ccb1085d0e3ac78263eb17c6bc2/0eb09/choose-repository-theme.png 500w,
+/static/111d4ccb1085d0e3ac78263eb17c6bc2/1263b/choose-repository-theme.png 1000w,
+/static/111d4ccb1085d0e3ac78263eb17c6bc2/c3ac1/choose-repository-theme.png 1057w&quot;
+        sizes=&quot;(max-width: 1057px) 100vw, 1057px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;/ol&gt;</content:encoded></item></channel></rss>

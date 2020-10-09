@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://luckydavekim.github.io/sitemap.xml
