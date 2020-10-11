@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[DevDave]]></title><description><![CDATA[The blog for dave]]></description><link>https://luckydavekim.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Fri, 09 Oct 2020 09:22:02 GMT</lastBuildDate><item><title><![CDATA[Kotlin과 Spring Boot로 REST API 서비스 구축]]></title><description><![CDATA[개요 이 포스팅에서는 Kotlin 언어와 Spring Boot 프레임워크로 REST Api 서비스를 구축하는 과정을 담고자 합니다. 만약 Kotlin…]]></description><link>https://luckydavekim.github.io/back-end/create-kotlin-spring-boot</link><guid isPermaLink="false">https://luckydavekim.github.io/back-end/create-kotlin-spring-boot</guid><pubDate>Wed, 25 Sep 2019 01:05:34 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[DevDave]]></title><description><![CDATA[The blog for dave]]></description><link>https://luckydavekim.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Sun, 11 Oct 2020 19:44:37 GMT</lastBuildDate><item><title><![CDATA[Kotlin과 Spring Boot로 REST API 서비스 구축]]></title><description><![CDATA[개요 이 포스팅에서는 Kotlin 언어와 Spring Boot 프레임워크로 REST Api 서비스를 구축하는 과정을 담고자 합니다. 만약 Kotlin…]]></description><link>https://luckydavekim.github.io/development/create-kotlin-spring-boot</link><guid isPermaLink="false">https://luckydavekim.github.io/development/create-kotlin-spring-boot</guid><pubDate>Wed, 25 Sep 2019 01:05:34 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
 &lt;p&gt;이 포스팅에서는 &lt;a href=&quot;https://kotlinlang.org/&quot;&gt;Kotlin&lt;/a&gt; 언어와 &lt;a href=&quot;https://spring.io/projects/spring-boot&quot;&gt;Spring Boot&lt;/a&gt; 프레임워크로 REST Api 서비스를 구축하는 과정을 담고자 합니다.&lt;/p&gt;
 &lt;p&gt;만약 Kotlin에 대해 자세히 알고 싶으시면 &lt;a href=&quot;https://kotlinlang.org/docs/reference/&quot;&gt;참고 문서&lt;/a&gt;를 읽어보시고, &lt;a href=&quot;https://play.kotlinlang.org/koans/overview&quot;&gt;웹 튜토리얼&lt;/a&gt;을 통해 쉽게 배우실 수 있습니다.&lt;/p&gt;
 &lt;h1&gt;목표&lt;/h1&gt;
@@ -190,7 +190,7 @@ class ReadTodoTests(@Autowired val mockMvc: MockMvc) { &amp;lt;=== (2)
 &lt;/ul&gt;
 &lt;h1&gt;줄이며…&lt;/h1&gt;
 &lt;p&gt;지금까지 Kotlin-Spring Boot 프로젝트 생성부터 간단한 REST Api 작성 및 테스트를 진행하였습니다.&lt;br&gt;
-다음에는 DB 연결을 진행하도록 하겠습니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Vue.js 사용하기]]></title><description><![CDATA[Vue CLI란? Vue CLI는 커멘드라인 인터페이스 기반의 Vue 프로젝트 생성 도구이며, 사용자가 어플리케이션 개발에 집중할 수 있도록 프로젝트 구성을 도와준다. Vue CLI…]]></description><link>https://luckydavekim.github.io/front-end/create-vuejs</link><guid isPermaLink="false">https://luckydavekim.github.io/front-end/create-vuejs</guid><pubDate>Mon, 09 Sep 2019 01:20:55 GMT</pubDate><content:encoded>&lt;h1&gt;Vue CLI란?&lt;/h1&gt;
+다음에는 DB 연결을 진행하도록 하겠습니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Vue.js 사용하기]]></title><description><![CDATA[Vue CLI란? Vue CLI는 커멘드라인 인터페이스 기반의 Vue 프로젝트 생성 도구이며, 사용자가 어플리케이션 개발에 집중할 수 있도록 프로젝트 구성을 도와준다. Vue CLI…]]></description><link>https://luckydavekim.github.io/development/create-vuejs</link><guid isPermaLink="false">https://luckydavekim.github.io/development/create-vuejs</guid><pubDate>Mon, 09 Sep 2019 01:20:55 GMT</pubDate><content:encoded>&lt;h1&gt;Vue CLI란?&lt;/h1&gt;
 &lt;p&gt;Vue CLI는 커멘드라인 인터페이스 기반의 Vue 프로젝트 생성 도구이며, 사용자가 어플리케이션 개발에 집중할 수 있도록 프로젝트 구성을 도와준다.&lt;/p&gt;
 &lt;p&gt;Vue CLI 3의 목표는 다음 두가지 &lt;a href=&quot;https://github.com/vuejs/vue-cli/issues/589&quot;&gt;문제점&lt;/a&gt;을 해결하는 것 이다.&lt;/p&gt;
 &lt;ol&gt;
@@ -346,7 +346,7 @@ class ReadTodoTests(@Autowired val mockMvc: MockMvc) { &amp;lt;=== (2)
 &lt;h1&gt;끝으로…&lt;/h1&gt;
 &lt;p&gt;여기까지 Vue CLI를 사용하여 기본 프로젝트를 생성하는 방법에 대해 알아보았다.&lt;br&gt;
 다음에는 생성한 프로젝트의 구조에 대해 좀더 자세히 알아보도록 하자.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[ES6?! ES2015?! ECMAScript란 도대체 무엇인가?]]></title><description><![CDATA[ES6은 뭐고 ES2015는 뭐야?! 가끔씩 볼때마다 헷갈리는 ECMAScript 버전!! 도대체 어떻게 버전관리를 하는거야 ㅠㅠ.
-다음부터 헷갈리지 않게 한번 정리해놔야겠다. 자바스크립트(JavaScript) 잘 알고있니? ECMAScript…]]></description><link>https://luckydavekim.github.io/front-end/what-is-the-ecmascript</link><guid isPermaLink="false">https://luckydavekim.github.io/front-end/what-is-the-ecmascript</guid><pubDate>Wed, 07 Feb 2018 11:30:04 GMT</pubDate><content:encoded>&lt;h1&gt;ES6은 뭐고 ES2015는 뭐야?!&lt;/h1&gt;
+다음부터 헷갈리지 않게 한번 정리해놔야겠다. 자바스크립트(JavaScript) 잘 알고있니? ECMAScript…]]></description><link>https://luckydavekim.github.io/development/what-is-the-ecmascript</link><guid isPermaLink="false">https://luckydavekim.github.io/development/what-is-the-ecmascript</guid><pubDate>Wed, 07 Feb 2018 11:30:04 GMT</pubDate><content:encoded>&lt;h1&gt;ES6은 뭐고 ES2015는 뭐야?!&lt;/h1&gt;
 &lt;p&gt;가끔씩 볼때마다 헷갈리는 ECMAScript 버전!! 도대체 어떻게 버전관리를 하는거야 ㅠㅠ.
 다음부터 헷갈리지 않게 한번 정리해놔야겠다.&lt;/p&gt;
 &lt;h1&gt;자바스크립트(JavaScript) 잘 알고있니?&lt;/h1&gt;
@@ -1217,7 +1217,7 @@ this를 강제로 바인딩 시켜주는 메소드이다. 좀 더 명확하게 t
         loading=&quot;lazy&quot;
       /&gt;
   &lt;/a&gt;
-    &lt;/span&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[검색엔진에서 페이지 검색 가능하게 하기]]></title><description><![CDATA[개요 이 포스팅에서는 검색엔진에서 페이지 검색이 가능하도록 등록하는 방법에 대해 소개하고자 합니다. 왜 이런 일을 해야 하나요? 기본 옵션의 GitHub Pages…]]></description><link>https://luckydavekim.github.io/front-end/add-blog-to-search-engine</link><guid isPermaLink="false">https://luckydavekim.github.io/front-end/add-blog-to-search-engine</guid><pubDate>Thu, 02 Nov 2017 04:48:18 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+    &lt;/span&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[검색엔진에서 페이지 검색 가능하게 하기]]></title><description><![CDATA[개요 이 포스팅에서는 검색엔진에서 페이지 검색이 가능하도록 등록하는 방법에 대해 소개하고자 합니다. 왜 이런 일을 해야 하나요? 기본 옵션의 GitHub Pages…]]></description><link>https://luckydavekim.github.io/development/add-blog-to-search-engine</link><guid isPermaLink="false">https://luckydavekim.github.io/development/add-blog-to-search-engine</guid><pubDate>Thu, 02 Nov 2017 04:48:18 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
 &lt;p&gt;이 포스팅에서는 검색엔진에서 페이지 검색이 가능하도록 등록하는 방법에 대해 소개하고자 합니다.&lt;/p&gt;
 &lt;h1&gt;왜 이런 일을 해야 하나요?&lt;/h1&gt;
 &lt;p&gt;기본 옵션의 GitHub Pages는 일반 포털사이트의 블로그와 달리 검색엔진에서 검색이 되지 않는다. 즉, 검색엔진에 등록하지 않으면 혼자만 사용하는 홈페이지가 되는 것이다. 다양한 사람과 소통하기 위해 만든 홈페이지라면 검색엔진에 등록하는 것이 필수이다.&lt;/p&gt;
@@ -1366,7 +1366,7 @@ this를 강제로 바인딩 시켜주는 메소드이다. 좀 더 명확하게 t
 — RubyDevKit
 — Jekyll
 — Rouge Python
-— Pygements Ruby…]]></description><link>https://luckydavekim.github.io/front-end/install-jekyll</link><guid isPermaLink="false">https://luckydavekim.github.io/front-end/install-jekyll</guid><pubDate>Thu, 02 Nov 2017 04:45:30 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+— Pygements Ruby…]]></description><link>https://luckydavekim.github.io/development/install-jekyll</link><guid isPermaLink="false">https://luckydavekim.github.io/development/install-jekyll</guid><pubDate>Thu, 02 Nov 2017 04:45:30 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
 &lt;p&gt;이 포스팅에서는 Jekyll을 설치하고 GitHub에 적용하는 방법에 대해 소개하고자 합니다.&lt;/p&gt;
 &lt;p&gt;&lt;span
       class=&quot;gatsby-resp-image-wrapper&quot;
