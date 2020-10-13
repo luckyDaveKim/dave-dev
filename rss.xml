@@ -1,4 +1,77 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[DevDave]]></title><description><![CDATA[The blog for dave]]></description><link>https://luckydavekim.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Mon, 12 Oct 2020 16:41:28 GMT</lastBuildDate><item><title><![CDATA[Kotlin과 Spring Boot로 REST API 서비스 구축]]></title><description><![CDATA[개요 이 포스팅에서는 Kotlin 언어와 Spring Boot 프레임워크로 REST Api 서비스를 구축하는 과정을 담고자 합니다. 만약 Kotlin…]]></description><link>https://luckydavekim.github.io/development/create-kotlin-spring-boot</link><guid isPermaLink="false">https://luckydavekim.github.io/development/create-kotlin-spring-boot</guid><pubDate>Wed, 25 Sep 2019 01:05:34 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[DevDave]]></title><description><![CDATA[The blog for dave]]></description><link>https://luckydavekim.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Tue, 13 Oct 2020 16:07:25 GMT</lastBuildDate><item><title><![CDATA[[LeetCode] #19. Remove Nth Node From End of List]]></title><description><![CDATA[문제 #19. Remove Nth Node From End of List Given the head of a linked list, remove the nth node from the end of the list and return its head…]]></description><link>https://luckydavekim.github.io/algorithm/remove-nth-node-from-end-of-list</link><guid isPermaLink="false">https://luckydavekim.github.io/algorithm/remove-nth-node-from-end-of-list</guid><pubDate>Tue, 13 Oct 2020 16:02:49 GMT</pubDate><content:encoded>&lt;h1&gt;문제&lt;/h1&gt;
+&lt;h2&gt;&lt;a href=&quot;https://leetcode.com/problems/remove-nth-node-from-end-of-list&quot;&gt;#19. Remove Nth Node From End of List&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Given the head of a linked list, remove the nth node from the end of the list and return its head.&lt;br&gt;
+&lt;em&gt;Follow up: Could you do this in one pass?&lt;/em&gt;&lt;/p&gt;
+&lt;h2&gt;Example 1.&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;Input: head = [1,2,3,4,5], n = 2
+Output: [1,2,3,5]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Example 2.&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;Input: head = [1], n = 1
+Output: []&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Example 3.&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;Input: head = [1,2], n = 1
+Output: [1]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Constraints.&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;The number of nodes in the list is sz.
+1 &amp;lt;= sz &amp;lt;= 30
+0 &amp;lt;= Node.val &amp;lt;= 100
+1 &amp;lt;= n &amp;lt;= sz&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+&lt;h1&gt;해법&lt;/h1&gt;
+&lt;h2&gt;설명&lt;/h2&gt;
+&lt;p&gt;단순하게 풀자면, 단방향 링크드 리스트 이므로 2번 순회하여 다음과 같이 풀 수 있다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;전체 노드의 길이를 구한다.&lt;/li&gt;
+&lt;li&gt;제거 대상 노드를 찾아가 제거한다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;이를 2개의 노드를 활용하여 1번 순회하여 다음과 같이 풀 수 있다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;n만큼의 거리를 갖는 두개의 &lt;code class=&quot;language-text&quot;&gt;slow&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;fast&lt;/code&gt; 노드를 설정한다.&lt;br&gt;
+(총 &lt;code class=&quot;language-text&quot;&gt;sz&lt;/code&gt; 만큼의 노드 길이 중 &lt;code class=&quot;language-text&quot;&gt;n&lt;/code&gt; 만큼 순회한다.)&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;slow&lt;/code&gt; 노드와 &lt;code class=&quot;language-text&quot;&gt;fast&lt;/code&gt; 노드를 거리를 유지하며 맨 뒤까지 밀어 놓는다.&lt;br&gt;
+(&lt;code class=&quot;language-text&quot;&gt;sz&lt;/code&gt; - &lt;code class=&quot;language-text&quot;&gt;n&lt;/code&gt; 만큼 순회한다.)&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;slow&lt;/code&gt; 다음 노드를 제거한다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;Java 코드&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;RemoveNthNodeFromEndOfListNew&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+	&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ListNode&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;removeNthFromEnd&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;ListNode&lt;/span&gt; head&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; n&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;token class-name&quot;&gt;ListNode&lt;/span&gt; start &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ListNode&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+		start&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;next &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; head&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+		&lt;span class=&quot;token class-name&quot;&gt;ListNode&lt;/span&gt; slow &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; start&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+		&lt;span class=&quot;token class-name&quot;&gt;ListNode&lt;/span&gt; fast &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; start&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+		&lt;span class=&quot;token keyword&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; gap &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; gap &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt; n&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; gap&lt;span class=&quot;token operator&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+			fast &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; fast&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;next&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+		&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+		&lt;span class=&quot;token keyword&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;fast&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;next &lt;span class=&quot;token operator&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+			slow &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; slow&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;next&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+			fast &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; fast&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;next&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+		&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+		slow&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;next &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; slow&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;next&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;next&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+		&lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; start&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;next&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+	&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+&lt;h1&gt;코멘트&lt;/h1&gt;
+&lt;p&gt;이 문제의 핵심은 두가지이다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;2개의 노드를 활용하여 1번의 순회로 문제를 해결하기.&lt;/li&gt;
+&lt;li&gt;최초의 더미노드 &lt;code class=&quot;language-text&quot;&gt;start&lt;/code&gt;를 활용해 Edge case 쉽게 해결하기.&lt;/li&gt;
+&lt;/ol&gt;</content:encoded></item><item><title><![CDATA[Kotlin과 Spring Boot로 REST API 서비스 구축]]></title><description><![CDATA[개요 이 포스팅에서는 Kotlin 언어와 Spring Boot 프레임워크로 REST Api 서비스를 구축하는 과정을 담고자 합니다. 만약 Kotlin…]]></description><link>https://luckydavekim.github.io/development/create-kotlin-spring-boot</link><guid isPermaLink="false">https://luckydavekim.github.io/development/create-kotlin-spring-boot</guid><pubDate>Wed, 25 Sep 2019 01:05:34 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
 &lt;p&gt;이 포스팅에서는 &lt;a href=&quot;https://kotlinlang.org/&quot;&gt;Kotlin&lt;/a&gt; 언어와 &lt;a href=&quot;https://spring.io/projects/spring-boot&quot;&gt;Spring Boot&lt;/a&gt; 프레임워크로 REST Api 서비스를 구축하는 과정을 담고자 합니다.&lt;/p&gt;
 &lt;p&gt;만약 Kotlin에 대해 자세히 알고 싶으시면 &lt;a href=&quot;https://kotlinlang.org/docs/reference/&quot;&gt;참고 문서&lt;/a&gt;를 읽어보시고, &lt;a href=&quot;https://play.kotlinlang.org/koans/overview&quot;&gt;웹 튜토리얼&lt;/a&gt;을 통해 쉽게 배우실 수 있습니다.&lt;/p&gt;
 &lt;h1&gt;목표&lt;/h1&gt;
