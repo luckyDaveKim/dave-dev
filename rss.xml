@@ -1,4 +1,146 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[DevDave]]></title><description><![CDATA[The blog for dave]]></description><link>https://luckydavekim.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Wed, 14 Oct 2020 06:09:07 GMT</lastBuildDate><item><title><![CDATA[[LeetCode] #19. Remove Nth Node From End of List]]></title><description><![CDATA[문제 #19. Remove Nth Node From End of List Given the head of a linked list, remove the nth node from the end of the list and return its head…]]></description><link>https://luckydavekim.github.io/algorithm/remove-nth-node-from-end-of-list</link><guid isPermaLink="false">https://luckydavekim.github.io/algorithm/remove-nth-node-from-end-of-list</guid><pubDate>Tue, 13 Oct 2020 16:02:49 GMT</pubDate><content:encoded>&lt;h1&gt;문제&lt;/h1&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[DevDave]]></title><description><![CDATA[The blog for dave]]></description><link>https://luckydavekim.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Wed, 14 Oct 2020 16:43:25 GMT</lastBuildDate><item><title><![CDATA[Gatsby로 나만의 홈페이지 만들기 (1)]]></title><description><![CDATA[개요 이 포스팅에서는 Gatsby를 설치하고 GitHub에 적용하는 방법에 대해 소개하고자 합니다. 이전에 Jekyll로 홈페이지 만들기를 작성했었는데, 이번에는 Gatsby로 홈페이지를 만들어 보겠습니다. Gatsby란 무엇인가? Gatsby…]]></description><link>https://luckydavekim.github.io/development/install-gatsby</link><guid isPermaLink="false">https://luckydavekim.github.io/development/install-gatsby</guid><pubDate>Wed, 14 Oct 2020 10:13:10 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+&lt;p&gt;이 포스팅에서는 Gatsby를 설치하고 GitHub에 적용하는 방법에 대해 소개하고자 합니다.&lt;br&gt;
+이전에 &lt;a href=&quot;/development/install-jekyll&quot;&gt;Jekyll로 홈페이지 만들기&lt;/a&gt;를 작성했었는데, 이번에는 Gatsby로 홈페이지를 만들어 보겠습니다.&lt;/p&gt;
+&lt;h1&gt;Gatsby란 무엇인가?&lt;/h1&gt;
+&lt;p&gt;Gatsby는 React 기반의 정적 사이트 생성기(SSG, Static Site Generator) 프레임워크 입니다. GraphQL을 통해 데이터를 관리하고, 빌드 시점에 HTML, CSS, Javascript를 생성합니다.&lt;br&gt;
+Jekyll 과 같이 모든 페이지 정보들이 빌드 시점에 생성되므로 GitHub Pages를 통한 홈페이지 관리하기가 용이합니다.&lt;/p&gt;
+&lt;h1&gt;왜 Jekyll에서 Gatsby로 바꿨나?&lt;/h1&gt;
+&lt;p&gt;모두 아시다 싶이 Jekyll은 Ruby 기반이고, Gatsby는 React 기반으로 작성되어 있습니다. 우선, Ruby는 저에게 익숙하지 않았습니다.
+모든 기술을 배우면 좋겠지만, Javascript가 익숙하고 NodeJS, Vue.js 등을 다뤄본 경험이 있던 저에게 React를 학습할 기회가 생겼습니다.
+이때 우연히 Gatsby를 알게 되었고, 선택과 집중이 필요하다고 생각되어 React와 친해질 겸 Jekyll을 떠나 보내고, 먼지가 쌓인 블로그를 단장해보려 합니다.&lt;/p&gt;
+&lt;h1&gt;Gatsby를 사용해보자!&lt;/h1&gt;
+&lt;p&gt;Gatsby를 설치하는 방법을 알아보고, 실행해보도록 하겠습니다.&lt;/p&gt;
+&lt;h2&gt;Gatsby 설치 및 실행&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.gatsbyjs.com/docs/quick-start&quot;&gt;Gatsby 시작&lt;/a&gt;을 통해 Gatsby 설치 및 실행하는 방법을 볼 수 있습니다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Gatsby CLI 설치&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;npm&lt;/span&gt; intall -g gatsby-cli&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Gatsby 설치는 npm 으로 &lt;code class=&quot;language-text&quot;&gt;gatsby-cli&lt;/code&gt;를 설치하며 시작됩니다.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Gatsby 프로젝트 생성&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; gatsby new my-blog&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;별도로 프로젝트를 지정하지 않으면 &lt;a href=&quot;https://github.com/gatsbyjs/gatsby-starter-default&quot;&gt;Gatsby 기본 스타터&lt;/a&gt;를 기반으로 생성됩니다.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;생성된 프로젝트로 경로 이동&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token builtin class-name&quot;&gt;cd&lt;/span&gt; my-blog&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Gatsby 실행&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; gatsby serve&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;위 명령어로 로컬에서 서비스를 실행시켜 볼 수 있으며, &lt;code class=&quot;language-text&quot;&gt;&amp;gt; gatsby build&lt;/code&gt;를 통해 빌드 결과물만 생성할 수도 있습니다.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;Gatsby 실행 결과물 살펴보기&lt;/h2&gt;
+&lt;p&gt;위 명령어를 차례로 실하여 웹사이트 결과물과 GraphiQL 데이터 탐색 UI를 살펴보겠습니다.&lt;/p&gt;
+&lt;h3&gt;웹사이트 화면&lt;/h3&gt;
+&lt;p&gt;브라우저에서 &lt;a href=&quot;http://localhost:8000&quot;&gt;http://localhost:8000&lt;/a&gt; 접속을 통하여 웹사이트를 다음과 같이 볼 수 있습니다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 938px; &quot;
+    &gt;
+      &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 79.6%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAIAAACZeshMAAAACXBIWXMAAAsSAAALEgHS3X78AAABiElEQVQoz5WRTUsCQRjH9/tEX6CP0MkiI0/RvVNvEkmap4KuZh4MgiBRCekQ6CIZQiTSoSBzdTWxKNx1X2df253d3F0yQbe2h4dheOb3Y/jPICvTR6O9PBULzp5FA5mQL7XjOx9sdudTYX86NJcKL6RXZ5IDYAgj0aXsTweyEX8mvo6eRsonoZvkdimxhSaCaGwtH98oHG8WDlZye4uZIY9A3Ri2rkHTMDvtLo6123in/tzgWEFTDVXWnNY/4SiPmCNlGNZKkgTewvFWE2tgQADW2DkYK2R8JMkSD3jRLpZhOI5zcSfJiqwIVgGe4wEAEELT9Cx/Z7AWTdWfyq+Ake1Qhid5gKksRbTea9e1i8OqIqieZIfgafUhnUNj+VKyWK/0hm/51802NIiJFSuX+7mXu0fbhF4zO5eTXa56hRMd1ppAz1/loM37j9rtG9MTJ6Z1fzCbBJQo0JJbWleZJCBW1/u0IYqmrLirE2VRgDStU5TWJ3VJgv+TJUngeIbjaYZiGAL8In8BNIttKTQHBv8AAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Gatsby UI&quot;
+        title=&quot;Gatsby UI&quot;
+        src=&quot;/static/6eb12ce811e4a13e08ef3f143669b89f/7bf1f/gatsby-ui.png&quot;
+        srcset=&quot;/static/6eb12ce811e4a13e08ef3f143669b89f/0eb09/gatsby-ui.png 500w,
+/static/6eb12ce811e4a13e08ef3f143669b89f/7bf1f/gatsby-ui.png 938w&quot;
+        sizes=&quot;(max-width: 938px) 100vw, 938px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+    &lt;/span&gt;
+기본 사이트 구성은 메인 메뉴와 2개의 서브 메뉴로 구성되어 있는걸 볼 수 있습니다.&lt;/p&gt;
+&lt;p&gt;Gatsby의 장점중 하나는 자동으로 최적화를 지원해 준다는 점 입니다.&lt;br&gt;
+크롬에서 개발자 모드를 열어놓고 확인해 보시면, 링크를 클릭하지 않더라도 링크에 마우스 오버시 필요한 파일을 미리 받아오며
+이후 링크를 클릭할 때에는 기존에 미리 받아온 파일을 바로 보여주기 때문에 사용자는 빠른 반응성을 경험하게 됩니다.
+&lt;img src=&quot;/fc452b45814ba11565c5a1937cb3e661/gatsby-optimization.gif&quot; alt=&quot;Gatsby Optimization&quot;&gt;&lt;/p&gt;
+&lt;h3&gt;GraphiQL 탐색 화면&lt;/h3&gt;
+&lt;p&gt;브라우저에서 &lt;a href=&quot;http://localhost:8000/___graphql&quot;&gt;http://localhost:8000/___graphql&lt;/a&gt; 접속을 통하여, 개발시 쉽게 데이터 탐색을 할 수 있습니다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1206px; &quot;
+    &gt;
+      &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 63.2%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAANCAIAAAAmMtkJAAAACXBIWXMAAAsSAAALEgHS3X78AAABGUlEQVQoz42SC2+FIAyF/f+/8y6ZDwYFWkBAdxSnW+7uozkxpunHaQtdDGFSKqWUc1ZKfdxuQ9+PE3IKn2n/6YdBG/11F504Wdd1WZZcCpExmki7lmlRarHGDqMmxxIiQxKauomklIrqssEUU45zXn9FrZVZBkVaWzix8eIFp0BdiuUsMsbUWta/gbyEYD2T9YDFB5F4wLBqRXC21qLPf2AJBNg4Nu603WBleM7lNeyYaG84xgv+HAmzZLT7BswQ1hYvZ289djinOTv3AA6APdHWM+9qY3eDshLnt9rGzNp57djy4ewlNeAZ/LNt9MxYeEgHTD4+3zYyDpze7CSmTeG6qvLyqvBIZH9SJ3bA42R4D4d1PYLvsKZvcoL0VwLCvdoAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;GraphiQL&quot;
+        title=&quot;GraphiQL&quot;
+        src=&quot;/static/11e92789d6f9b7570d92d00a74e93a17/fcbeb/graphiql-ui.png&quot;
+        srcset=&quot;/static/11e92789d6f9b7570d92d00a74e93a17/0eb09/graphiql-ui.png 500w,
+/static/11e92789d6f9b7570d92d00a74e93a17/1263b/graphiql-ui.png 1000w,
+/static/11e92789d6f9b7570d92d00a74e93a17/fcbeb/graphiql-ui.png 1206w&quot;
+        sizes=&quot;(max-width: 1206px) 100vw, 1206px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+    &lt;/span&gt;
+좌측의 트리 UI를 선택하여 조회할 데이터를 선택 후, 가운데 &lt;code class=&quot;language-text&quot;&gt;Execute Query&lt;/code&gt;버튼을 클릭하면, 우측에 결과 데이터가 보여지게 됩니다.&lt;/p&gt;
+&lt;h1&gt;Gatsby 구조를 살펴보자~&lt;/h1&gt;
+&lt;p&gt;다음으로 생성한 Gatsby 소스 파일과 빌드된 파일의 내용을 비교하여 살펴보겠습니다.&lt;/p&gt;
+&lt;h2&gt;Gatsby 소스 파일 구조&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;.
+└─ .cache : Gatsby의 내부 캐시파일이 저장됩니다.
+└─ node_modules : npm 의존성 모듈이 저장됩니다.
+└─ public
+└─ src
+│ └─ components
+│ └─ images
+│ └─ pages
+└─ gatsby-browser.js
+└─ gatsby-config.js
+└─ gatsby-node.js
+└─ gatsby-ssr.js
+.
+.
+.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;.cache&lt;/code&gt; : Gatsby의 내부 캐시파일이 저장됩니다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;node_modules&lt;/code&gt; : npm 의존성 모듈이 저장됩니다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;public&lt;/code&gt; : Gatsby의 빌드 결과물이 저장됩니다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;src&lt;/code&gt; : Gatsby의 소스코드를 저장합니다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;src/components&lt;/code&gt; : 모듈화된 기능의 컴포넌트를 저장합니다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;src/images&lt;/code&gt; : 이미지 파일을 저장합니다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;src/pages&lt;/code&gt; : pages 하위에 저장된 path에 따라 url이 생성됩니다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;gatsby-browser.js&lt;/code&gt; : Gatsby 브라우저 API 사용 설정 파일입니다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;gatsby-config.js&lt;/code&gt; : Gatsby의 기본 설정 파일입니다. 사이트의 세부정보 및 추가할 플러그인 정보를 저장합니다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;gatsby-node.js&lt;/code&gt; : Gatsby node API 사용 설정 파일입니다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;gatsby-ssr.js&lt;/code&gt; : Gatsby 서버 사이드 렌더링 API 사용 설정 파일입니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;빌드된 파일 구조&lt;/h2&gt;
+&lt;p&gt;아래와 같이 빌드된 파일 구조는 여러 파일로 나뉘어져 있습니다.&lt;br&gt;
+이와 같이 여러 파일로 나뉘어지기 때문에 위에서 확인한 것과 같이, 최소한의 필요한 파일만 분리 호출하여 최적화가 가능합니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;.
+└─ public
+│ └─ 404
+│ └─ icons
+│ └─ page-2
+│ └─ page-data
+│ └─ static
+│ └─ 404.html
+│ └─ app-0f61b492ba0f76e7dbee.js
+│ └─ app-0f61b492ba0f76e7dbee.js.LICENSE.txt
+│ └─ app-0f61b492ba0f76e7dbee.js.map
+│ └─ component---src-pages-page-2-js-6f9304e8e0b72f58449a.js
+│ └─ component---src-pages-page-2-js-6f9304e8e0b72f58449a.js.map
+│ └─ component---src-pages-using-typescript-tsx-d51a13ff025a3ef04cea.js
+│ └─ component---src-pages-using-typescript-tsx-d51a13ff025a3ef04cea.js.map
+.
+.
+.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;줄이며…&lt;/h1&gt;
+&lt;p&gt;지금까지 Gatsby가 무엇이고, SSG를 Jekyll에서 Gastby로 변경한 이유와 Gatsby의 장점에 대해 알아보았습니다.&lt;br&gt;
+다음에는 GitHub Pages에 나만의 홈페이지를 생성하고, Travis CI를 통해 자동 배포하는 방법에 대해 알아보겠습니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[[LeetCode] #19. Remove Nth Node From End of List]]></title><description><![CDATA[문제 #19. Remove Nth Node From End of List Given the head of a linked list, remove the nth node from the end of the list and return its head…]]></description><link>https://luckydavekim.github.io/algorithm/remove-nth-node-from-end-of-list</link><guid isPermaLink="false">https://luckydavekim.github.io/algorithm/remove-nth-node-from-end-of-list</guid><pubDate>Tue, 13 Oct 2020 16:02:49 GMT</pubDate><content:encoded>&lt;h1&gt;문제&lt;/h1&gt;
 &lt;h2&gt;&lt;a href=&quot;https://leetcode.com/problems/remove-nth-node-from-end-of-list&quot;&gt;#19. Remove Nth Node From End of List&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Given the head of a linked list, remove the nth node from the end of the list and return its head.&lt;br&gt;
 &lt;em&gt;Follow up: Could you do this in one pass?&lt;/em&gt;&lt;/p&gt;
