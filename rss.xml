@@ -1,4 +1,63 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[DevDave]]></title><description><![CDATA[The blog for dave]]></description><link>https://luckydavekim.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Wed, 14 Oct 2020 16:43:25 GMT</lastBuildDate><item><title><![CDATA[Gatsby로 나만의 홈페이지 만들기 (1)]]></title><description><![CDATA[개요 이 포스팅에서는 Gatsby를 설치하고 GitHub에 적용하는 방법에 대해 소개하고자 합니다. 이전에 Jekyll로 홈페이지 만들기를 작성했었는데, 이번에는 Gatsby로 홈페이지를 만들어 보겠습니다. Gatsby란 무엇인가? Gatsby…]]></description><link>https://luckydavekim.github.io/development/install-gatsby</link><guid isPermaLink="false">https://luckydavekim.github.io/development/install-gatsby</guid><pubDate>Wed, 14 Oct 2020 10:13:10 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[DevDave]]></title><description><![CDATA[The blog for dave]]></description><link>https://luckydavekim.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Wed, 14 Oct 2020 17:43:25 GMT</lastBuildDate><item><title><![CDATA[[LeetCode] #3. Longest Substring Without Repeating Characters]]></title><description><![CDATA[문제 #3. Longest Substring Without Repeating Characters Given a string s, find the length of the longest substring without repeating…]]></description><link>https://luckydavekim.github.io/algorithm/longest-substring-without-repeating-characters</link><guid isPermaLink="false">https://luckydavekim.github.io/algorithm/longest-substring-without-repeating-characters</guid><pubDate>Wed, 14 Oct 2020 16:52:19 GMT</pubDate><content:encoded>&lt;h1&gt;문제&lt;/h1&gt;
+&lt;h2&gt;&lt;a href=&quot;https://leetcode.com/problems/longest-substring-without-repeating-characters&quot;&gt;#3. Longest Substring Without Repeating Characters&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Given a string s, find the length of the longest substring without repeating characters.  &lt;/p&gt;
+&lt;h2&gt;Example 1.&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;Input: s = &amp;quot;abcabcbb&amp;quot;
+Output: 3
+Explanation: The answer is &amp;quot;abc&amp;quot;, with the length of 3.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Example 2.&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;Input: s = &amp;quot;bbbbb&amp;quot;
+Output: 1&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Explanation: The answer is “b”, with the length of 1.&lt;/p&gt;
+&lt;h2&gt;Example 3.&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;Input: s = &amp;quot;pwwkew&amp;quot;
+Output: 3&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Explanation: The answer is “wke”, with the length of 3.
+Notice that the answer must be a substring, “pwke” is a subsequence and not a substring.&lt;/p&gt;
+&lt;h2&gt;Example 4.&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;Input: s = &amp;quot;&amp;quot;
+Output: 0&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Constraints.&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;0 &amp;lt;= s.length &amp;lt;= 5 * 10^4
+s consists of English letters, digits, symbols and spaces.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+&lt;h1&gt;해법&lt;/h1&gt;
+&lt;h2&gt;설명&lt;/h2&gt;
+&lt;p&gt;문자열 &lt;code class=&quot;language-text&quot;&gt;s&lt;/code&gt;는 영어, 숫자, 특수문자, 공백의 조합이므로 ASCII 코드의 조합이라고 볼 수 있다.&lt;br&gt;
+이를 바탕으로 ASCII 코드 128종류를 담을 수 있는 int 배열을 준비하고, 문자의 ASCII 코드 번호를 배열의 index와 매칭하여 해당 문자의 마지막 출현 위치를 저장한다.&lt;br&gt;
+이제 문자열을 순회하며, 배열에서 현재 문자에 매칭되는 값이 존재하는지 비교하면서 중복이 없는 최대 문자열 길이를 구한다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;128 종류의 문자열의 마지막 출현 위치를 저장할 int 형의 배열 &lt;code class=&quot;language-text&quot;&gt;lastIndexOf&lt;/code&gt;를 선언하고 음수로 초기화 한다.&lt;/li&gt;
+&lt;li&gt;문자열을 순회하며 다음을 구한다.&lt;br&gt;
+2-1. 현재 문자의 마지막 출현 위치를 &lt;code class=&quot;language-text&quot;&gt;lastIndexOf&lt;/code&gt;를 통해 구하고, 중복없는 문자가 시작되는 위치 &lt;code class=&quot;language-text&quot;&gt;indexSoFar&lt;/code&gt;중 큰 값을 &lt;code class=&quot;language-text&quot;&gt;indexSoFar&lt;/code&gt;에 저장한다.&lt;br&gt;
+2-2. 이전까지 중복이 없는 최대 문자열 길이 &lt;code class=&quot;language-text&quot;&gt;maxLength&lt;/code&gt;와 현재 문자를 포함한 최대 문자열 길이중 큰 값을 &lt;code class=&quot;language-text&quot;&gt;maxLength&lt;/code&gt;에 저장한다.&lt;br&gt;
+2-3. 배열에 현재 문자의 마지막 출현 위치를 갱신한다.  &lt;/li&gt;
+&lt;li&gt;지금 까지의 중복이 없는 최대 문자열 길이 &lt;code class=&quot;language-text&quot;&gt;maxLength&lt;/code&gt;를 반환한다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;Java 코드&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;LongestSubstringWithoutRepeatingCharacters&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;lengthOfLongestSubstring&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; s&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; lastIndexOf&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;128&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;Arrays&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;fill&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;lastIndexOf&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; n &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; s&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; maxLength &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; indexSoFar &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token keyword&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; cursor &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; cursor &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt; n&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; cursor&lt;span class=&quot;token operator&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;char&lt;/span&gt; c &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; s&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;charAt&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;cursor&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+      indexSoFar &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Math&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;lastIndexOf&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;c&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; indexSoFar&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+      maxLength &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Math&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;maxLength&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; cursor &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt; indexSoFar &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+      lastIndexOf&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;c&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; cursor&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; maxLength&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+&lt;h1&gt;코멘트&lt;/h1&gt;
+&lt;p&gt;이 문제의 핵심은 문자열이 ASCII의 조합임을 활용하여, 문자열을 순회하며 현재 문자의 ASCII 코드와 매칭되는 배열의 index 값에 현재 문자의 마지막 출현 위치를 지속적으로 갱신해가는 것이다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Gatsby로 나만의 홈페이지 만들기 (1)]]></title><description><![CDATA[개요 이 포스팅에서는 Gatsby를 설치하고 GitHub에 적용하는 방법에 대해 소개하고자 합니다. 이전에 Jekyll로 홈페이지 만들기를 작성했었는데, 이번에는 Gatsby로 홈페이지를 만들어 보겠습니다. Gatsby란 무엇인가? Gatsby…]]></description><link>https://luckydavekim.github.io/development/install-gatsby</link><guid isPermaLink="false">https://luckydavekim.github.io/development/install-gatsby</guid><pubDate>Wed, 14 Oct 2020 10:13:10 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
 &lt;p&gt;이 포스팅에서는 Gatsby를 설치하고 GitHub에 적용하는 방법에 대해 소개하고자 합니다.&lt;br&gt;
 이전에 &lt;a href=&quot;/development/install-jekyll&quot;&gt;Jekyll로 홈페이지 만들기&lt;/a&gt;를 작성했었는데, 이번에는 Gatsby로 홈페이지를 만들어 보겠습니다.&lt;/p&gt;
 &lt;h1&gt;Gatsby란 무엇인가?&lt;/h1&gt;
@@ -185,7 +244,7 @@ Output: [1]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
  *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
  * }
  */&lt;/span&gt;
-&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;RemoveNthNodeFromEndOfListNew&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;RemoveNthNodeFromEndOfList&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
 
 	&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ListNode&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;removeNthFromEnd&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;ListNode&lt;/span&gt; head&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; n&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
 		&lt;span class=&quot;token class-name&quot;&gt;ListNode&lt;/span&gt; start &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ListNode&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
