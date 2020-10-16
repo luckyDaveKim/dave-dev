@@ -1,4 +1,133 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[DevDave]]></title><description><![CDATA[The blog for dave]]></description><link>https://luckydavekim.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Fri, 16 Oct 2020 16:06:53 GMT</lastBuildDate><item><title><![CDATA[[LeetCode] #3. Longest Substring Without Repeating Characters]]></title><description><![CDATA[문제 #3. Longest Substring Without Repeating Characters Given a string s, find the length of the longest substring without repeating…]]></description><link>https://luckydavekim.github.io/algorithm/longest-substring-without-repeating-characters</link><guid isPermaLink="false">https://luckydavekim.github.io/algorithm/longest-substring-without-repeating-characters</guid><pubDate>Wed, 14 Oct 2020 16:52:19 GMT</pubDate><content:encoded>&lt;h1&gt;문제&lt;/h1&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[DevDave]]></title><description><![CDATA[The blog for dave]]></description><link>https://luckydavekim.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Fri, 16 Oct 2020 19:15:04 GMT</lastBuildDate><item><title><![CDATA[Gatsby로 나만의 홈페이지 만들기 (2)]]></title><description><![CDATA[개요 지난 포스팅에서는 Gatsby를 알아보고, 정적 페이지를 생성해 보았습니다. 이번 포스팅에서는 GitHub Pages를 생성하고, Gatsby로 생성한 홈페이지를 GitHub Pages에 올리는 방법에 대해 소개하고자 합니다. GitHub…]]></description><link>https://luckydavekim.github.io/development/install-gatsby-2</link><guid isPermaLink="false">https://luckydavekim.github.io/development/install-gatsby-2</guid><pubDate>Fri, 16 Oct 2020 16:07:27 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;/development/install-gatsby-1&quot;&gt;지난 포스팅&lt;/a&gt;에서는 Gatsby를 알아보고, 정적 페이지를 생성해 보았습니다.&lt;br&gt;
+이번 포스팅에서는 GitHub Pages를 생성하고, Gatsby로 생성한 홈페이지를 GitHub Pages에 올리는 방법에 대해 소개하고자 합니다.&lt;/p&gt;
+&lt;h1&gt;GitHub Pages란 무엇인가?&lt;/h1&gt;
+&lt;p&gt;GitHub Pages는 GitHub 저장소의 내용을 무료로! 호스팅해주는 서비스입니다.&lt;br&gt;
+지금 보시는 이 블로그 또한 GitHub Pages 서비스를 이용하고 있으며, 기본으로 제공되는 도메인은 &lt;code class=&quot;language-text&quot;&gt;https://{user-name}.github.io&lt;/code&gt; 와 같은 형태를 갖습니다. 물론 설정을 통해 별도의 도메인으로 변경할 수 있습니다.  &lt;/p&gt;
+&lt;p&gt;블로그를 제공하는 여러 다른 서비스들이 있습니다. 예를들면, 네이버 블로그, 카카오 티스토리 등이 있습니다.&lt;br&gt;
+그렇다면 다른 블로그 서비스가 아닌 GitHub Pages를 사용하는 이유는 무엇일까요?&lt;br&gt;
+네이버 블로그와 카카오 티스토리 같은 경우 누구나 쉽게 블로그를 설정하고 꾸밀 수 있지만, 정해진 틀 내에서만 꾸밀 수 있다는 제약사항이 있습니다.&lt;br&gt;
+GitHub Pages 같은 경우 초기 진입장벽이 다른 블로그 서비스보다 높은 편이지만, 그만큼 무궁무진한 자유도를 갖습니다.&lt;br&gt;
+또한, 저와 같이 Gatsby를 학습하며 동시에 블로그를 꾸밀 수 있는 일석이조의 효과를 갖을수도 있다는 점이 장점으로 들 수 있겠습니다.&lt;/p&gt;
+&lt;h1&gt;GitHub Pages를 구축해보자!&lt;/h1&gt;
+&lt;p&gt;GitHub Pages를 구축하는 방법에 대해서는 &lt;a href=&quot;https://pages.github.com/&quot;&gt;GitHub Pages 생성하는 방법&lt;/a&gt;을 보면 잘 나와있습니다.&lt;br&gt;
+함께 살펴보자면 우선 &lt;code class=&quot;language-text&quot;&gt;{user-name}.github.io&lt;/code&gt; 이름의 저장소를 생성 하면 끝입니다~!&lt;br&gt;
+이후 &lt;code class=&quot;language-text&quot;&gt;https://{user-name}.github.io&lt;/code&gt;로 접속해보시면 저장소의 &lt;code class=&quot;language-text&quot;&gt;README.md&lt;/code&gt; 또는 &lt;code class=&quot;language-text&quot;&gt;index.html&lt;/code&gt;의 내용이 출력됨을 확인하실 수 있습니다.  &lt;/p&gt;
+&lt;h2&gt;사용자 페이지와 프로젝트 페이지&lt;/h2&gt;
+&lt;p&gt;위와같이 자신의 GitHub ID를 기반으로 생성하는 GitHub Pages를 &lt;code class=&quot;language-text&quot;&gt;사용자 페이지&lt;/code&gt;라고 하며, 이와 다른 &lt;code class=&quot;language-text&quot;&gt;프로젝트 페이지&lt;/code&gt;가 있습니다.&lt;/p&gt;
+&lt;h3&gt;사용자 페이지&lt;/h3&gt;
+&lt;p&gt;사용자 페이지는 계정별 단 하나만 생성이 가능하며, 다음과 같은 특징을 갖습니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;저장소의 이름은 &lt;code class=&quot;language-text&quot;&gt;{user-name}.github.io&lt;/code&gt;의 구조로 단 하나만 생성 가능합니다.&lt;/li&gt;
+&lt;li&gt;GitHub Pages에 반영되는 브랜치는 &lt;code class=&quot;language-text&quot;&gt;master&lt;/code&gt; 브랜치의 내용이 반영됩니다.&lt;/li&gt;
+&lt;li&gt;GitHub Pages 접속 url은 &lt;code class=&quot;language-text&quot;&gt;https://{user-name}.github.io&lt;/code&gt; 입니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;luckyDaveKim&lt;/code&gt; GitHub 계정을 갖은 사용자가 &lt;code class=&quot;language-text&quot;&gt;new-luckyDaveKim.github.io&lt;/code&gt; 저장소를 생성하더라도 해당 정보의 GitHub Pages는 생성되지 않습니다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3&gt;프로젝트 페이지&lt;/h3&gt;
+&lt;p&gt;프로젝트 페이지는 여러개 생성이 가능하며, 다음과 같은 특징을 갖습니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;저장소의 이름에 제한이 없습니다.&lt;/li&gt;
+&lt;li&gt;GitHub Pages에 반영되는 브랜치는 &lt;code class=&quot;language-text&quot;&gt;gh-pages&lt;/code&gt; 브랜치의 내용이 반영됩니다.&lt;/li&gt;
+&lt;li&gt;GitHub Pages 접속 url은 &lt;code class=&quot;language-text&quot;&gt;https://{user-name}.github.io/{project-name}&lt;/code&gt; 형식의 사용자 페이지의 서브 url 입니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;Gatsby 홈페이지 배포하기!&lt;/h1&gt;
+&lt;p&gt;Gatsby로 생성한 정적 홈페이지를 GitHub Pages에 배포하는 방법을 알아보겠습니다.&lt;br&gt;
+여기서는 위에서 알아본 GitHub Pages의 사용자 페이지와 프로젝트 페이지 중 사용자 페이지를 통해 배포하는 방법을 살펴보도록 하겠습니다.  &lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;{user-name}.github.io&lt;/code&gt; 저장소를 생성합니다.&lt;br&gt;
+1-1. &lt;a href=&quot;github.com&quot;&gt;GitHub&lt;/a&gt; 페이지에 접속 후 우측 상단의 &lt;code class=&quot;language-text&quot;&gt;+&lt;/code&gt; 버튼을 클릭 후 &lt;code class=&quot;language-text&quot;&gt;New repository&lt;/code&gt;를 클릭합니다.&lt;br&gt;
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 287px; &quot;
+    &gt;
+      &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 77.00348432055749%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAPCAIAAABr+ngCAAAACXBIWXMAAAsSAAALEgHS3X78AAADEElEQVQoz2NQ0zYAIlVtA2UNXSV5RSV5JUUIUlCWl5E30NFz8EtRUNI0MTTU1dZT1THcfWZjSX2Jsrquuo4Bg4SsEghJK8RpGU5KLuhMKuxOKuxJBpFdiQUTMsoWltT1J+cvrmztjU71lFOx9HLUMTYSlwbpYigsrcwvq64sKupMrVWteuDY/di4+aFh4wPTlocWbY+ApGrVXbmyu1Lljy0qzsxISE/PK8krLCupqCmtqGX4////XxD+eW79UdHye27TXjpPeeEw6YX3zJfOU1+4T39h2v1MuOweV9E9u857X/YfAar99/fffzBguHHr7o3b965dv3lj7qK7q3acmLfh1PwNZxZsPLNg0+n5G0/N23B+0cbbq3c+3Hzw3rJNVxYtu3Ln3pVrN95//Pz1+08GCTllGUU1QQnZiOj4/79/fnj25NXDex9fPP3w7PHzu7dfP7z/8v7dz69fAu15cPu2oamVhq4REO3Zfwhkc3xSWlBopG9gaHV9E5D/4fPnbz9+fv/1++v3H/9h4O9fkM8ePHpsZG5jbG5jaGa1becekOaAkAig5oCQyIrqOiD/6bNnL1+9evT4yatXr9A033/wEKhZRkFNVkl9194DIM1GZta2zm76huallbVA/sePH799+/bjx48vX79+/PQJhD5+/P79O1DqydNnLh6+1g4uqpp6O3bvB2l2cPbw8A10dPGqqm8Gq3gKtPndu3f3Hjx4/vzF48dPgOjjx09AqWcvXvkHh9k4uSir6+zcA9Zs4+ACtNnZ07+yrun/v3+fPn0C2vPt23egzV++fP3z5w/c2UCbg8MiFZTV5VW0du0BOzsoJNw3KNzc2j4hNRPIf/v27QewO1+/fvPu/XuINgj5+MlTSzsnFQ1dBVWgZrDN1k4uVs6eppZ2QIneCZMnT5sxaQoYTQWhCZOn9U+a1jdx6uRpMytq6jX1jFW19OVVNKGaTbSNTbT1NTR1lTV1ZRTVZZQ1ZFGQJgTJKGnIKmmoaeujaHY2tXUztdTTNVTR0tfUNdbUM8KFgGkDqBNZMwCLDfZLkARMtgAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Create new GitHub Repository&quot;
+        title=&quot;Create new GitHub Repository&quot;
+        src=&quot;/static/2ac38071cb59cc7b72d47025e5c34e2b/efc29/create-new-repository.png&quot;
+        srcset=&quot;/static/2ac38071cb59cc7b72d47025e5c34e2b/efc29/create-new-repository.png 287w&quot;
+        sizes=&quot;(max-width: 287px) 100vw, 287px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+    &lt;/span&gt;
+1-2. Repository name에 계정 이름을 포함한 &lt;code class=&quot;language-text&quot;&gt;{user-name}.github.io&lt;/code&gt; 형식으로 입력합니다.&lt;br&gt;
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 866px; &quot;
+    &gt;
+      &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 88.99999999999999%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAASCAIAAADUsmlHAAAACXBIWXMAAAsSAAALEgHS3X78AAABoUlEQVQ4y41T227bMAzt/w/YHwz7oWFPA9YWXbO2AZzUuou6WNcex8nSLG1amqJkyeQhj+ir3nutVStlrSUibYyQ0nnfPyFXGKWUYcu2o2BCCSEY40pp70MIMcwS/fwSfZinZd1a2ztjMaXmYolTeRW3tVoxYM/lBNk5h6+XLWNIKpQQEBRa2+HgzbQRSRi+eR6fx9E6/2cjfj0Ov9fbm2F8ku6BkQ2p1ZLx1PJGzVJKLoRSCiU9+eGGVnf0cEt/V25NHvR58mSd9tG1c2eljSXk7guC/6d10bbT/eYJYXhNKR2P65meRjw659qZ9pxzIMc4RYzpn51iwCK9SxjYTJPXWgcfQF56JfNV7eQC243IGmNQubEWTQA3oAFxye9cj84555ExKZVEZ8696ZAtOuu9bE+QEd0ayzgfGQcmYi12nvNM8gfOAByGzdLSuFcwB0suUqz5Q2dlNGMMJS+IC3jK9QLsgW2UHXOwIXsQlfAvxZ3gpgh7U71EGAvyy49vX39+h71X65n/A8n7/+uCcyzTtbi/k4+3YkXJ9d5b/5S8AOcZHHFhNqxgAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Create new GitHub Repository Detail&quot;
+        title=&quot;Create new GitHub Repository Detail&quot;
+        src=&quot;/static/543999359854943379c091218d1c3fbe/4219d/create-new-repository-detail.png&quot;
+        srcset=&quot;/static/543999359854943379c091218d1c3fbe/0eb09/create-new-repository-detail.png 500w,
+/static/543999359854943379c091218d1c3fbe/4219d/create-new-repository-detail.png 866w&quot;
+        sizes=&quot;(max-width: 866px) 100vw, 866px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;새로 생성한 저장소를 로컬에 clone 합니다.&lt;br&gt;
+2-1. &lt;code class=&quot;language-text&quot;&gt;https://github.com/{user-name}/{user-name}.github.io&lt;/code&gt; 으로 이동하여 새로 생성한 저장소를 확인합니다.&lt;br&gt;
+2-2. 우측의 &lt;code class=&quot;language-text&quot;&gt;Code&lt;/code&gt;를 클릭하여 repository 주소를 복사합니다.&lt;br&gt;
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 406px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/fcc2bf387698f198e7bb0e6afa4413a8/3017e/clone-repository.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 82.51231527093596%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAARCAIAAABSJhvpAAAACXBIWXMAAAsSAAALEgHS3X78AAACX0lEQVQ4y4VTO4/TQBD2v6NCVJQUUAAFSEhIiIIKCX4FdEgnHcU1CCjhQMDd5ZAucfxIIIHE7+fa2bW9L5vZOCdyFyFGn8azO+/xrNatqW3bbosuHdVN18lWcim2VVr/qeo6TrIkST0/olxQxoIwcr0gSlLQvjjdv/Lq1o2DR3fePLm6d/ve26cQQgqmKS4kJhWYOq73e+lWDa3rZrF0fy0cx/M73r0cvL62d/fmweOH759f37//4N0zcBaCa0JKKEoqviGpqN2qtv1bartpCgx4RTSEiulkyhib/ZyVqNgY9Po1OiUKyANcCg7VYELgDLLWcO7HCW4oIgQKrhirhWi2Crk0Ng4QkjGI1Wpk8D388DH/8rX8dkxOTuPDz/Hhp/LomA9HUh+LkS5HuliDn404HM+G1LSZUN1odKhjJkI/LIsyCEIYeJ6jOE7iJPX90PeC/jLwQ4JJBLcI0ZMBo7RcYa0+OsGzeaYbpT3JxgYyrRxgmCAACssGgJCOjXo2LydTPP3RHA8Y59C21vhBNNSRPUGTaTw2E8NKTTs1rAy4aUe6kVuT1LQyy5au1wZB6/kcFQwGyOBX7SzTv6g9Rz8w1TPGOPADgjHKc7xaZWm2RppniqMcCbA7/209BBfgrNZztVotlk5Zlo7jRnHswZTCCFYtimLHdZeOAytwqQSxziwY1aDv/1S7QzArcKYV1lBRzObzolCZIa3reovFso/Ybi/mbmYptaahGBNKKewpBCrKklSVWu6LdNFZZSZ1o5wBVd1QynoZnhSp6m2ANoySBTyxMIZnikkt1aJ3fwA7brw2fnVafgAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Clone repository&quot;
+        title=&quot;Clone repository&quot;
+        src=&quot;/static/fcc2bf387698f198e7bb0e6afa4413a8/3017e/clone-repository.png&quot;
+        srcset=&quot;/static/fcc2bf387698f198e7bb0e6afa4413a8/3017e/clone-repository.png 406w&quot;
+        sizes=&quot;(max-width: 406px) 100vw, 406px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;
+2-3. 새로 생성한 저장소를 로컬에 clone 합니다.  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token builtin class-name&quot;&gt;cd&lt;/span&gt; /
+&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; clone &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;repository-url&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token builtin class-name&quot;&gt;cd&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;user-name&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;.github.io&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Gatsby 빌드 파일을 push 합니다.&lt;br&gt;
+3-1. &lt;a href=&quot;/development/install-gatsby-1&quot;&gt;지난 포스팅&lt;/a&gt;에서 생성한 Gatsby 소스에서 &lt;code class=&quot;language-text&quot;&gt;gatsby build&lt;/code&gt; 명령어를 실행 후 생성된 public 디렉토리 내부 파일들을 모두 복사해옵니다.&lt;br&gt;
+3-2. Gatsby build를 통해 가져온 파일을 커밋합니다.  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; &lt;span class=&quot;token builtin class-name&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; commit -m &lt;span class=&quot;token string&quot;&gt;&apos;init&apos;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;3-3. 커밋한 내용을 원격 저장소에 push 합니다.  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; push origin master&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;3-4. 잠시후 GitHub Pages &lt;code class=&quot;language-text&quot;&gt;https://{user-name}.github.io&lt;/code&gt; 에 접속해보면 Gatsby로 build한 웹페이지가 나타나는 것을 확인 할 수 있습니다.  &lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1&gt;줄이며…&lt;/h1&gt;
+&lt;p&gt;지금까지 GitHub Pages가 무엇이고, 사용자 페이지와 프로젝트 페이지의 차이점을 알아보고 GitHub Pages를 생성 및 배포하는 방법에 대해 알아보았습니다.
+다음에는 Travis CI를 통해 자동 배포하는 방법에 대해 알아보겠습니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[[LeetCode] #3. Longest Substring Without Repeating Characters]]></title><description><![CDATA[문제 #3. Longest Substring Without Repeating Characters Given a string s, find the length of the longest substring without repeating…]]></description><link>https://luckydavekim.github.io/algorithm/longest-substring-without-repeating-characters</link><guid isPermaLink="false">https://luckydavekim.github.io/algorithm/longest-substring-without-repeating-characters</guid><pubDate>Wed, 14 Oct 2020 16:52:19 GMT</pubDate><content:encoded>&lt;h1&gt;문제&lt;/h1&gt;
 &lt;h2&gt;&lt;a href=&quot;https://leetcode.com/problems/longest-substring-without-repeating-characters&quot;&gt;#3. Longest Substring Without Repeating Characters&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Given a string s, find the length of the longest substring without repeating characters.  &lt;/p&gt;
 &lt;h2&gt;Example 1.&lt;/h2&gt;
@@ -57,7 +186,7 @@ s consists of English letters, digits, symbols and spaces.&lt;/code&gt;&lt;/pre&
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;hr&gt;
 &lt;h1&gt;코멘트&lt;/h1&gt;
-&lt;p&gt;이 문제의 핵심은 문자열이 ASCII의 조합임을 활용하여, 문자열을 순회하며 현재 문자의 ASCII 코드와 매칭되는 배열의 index 값에 현재 문자의 마지막 출현 위치를 지속적으로 갱신해가는 것이다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Gatsby로 나만의 홈페이지 만들기 (1)]]></title><description><![CDATA[개요 이 포스팅에서는 Gatsby를 설치하고 GitHub에 적용하는 방법에 대해 소개하고자 합니다. 이전에 Jekyll로 홈페이지 만들기를 작성했었는데, 이번에는 Gatsby로 홈페이지를 만들어 보겠습니다. Gatsby란 무엇인가? Gatsby…]]></description><link>https://luckydavekim.github.io/development/install-gatsby</link><guid isPermaLink="false">https://luckydavekim.github.io/development/install-gatsby</guid><pubDate>Wed, 14 Oct 2020 10:13:10 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+&lt;p&gt;이 문제의 핵심은 문자열이 ASCII의 조합임을 활용하여, 문자열을 순회하며 현재 문자의 ASCII 코드와 매칭되는 배열의 index 값에 현재 문자의 마지막 출현 위치를 지속적으로 갱신해가는 것이다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Gatsby로 나만의 홈페이지 만들기 (1)]]></title><description><![CDATA[개요 이 포스팅에서는 Gatsby를 설치하고 GitHub에 적용하는 방법에 대해 소개하고자 합니다. 이전에 Jekyll로 홈페이지 만들기를 작성했었는데, 이번에는 Gatsby로 홈페이지를 만들어 보겠습니다. Gatsby란 무엇인가? Gatsby…]]></description><link>https://luckydavekim.github.io/development/install-gatsby-1</link><guid isPermaLink="false">https://luckydavekim.github.io/development/install-gatsby-1</guid><pubDate>Wed, 14 Oct 2020 10:13:10 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
 &lt;p&gt;이 포스팅에서는 Gatsby를 설치하고 GitHub에 적용하는 방법에 대해 소개하고자 합니다.&lt;br&gt;
 이전에 &lt;a href=&quot;/development/install-jekyll&quot;&gt;Jekyll로 홈페이지 만들기&lt;/a&gt;를 작성했었는데, 이번에는 Gatsby로 홈페이지를 만들어 보겠습니다.&lt;/p&gt;
 &lt;h1&gt;Gatsby란 무엇인가?&lt;/h1&gt;
