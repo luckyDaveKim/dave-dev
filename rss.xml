@@ -1,4 +1,114 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[DevDave]]></title><description><![CDATA[The blog for dave]]></description><link>https://luckydavekim.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Mon, 19 Oct 2020 08:45:00 GMT</lastBuildDate><item><title><![CDATA[[LeetCode] #73. Set Matrix Zeroes]]></title><description><![CDATA[문제 #73. Set Matrix Zeroes Given an m x n matrix. If an element is 0, set its entire row and column to 0. Do it in-place. Follow up: A…]]></description><link>https://luckydavekim.github.io/algorithm/leetcode/set-matrix-zeroes</link><guid isPermaLink="false">https://luckydavekim.github.io/algorithm/leetcode/set-matrix-zeroes</guid><pubDate>Mon, 19 Oct 2020 08:41:14 GMT</pubDate><content:encoded>&lt;h1&gt;문제&lt;/h1&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[DevDave]]></title><description><![CDATA[The blog for dave]]></description><link>https://luckydavekim.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Tue, 20 Oct 2020 18:44:12 GMT</lastBuildDate><item><title><![CDATA[[LeetCode] #64. Minimum Path Sum]]></title><description><![CDATA[문제 #64. Minimum Path Sum Given a m * n grid filled with non-negative numbers, find a path from top left to bottom right which minimizes the…]]></description><link>https://luckydavekim.github.io/algorithm/leetcode/minimum-path-sum</link><guid isPermaLink="false">https://luckydavekim.github.io/algorithm/leetcode/minimum-path-sum</guid><pubDate>Tue, 20 Oct 2020 08:52:04 GMT</pubDate><content:encoded>&lt;h1&gt;문제&lt;/h1&gt;
+&lt;h2&gt;&lt;a href=&quot;https://leetcode.com/problems/minimum-path-sum/&quot;&gt;#64. Minimum Path Sum&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Given a m * n grid filled with non-negative numbers, find a path from top left to bottom right which minimizes the sum of all numbers along its path.&lt;br&gt;
+&lt;em&gt;Note: You can only move either down or right at any point in time.&lt;/em&gt;&lt;/p&gt;
+&lt;h2&gt;Example 1.&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;Input:
+[
+  [1,3,1],
+  [1,5,1],
+  [4,2,1]
+]
+Output: 7&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+&lt;h1&gt;해법&lt;/h1&gt;
+&lt;h2&gt;나의 해법&lt;/h2&gt;
+&lt;h3&gt;성능&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;시간 복잡도 : &lt;code class=&quot;language-text&quot;&gt;O((m * n)!)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;공간 복잡도 : &lt;code class=&quot;language-text&quot;&gt;O(1)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;해법&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;재귀 함수&lt;/code&gt;를 통해 행렬을 좌측 상단부터, 우측 하단까지의 최소 가중치 합을 구하려 했다.&lt;br&gt;
+이 풀이는 우측 하단부터 좌측 상단으로 최소 가중치를 구하며 이동해 결과를 구했고, 시간 복잡도가 너무 커서 Time Out 이 발생했다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;grid를 검토하여 비었다면 0을 반환한다.  &lt;/li&gt;
+&lt;li&gt;좌측 상단의 좌표인 (0, 0)으로 재귀 함수를 호출하며 시작된다.&lt;br&gt;
+2-1. 재귀 함수는 우측과 하단의 경로가 있는지 확인한다.&lt;br&gt;
+2-2. 우측과 하단의 경로가 모두 존재하면, &lt;code class=&quot;language-text&quot;&gt;(2)에서 우측 좌표 결과&lt;/code&gt;와 &lt;code class=&quot;language-text&quot;&gt;(2)에서 하단 좌표 결과&lt;/code&gt; 중 최소값 + &lt;code class=&quot;language-text&quot;&gt;현재 경로의 값&lt;/code&gt;을 반환한다.&lt;br&gt;
+2-3. 우측의 경로만 존재하면, &lt;code class=&quot;language-text&quot;&gt;(2)에서 우측 좌표 결과&lt;/code&gt; + &lt;code class=&quot;language-text&quot;&gt;현재 경로의 값&lt;/code&gt;을 반환한다.&lt;br&gt;
+2-4. 하단의 경로만 존재하면, &lt;code class=&quot;language-text&quot;&gt;(2)에서 하단 좌표 결과&lt;/code&gt; + &lt;code class=&quot;language-text&quot;&gt;현재 경로의 값&lt;/code&gt;을 반환한다.  &lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;Java 코드&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;MinimumPathSum&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;minPathSum&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; grid&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;grid &lt;span class=&quot;token operator&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;||&lt;/span&gt; grid&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;length &lt;span class=&quot;token operator&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;||&lt;/span&gt; grid&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;length &lt;span class=&quot;token operator&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+			&lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+		&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+		&lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; sizeCol &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; grid&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;length&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+		&lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; sizeRow &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; grid&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;length&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+		&lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;findMinPathOfSum&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;grid&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; sizeRow&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; sizeCol&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+	&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+	&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;findMinPathOfSum&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; grid&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; sizeRow&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; sizeCol&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; row&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; col&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;token keyword&quot;&gt;boolean&lt;/span&gt; hasNextRow &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; row &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt; sizeRow&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+		&lt;span class=&quot;token keyword&quot;&gt;boolean&lt;/span&gt; hasNextCol &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; col &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt; sizeCol&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+		&lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; untilMinVal &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+		&lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;hasNextRow &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; hasNextCol&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+			untilMinVal &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Math&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;min&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;findMinPathOfSum&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;grid&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; sizeRow&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; sizeCol&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; row &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; col&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;findMinPathOfSum&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;grid&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; sizeRow&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; sizeCol&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; row&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; col &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+		&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;hasNextRow&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+			untilMinVal &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;findMinPathOfSum&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;grid&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; sizeRow&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; sizeCol&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; row &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; col&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+		&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;hasNextCol&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+			untilMinVal &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;findMinPathOfSum&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;grid&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; sizeRow&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; sizeCol&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; row&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; col &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+		&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+		&lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; grid&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;col&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;row&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; untilMinVal&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+	&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;최적 해법&lt;/h2&gt;
+&lt;h3&gt;성능&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;시간 복잡도 : &lt;code class=&quot;language-text&quot;&gt;O(m * n)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;공간 복잡도 : &lt;code class=&quot;language-text&quot;&gt;O(m * n)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;해법&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;DP(Dynamic Programming)&lt;/code&gt;를 활용한 풀이로 메모리를 추가로 사용하는 대신, 시간 복잡도가 획기적으로 줄어든다.  &lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;grid를 검토하여 비었다면 0을 반환한다.  &lt;/li&gt;
+&lt;li&gt;m * n 사이즈의 &lt;code class=&quot;language-text&quot;&gt;dist&lt;/code&gt; 배열을 설정한다.  &lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;getDist&lt;/code&gt; 함수를 구현한다.&lt;br&gt;
+3-1. &lt;code class=&quot;language-text&quot;&gt;getDist&lt;/code&gt;로 전달 받은 좌표가 under flow 시 Integer의 최댓값을 반환한다.&lt;br&gt;
+3-2. 그 외의 경우에는 dist의 좌표를 반환한다.  &lt;/li&gt;
+&lt;li&gt;행과 열을 순회하며 결과를 &lt;code class=&quot;language-text&quot;&gt;dist[row][col]&lt;/code&gt;에 담는다.&lt;br&gt;
+4-1. 행과 열이 모두 0인경우 &lt;code class=&quot;language-text&quot;&gt;dist[0][0]&lt;/code&gt;에 &lt;code class=&quot;language-text&quot;&gt;grid[0][0]&lt;/code&gt;를 담는다.&lt;br&gt;
+4-2. 그 외의 경우에는 &lt;code class=&quot;language-text&quot;&gt;(3)에서 상단 좌표 결과&lt;/code&gt;와 &lt;code class=&quot;language-text&quot;&gt;(3)에서 좌측 좌표 결과&lt;/code&gt; 중 최소값 + &lt;code class=&quot;language-text&quot;&gt;현재 경로의 값&lt;/code&gt;을 &lt;code class=&quot;language-text&quot;&gt;grid[row][col]&lt;/code&gt;에 담는다.  &lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;Java 코드&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;MinimumPathSum&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;minPathSum&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; grid&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;grid &lt;span class=&quot;token operator&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;||&lt;/span&gt; grid&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;length &lt;span class=&quot;token operator&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;||&lt;/span&gt; grid&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;length &lt;span class=&quot;token operator&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+			&lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+		&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+		&lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; sizeRow &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; grid&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;length&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+		&lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; sizeCol &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; grid&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;length&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+		&lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; dist &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;sizeRow&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;sizeCol&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+		&lt;span class=&quot;token keyword&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; row &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; row &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt; sizeRow&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; row&lt;span class=&quot;token operator&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+			&lt;span class=&quot;token keyword&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; col &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; col &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt; sizeCol&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; col&lt;span class=&quot;token operator&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+				&lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;row &lt;span class=&quot;token operator&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; col &lt;span class=&quot;token operator&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+					dist&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; grid&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+				&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+					dist&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;row&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;col&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Math&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;min&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getDist&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;dist&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; row &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; col&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;getDist&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;dist&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; row&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; col &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; grid&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;row&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;col&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+				&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+			&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+		&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+		&lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; dist&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;sizeRow &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;sizeCol &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+	&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+	&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;getDist&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; dist&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; row&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; col&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;row &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;||&lt;/span&gt; col &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+			&lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;MAX_VALUE&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+		&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+		&lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; dist&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;row&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;col&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+	&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content:encoded></item><item><title><![CDATA[[LeetCode] #73. Set Matrix Zeroes]]></title><description><![CDATA[문제 #73. Set Matrix Zeroes Given an m x n matrix. If an element is 0, set its entire row and column to 0. Do it in-place. Follow up: A…]]></description><link>https://luckydavekim.github.io/algorithm/leetcode/set-matrix-zeroes</link><guid isPermaLink="false">https://luckydavekim.github.io/algorithm/leetcode/set-matrix-zeroes</guid><pubDate>Mon, 19 Oct 2020 08:41:14 GMT</pubDate><content:encoded>&lt;h1&gt;문제&lt;/h1&gt;
 &lt;h2&gt;&lt;a href=&quot;https://leetcode.com/problems/set-matrix-zeroes&quot;&gt;#73. Set Matrix Zeroes&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Given an m x n matrix. If an element is 0, set its entire row and column to 0. Do it in-place.&lt;br&gt;
 &lt;em&gt;Follow up:&lt;br&gt;
@@ -136,8 +246,230 @@ n == matrix[0].length
 &lt;ul&gt;
 &lt;li&gt;원소값이 0인 행과 열을 조합하여 저장하는 것이 아니라 별도로 저장한 후, 전체 matrix를 한번 순회하며 현재 원소의 행 혹은 열이 이전에 저장한 값에 존재 여부를 통하여 결과를 얻을 수 있다.&lt;/li&gt;
 &lt;li&gt;matrix의 첫번째 행과 첫번째 열에 원소값이 0인 정보를 담음으로써, 공간 복잡도를 &lt;code class=&quot;language-text&quot;&gt;O(1)&lt;/code&gt;로 풀 수 있다.&lt;/li&gt;
-&lt;/ul&gt;</content:encoded></item><item><title><![CDATA[Gatsby로 나만의 홈페이지 만들기 (2)]]></title><description><![CDATA[개요 지난 포스팅에서는 Gatsby를 알아보고, 정적 페이지를 생성해 보았습니다. 이번 포스팅에서는 GitHub Pages를 생성하고, Gatsby로 생성한 홈페이지를 GitHub Pages에 올리는 방법에 대해 소개하고자 합니다. GitHub…]]></description><link>https://luckydavekim.github.io/development/install-gatsby-2</link><guid isPermaLink="false">https://luckydavekim.github.io/development/install-gatsby-2</guid><pubDate>Fri, 16 Oct 2020 16:07:27 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
-&lt;p&gt;&lt;a href=&quot;/development/install-gatsby-1&quot;&gt;지난 포스팅&lt;/a&gt;에서는 Gatsby를 알아보고, 정적 페이지를 생성해 보았습니다.&lt;br&gt;
+&lt;/ul&gt;</content:encoded></item><item><title><![CDATA[Gatsby로 나만의 홈페이지 만들기 (3)]]></title><description><![CDATA[개요 지난 포스팅에서는 GitHub Pages를 알아보고, 나만의 홈페이지를 생성해 보았습니다. 이번 포스팅에서는 Travis CI를 통해 자동 배포하는 방법에 대해 소개하고자 합니다. CI(Continuous Integration…]]></description><link>https://luckydavekim.github.io/development/front-end/install-gatsby-3</link><guid isPermaLink="false">https://luckydavekim.github.io/development/front-end/install-gatsby-3</guid><pubDate>Sun, 18 Oct 2020 02:12:13 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;/development/front-end/install-gatsby-2&quot;&gt;지난 포스팅&lt;/a&gt;에서는 GitHub Pages를 알아보고, 나만의 홈페이지를 생성해 보았습니다.&lt;br&gt;
+이번 포스팅에서는 Travis CI를 통해 자동 배포하는 방법에 대해 소개하고자 합니다.&lt;/p&gt;
+&lt;h1&gt;CI(Continuous Integration)란 무엇인가?&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;지속적 통합(CI, Continuous Integration)&lt;/strong&gt;이란 빌드와 테스트 자동화를 정기적으로 수행하는 것을 말합니다.&lt;br&gt;
+과거에는 대규모 기능을 개발할 때, 모든 작은 기능들의 개발이 끝나면 최종적으로 통합하여 테스트를 진행하였습니다.&lt;br&gt;
+이럴경우, 개발 중 QC(Quality Control)를 수행하지 않았기 때문에 모든 이슈가 개발 후반에 몰려서 일어나게 됩니다.&lt;br&gt;
+이 문제를 효율적으로 관리하기 위하여, 작은 기능이 개발완료 될 때 마다 빌드 및 테스트를 진행하여 이슈를 즉각적으로 인지하고 해결하기 위하여 CI가 탄생하였습니다.&lt;/p&gt;
+&lt;p&gt;CI의 일반적인 동작 원리로는 사용자가 변경사항을 형상관리 도구(VCS, Version Control System)에 커밋하게 되면 CI가 시작됩니다.&lt;br&gt;
+CI 툴에서는 변경사항을 기반으로 빌드를 진행하고, 테스트를 하며 성공 및 실패 여부를 판단한다. 그리고 설정에 따라 사용자에게 메일 및 SMS등의 방식으로 알림을 보내기도 합니다.&lt;/p&gt;
+&lt;h1&gt;Travis CI란 무엇인가?&lt;/h1&gt;
+&lt;p&gt;위에서 알아본 &lt;code class=&quot;language-text&quot;&gt;CI&lt;/code&gt;를 위한 툴은 여럿 존재합니다. 그 중 대표적으로 &lt;a href=&quot;https://www.jenkins.io&quot;&gt;Jenkins&lt;/a&gt;, &lt;a href=&quot;https://travis-ci.org&quot;&gt;Travis CI&lt;/a&gt;, &lt;a href=&quot;https://www.atlassian.com/software/bamboo&quot;&gt;Bamboo&lt;/a&gt; 등이 있습니다.&lt;br&gt;
+우리는 이러한 CI 툴을 이용해 간단한게 빌드 시 발생할 수 있는 문제를 미리 파악할 수 있고, 빌드에 대한 내용을 메일 등으로 알림받을 수 있습니다.&lt;br&gt;
+즉, 개발 완료 후 매번 서비스를 수동으로 빌드할 필요가 없으며, 빌드 후 문제가 있는지 직접 서비스에 접속하지 않고도 간편하게 알 수 있습니다.  &lt;/p&gt;
+&lt;p&gt;여러가지 CI 툴 중, 우리는 GitHub과 가장 궁합이 좋은 Travis CI를 사용해보도록 하겠습니다.&lt;br&gt;
+Travis CI는 2020년 10월 현재 &lt;a href=&quot;https://travis-ci.org&quot;&gt;travis-ci.org&lt;/a&gt;와 &lt;a href=&quot;https://travis-ci.com&quot;&gt;travis-ci.com&lt;/a&gt; 2개의 url를 갖고 있습니다.
+이는 과거에 Travis CI는 비공개형 유료 버전인 &lt;code class=&quot;language-text&quot;&gt;.com&lt;/code&gt;과 공개형 무료 버전인 &lt;code class=&quot;language-text&quot;&gt;.org&lt;/code&gt;로 운영되었기 때문이며,
+2018년 5월부터는 통합을 진행중이기 때문에 &lt;code class=&quot;language-text&quot;&gt;travis-ci.com&lt;/code&gt;로 가입하여 사용해야 합니다.&lt;br&gt;
+&lt;em&gt;&lt;code class=&quot;language-text&quot;&gt;travis-ci.org&lt;/code&gt;는 2021년 1월부로 서비스 종료됩니다.&lt;/em&gt;  &lt;/p&gt;
+&lt;h1&gt;그렇다면, Travis CI를 사용해보자!&lt;/h1&gt;
+&lt;p&gt;GitHub과 연동이 잘 되어있어, 복잡한 회원가입 및 설치 절차없이 사용할 수 있는 Travis CI 사용방법에 대해 알아보겠습니다. &lt;/p&gt;
+&lt;h2&gt;GitHub Token 발급 받기&lt;/h2&gt;
+&lt;p&gt;Travis CI에서 배포에 사용될 &lt;code class=&quot;language-text&quot;&gt;GitHub Token&lt;/code&gt;을 발급 받는 방법에 대해 알아보겠습니다.  &lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/settings/tokens&quot;&gt;GitHub Token 관리 페이지&lt;/a&gt;에 접속합니다.&lt;br&gt;
+GitHub 페이지에서 &lt;em&gt;Settings | Developer settings | Personal access tokens&lt;/em&gt;로 이동합니다.&lt;br&gt;
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1022px; &quot;
+    &gt;
+      &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 48%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAKCAIAAAA7N+mxAAAACXBIWXMAAAsSAAALEgHS3X78AAABDUlEQVQoz3VR2XLDMAj0//9j+9DjOZIlbpCLlCZx2skOw4DNAlo2Emea8IjjBcYjGr+2sAGAqo2JA4nqvvcO6VnkOHOOw0stb+/l4ws/v/lS3X0rtWbdWL9zfmt7a+3aApFgghq65zxhK8X25q2HzXlbFnWANWeIeunWUQmRmceIG2Zrc2dVVlEzJc6v2/ltYlHAdrRO0wM5SgAHi2V9gnCqIyKcw3PtZ/Ko4GmdoqJferaITBuacC6nS9kXZBatjWuTBtNKFyDlPIdYcif9jrn2eJ4s0oE7phdIPgom1c1z6bW2LaTOfhVsjPHvqOOcxLpr3A4cp0v/JafIqYposAbJNF5xZ7+nKWEGyfsBgShKaH5lznMAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;GitHub Personal access tokens&quot;
+        title=&quot;GitHub Personal access tokens&quot;
+        src=&quot;/static/5d739c169faca5c68d4fe23ec8cec9ac/e5fd4/github-personal-access-tokens.png&quot;
+        srcset=&quot;/static/5d739c169faca5c68d4fe23ec8cec9ac/0eb09/github-personal-access-tokens.png 500w,
+/static/5d739c169faca5c68d4fe23ec8cec9ac/1263b/github-personal-access-tokens.png 1000w,
+/static/5d739c169faca5c68d4fe23ec8cec9ac/e5fd4/github-personal-access-tokens.png 1022w&quot;
+        sizes=&quot;(max-width: 1022px) 100vw, 1022px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+    &lt;/span&gt;  &lt;/li&gt;
+&lt;li&gt;신규 토큰을 발급 받습니다.&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;Generate new token&lt;/code&gt; 버튼을 클릭 후, &lt;code class=&quot;language-text&quot;&gt;repo&lt;/code&gt; 권한을 모두 선택하여 토큰을 생성합니다.&lt;br&gt;
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 763px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/3e295018abf7205d17838ea1a35a7958/7d9e4/generate-new-token.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 75%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAPCAIAAABr+ngCAAAACXBIWXMAAAsSAAALEgHS3X78AAABa0lEQVQoz5VTCU7EMAzM//8J226bw7mPOmXSwEoIdgUjN5did2xPhDZGSgVITNpguUuJw/MPECllH0KIEZYwXogx8jHRmBum2lqtbYxfdjALa+19B+S6rttOt90t0q7S3jZadvt+p7fNavKI6pz3PlxDgOVchHOulAoOPNAPPmHcsR02t/0ZbcTbNrlL7UNsD3oPhteiP/EWyJTIOusO/OKfEJbMsq6ods4ZlZqlC6n4zLFwKOzTEfLvccXmGrnYmUGv1IoQKIYLyYdiQyafUj1yZTAH92/Wu3ClK2WITC7lHEdMY2eUVKDRajmf1Gs4I2bw/lKIbq3hFPVHFSwRUniR8Kczri7rHcnOhiml1dDcUB7k8dKZ+cozItV+YSoMH9SATr1yRm+J6Lashuz8M4iYC5bQCqQ/+A8BfS8YKAtIFAmiW2A6jxBLawODcucChkacP52hIescCvzIOYwHkvBgYJjHOuf+A7j5AUITa51/k56iAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Generate New Token&quot;
+        title=&quot;Generate New Token&quot;
+        src=&quot;/static/3e295018abf7205d17838ea1a35a7958/7d9e4/generate-new-token.png&quot;
+        srcset=&quot;/static/3e295018abf7205d17838ea1a35a7958/0eb09/generate-new-token.png 500w,
+/static/3e295018abf7205d17838ea1a35a7958/7d9e4/generate-new-token.png 763w&quot;
+        sizes=&quot;(max-width: 763px) 100vw, 763px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;  &lt;/li&gt;
+&lt;li&gt;신규 토큰 발급이 완료 되었습니다.&lt;br&gt;
+토큰은 해당 페이지를 닫으면 다시 확인할 수 없으므로, 아래 Travis CI에 설정하기 전까지 잘 보관합니다.&lt;br&gt;
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 766px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/3f81787d189db6226208649a1cdbcc0e/e4da8/new-token.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 30.8%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAGCAIAAABM9SnKAAAACXBIWXMAAAsSAAALEgHS3X78AAAA90lEQVQY02WLSVLDMBAA9f+ncXAIpiAxh8QxkWN5kcay9o1xOHBA1dXq0ZSIUopzIUAAAN44ln8nlxJTWrhYOHBYnbFm5sF64rwzRltr0EbvEWMIwT8dXIgxpv17zt47BFc5xeRdTolI7ZhQ82oY30ahd0CPXE2gsB+QFpV1KIiJ5TeULyoUGwuhMledrftQ9/6NIu54d8fd+Ohral87XbXb7uv23ofzXE5T+ZxKB5mIBdrLd9dS5IZc73/dPugM/aopbOheqIc0w2aZtIPQQnui6IV9vAzNgX0d0MO5Ys0zmgM9Hdf5KvMi/SjDhKx+RKSdFGfayR/Wb1Fjk2YkvgAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;New Token&quot;
+        title=&quot;New Token&quot;
+        src=&quot;/static/3f81787d189db6226208649a1cdbcc0e/e4da8/new-token.png&quot;
+        srcset=&quot;/static/3f81787d189db6226208649a1cdbcc0e/0eb09/new-token.png 500w,
+/static/3f81787d189db6226208649a1cdbcc0e/e4da8/new-token.png 766w&quot;
+        sizes=&quot;(max-width: 766px) 100vw, 766px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;  &lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;Travis CI 설정하기&lt;/h2&gt;
+&lt;p&gt;Travis CI를 설정하는 방법에 대해 알아보겠습니다.  &lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Travis CI에 로그인합니다.&lt;br&gt;
+&lt;a href=&quot;https://travis-ci.com/signin&quot;&gt;Travis 로그인 페이지&lt;/a&gt;로 접속 후, GitHub 계정 정보를 입력하여 로그인 합니다.&lt;br&gt;
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 646px; &quot;
+    &gt;
+      &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 80.60000000000001%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAIAAACZeshMAAAACXBIWXMAAAsSAAALEgHS3X78AAABlElEQVQoz5WS60rjQBTH87I+1K5+3BcoS1EoqIUKYkWhUAtrvbU2adK5xCYzk87teJJ2l9gEV/+cDEPO/M6cywQA4L3HTxv/FPqrsb8c+4sx/DhxB4d2wR36jbHlGcAzhvI3IZSxFpmg+lvKOdho0AbUBjLpjIWm8LBzDglccBPAX3iXAkCe50dHP7vd3+fnZ8Phdb/f73Q6zSja2EAVvoaX0loPBoNflSaTyWg06vV6ezBeK6QK0vU+vNWmEvqsbSnAOqdUEUjVAmPg9TpDMcaEkNgdLHIvbVTgGzVTkjw/TpM4ChfzOFpE4avIuDWb/8LlmqTFNMxCKl9igRYScTs3p1NfVOn7z+EZg5s5vKYwJaU9ULh7VPN74mvFt8C7uCIHEkO8hGgBcQgMY/yB4y4Uxb8b2uBqW2R5FicqTQWlkjLJGCV8llD7sTsVXOvjNhBh7Gk2Y5wvV6uEkGWcRMsEX6Vvwk5r8I0xOL/1b8fWHGYN/ih8npzzt0ppmuJKMX8pvwT7WkvqapszvkFjdvYdYYh3D/WfbYBwuSMAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Travis CI Sign in&quot;
+        title=&quot;Travis CI Sign in&quot;
+        src=&quot;/static/1b6950057f0237b8d87bc735a25e3310/3ffe4/travis-sign-in.png&quot;
+        srcset=&quot;/static/1b6950057f0237b8d87bc735a25e3310/0eb09/travis-sign-in.png 500w,
+/static/1b6950057f0237b8d87bc735a25e3310/3ffe4/travis-sign-in.png 646w&quot;
+        sizes=&quot;(max-width: 646px) 100vw, 646px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+    &lt;/span&gt;  &lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://travis-ci.com/account/repositories&quot;&gt;Travis CI Repository 관리 페이지&lt;/a&gt;에서 GitHub Pages 레파지토리를 검색해서 활성화 합니다.&lt;br&gt;
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1035px; &quot;
+    &gt;
+      &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 34.199999999999996%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAHCAIAAACHqfpvAAAACXBIWXMAAAsSAAALEgHS3X78AAAA70lEQVQY021QS07FMAzs6bkOOy7BghU7xG/VJu81f7tJbAe3FegJGE0sOclMJp7KBqnkxtyZSaQLjzHS5guWnHIIIcbovW+tjT+Y3tz8bOaPkHJt2Dq0ziIsDRFSSgDQDjDzP+KH98+7x6f7l9ezl6MiUWm91dpVV6uW3vsQ2Xkrjikt1qZS9AYRnYeFKHaqIhvt39FNPmS6SH93UmTSYH5dz3hyGjPny8XZnVdjcXUSI4ed5AMYWxYD1qKxU85Z5+Gc08EggEYcanNdN4W2iOoo+vg3fzIT4CQ30Kns8YjasoAxSrVnHyTEX9QIOC9f1NmWAO5Qdh0AAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Add Travis Repository&quot;
+        title=&quot;Add Travis Repository&quot;
+        src=&quot;/static/a80a4c9dd05ddb3140bccb4f01d51b74/46d55/add-travis-repository.png&quot;
+        srcset=&quot;/static/a80a4c9dd05ddb3140bccb4f01d51b74/0eb09/add-travis-repository.png 500w,
+/static/a80a4c9dd05ddb3140bccb4f01d51b74/1263b/add-travis-repository.png 1000w,
+/static/a80a4c9dd05ddb3140bccb4f01d51b74/46d55/add-travis-repository.png 1035w&quot;
+        sizes=&quot;(max-width: 1035px) 100vw, 1035px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+    &lt;/span&gt;  &lt;/li&gt;
+&lt;li&gt;GitHub Token을 등록합니다.&lt;br&gt;
+활성화한 repository의 &lt;em&gt;Settings | Environment Variables&lt;/em&gt;에 위에서 발급받은 &lt;code class=&quot;language-text&quot;&gt;GITHUB_TOKEN&lt;/code&gt;을 등록합니다.&lt;br&gt;
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1465px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/45c279859f5550f6ee778d88fd9efb1d/722fb/set-github-token.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 31.4%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAGCAIAAABM9SnKAAAACXBIWXMAAAsSAAALEgHS3X78AAAAg0lEQVQY05WPwQ7DIAxD+f8vRTuB2qaJIWUuCKStu+ydkmA7IezAaaZqtdb2CdzFABhx9/YgiFkWOVTRsYn2SWvX0F2/CCKyb5ueNzSklGKMr0nOee/oA+pDKcWAr7WrpojpbIdhLPTOvbkAPuG3qVtXMZeGoVuvHLJlwbtCnTH/Qv8baYJgOXThLVAAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Set GitHub Token&quot;
+        title=&quot;Set GitHub Token&quot;
+        src=&quot;/static/45c279859f5550f6ee778d88fd9efb1d/722fb/set-github-token.png&quot;
+        srcset=&quot;/static/45c279859f5550f6ee778d88fd9efb1d/0eb09/set-github-token.png 500w,
+/static/45c279859f5550f6ee778d88fd9efb1d/1263b/set-github-token.png 1000w,
+/static/45c279859f5550f6ee778d88fd9efb1d/722fb/set-github-token.png 1465w&quot;
+        sizes=&quot;(max-width: 1465px) 100vw, 1465px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;  &lt;/li&gt;
+&lt;li&gt;GitHub Pages 소스에 &lt;code class=&quot;language-text&quot;&gt;.travis.yml&lt;/code&gt;파일을 생성합니다.
+설정에 대한 자세한 내용은 &lt;a href=&quot;https://docs.travis-ci.com/user/deployment/pages&quot;&gt;.travis.yml 설정 메뉴얼&lt;/a&gt;을 참고합니다.&lt;br&gt;
+중요한 설정은 &lt;code class=&quot;language-text&quot;&gt;deploy.github-token&lt;/code&gt;에 위에서 등록한 environment variable key를 등록하고, &lt;code class=&quot;language-text&quot;&gt;deploy.on.branch&lt;/code&gt;에 GitHub Pages 소스 branch를 등록해야 하는 것 입니다.  &lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;yaml&quot;&gt;&lt;pre class=&quot;language-yaml&quot;&gt;&lt;code class=&quot;language-yaml&quot;&gt;&lt;span class=&quot;token key atrule&quot;&gt;language&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; node_js
+
+&lt;span class=&quot;token key atrule&quot;&gt;node_js&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;stable&quot;&lt;/span&gt;
+
+&lt;span class=&quot;token key atrule&quot;&gt;cache&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;token key atrule&quot;&gt;directories&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; .cache
+    &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; node_modules
+    &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; public
+
+&lt;span class=&quot;token key atrule&quot;&gt;before_install&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; npm install &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;g gatsby&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;cli
+
+&lt;span class=&quot;token key atrule&quot;&gt;install&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; npm install
+
+&lt;span class=&quot;token key atrule&quot;&gt;script&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; npm run build
+
+&lt;span class=&quot;token comment&quot;&gt;# 배포 설정&lt;/span&gt;
+&lt;span class=&quot;token key atrule&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;token key atrule&quot;&gt;provider&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; pages
+  &lt;span class=&quot;token key atrule&quot;&gt;skip-cleanup&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token boolean important&quot;&gt;true&lt;/span&gt;
+  &lt;span class=&quot;token key atrule&quot;&gt;keep-history&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token boolean important&quot;&gt;true&lt;/span&gt;
+  &lt;span class=&quot;token key atrule&quot;&gt;github-token&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; $GITHUB_TOKEN
+  &lt;span class=&quot;token key atrule&quot;&gt;local_dir&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; public
+  &lt;span class=&quot;token key atrule&quot;&gt;target_branch&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; master
+  &lt;span class=&quot;token key atrule&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;token key atrule&quot;&gt;branch&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; source&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;줄이며…&lt;/h1&gt;
+&lt;p&gt;여기까지 설정하였으면, &lt;code class=&quot;language-text&quot;&gt;source&lt;/code&gt; branch에 push 할 때 마다, Gatsby가 빌드되어 GitHub Pages &lt;code class=&quot;language-text&quot;&gt;master&lt;/code&gt; branch로 자동 반영이 진행됩니다.&lt;br&gt;
+향후 배포는 개발 후 &lt;code class=&quot;language-text&quot;&gt;source&lt;/code&gt; branch에 push 하는 것으로 간단해 졌습니다~!&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Gatsby로 나만의 홈페이지 만들기 (2)]]></title><description><![CDATA[개요 지난 포스팅에서는 Gatsby를 알아보고, 정적 페이지를 생성해 보았습니다. 이번 포스팅에서는 GitHub Pages를 생성하고, Gatsby로 생성한 홈페이지를 GitHub Pages에 올리는 방법에 대해 소개하고자 합니다. GitHub…]]></description><link>https://luckydavekim.github.io/development/front-end/install-gatsby-2</link><guid isPermaLink="false">https://luckydavekim.github.io/development/front-end/install-gatsby-2</guid><pubDate>Fri, 16 Oct 2020 16:07:27 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;/development/front-end/install-gatsby-1&quot;&gt;지난 포스팅&lt;/a&gt;에서는 Gatsby를 알아보고, 정적 페이지를 생성해 보았습니다.&lt;br&gt;
 이번 포스팅에서는 GitHub Pages를 생성하고, Gatsby로 생성한 홈페이지를 GitHub Pages에 올리는 방법에 대해 소개하고자 합니다.&lt;/p&gt;
 &lt;h1&gt;GitHub Pages란 무엇인가?&lt;/h1&gt;
 &lt;p&gt;GitHub Pages는 GitHub 저장소의 내용을 무료로! 호스팅해주는 서비스입니다.&lt;br&gt;
@@ -254,7 +586,7 @@ GitHub Pages 같은 경우 초기 진입장벽이 다른 블로그 서비스보�
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;Gatsby 빌드 파일을 push 합니다.&lt;br&gt;
-3-1. &lt;a href=&quot;/development/install-gatsby-1&quot;&gt;지난 포스팅&lt;/a&gt;에서 생성한 Gatsby 소스에서 &lt;code class=&quot;language-text&quot;&gt;gatsby build&lt;/code&gt; 명령어를 실행 후 생성된 public 디렉토리 내부 파일들을 모두 복사해옵니다.&lt;br&gt;
+3-1. &lt;a href=&quot;/development/front-end/install-gatsby-1&quot;&gt;지난 포스팅&lt;/a&gt;에서 생성한 Gatsby 소스에서 &lt;code class=&quot;language-text&quot;&gt;gatsby build&lt;/code&gt; 명령어를 실행 후 생성된 public 디렉토리 내부 파일들을 모두 복사해옵니다.&lt;br&gt;
 3-2. Gatsby build를 통해 가져온 파일을 커밋합니다.  &lt;/p&gt;
 &lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; &lt;span class=&quot;token builtin class-name&quot;&gt;.&lt;/span&gt;
 &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; commit -m &lt;span class=&quot;token string&quot;&gt;&apos;init&apos;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
@@ -324,7 +656,7 @@ s consists of English letters, digits, symbols and spaces.&lt;/code&gt;&lt;/pre&
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;hr&gt;
 &lt;h1&gt;코멘트&lt;/h1&gt;
-&lt;p&gt;이 문제의 핵심은 문자열이 ASCII의 조합임을 활용하여, 문자열을 순회하며 현재 문자의 ASCII 코드와 매칭되는 배열의 index 값에 현재 문자의 마지막 출현 위치를 지속적으로 갱신해가는 것이다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Gatsby로 나만의 홈페이지 만들기 (1)]]></title><description><![CDATA[개요 이 포스팅에서는 Gatsby를 설치하고 GitHub에 적용하는 방법에 대해 소개하고자 합니다. 이전에 Jekyll로 홈페이지 만들기를 작성했었는데, 이번에는 Gatsby로 홈페이지를 만들어 보겠습니다. Gatsby란 무엇인가? Gatsby…]]></description><link>https://luckydavekim.github.io/development/install-gatsby-1</link><guid isPermaLink="false">https://luckydavekim.github.io/development/install-gatsby-1</guid><pubDate>Wed, 14 Oct 2020 10:13:10 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+&lt;p&gt;이 문제의 핵심은 문자열이 ASCII의 조합임을 활용하여, 문자열을 순회하며 현재 문자의 ASCII 코드와 매칭되는 배열의 index 값에 현재 문자의 마지막 출현 위치를 지속적으로 갱신해가는 것이다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Gatsby로 나만의 홈페이지 만들기 (1)]]></title><description><![CDATA[개요 이 포스팅에서는 Gatsby를 설치하고 GitHub에 적용하는 방법에 대해 소개하고자 합니다. 이전에 Jekyll로 홈페이지 만들기를 작성했었는데, 이번에는 Gatsby로 홈페이지를 만들어 보겠습니다. Gatsby란 무엇인가? Gatsby…]]></description><link>https://luckydavekim.github.io/development/front-end/install-gatsby-1</link><guid isPermaLink="false">https://luckydavekim.github.io/development/front-end/install-gatsby-1</guid><pubDate>Wed, 14 Oct 2020 10:13:10 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
 &lt;p&gt;이 포스팅에서는 Gatsby를 설치하고 GitHub에 적용하는 방법에 대해 소개하고자 합니다.&lt;br&gt;
 이전에 &lt;a href=&quot;/development/install-jekyll&quot;&gt;Jekyll로 홈페이지 만들기&lt;/a&gt;를 작성했었는데, 이번에는 Gatsby로 홈페이지를 만들어 보겠습니다.&lt;/p&gt;
 &lt;h1&gt;Gatsby란 무엇인가?&lt;/h1&gt;
@@ -539,7 +871,7 @@ Output: [1]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;ol&gt;
 &lt;li&gt;2개의 노드를 활용하여 1번의 순회로 문제를 해결하기.&lt;/li&gt;
 &lt;li&gt;최초의 더미노드 &lt;code class=&quot;language-text&quot;&gt;start&lt;/code&gt;를 활용해 Edge case 쉽게 해결하기.&lt;/li&gt;
-&lt;/ol&gt;</content:encoded></item><item><title><![CDATA[Kotlin과 Spring Boot로 REST API 서비스 구축]]></title><description><![CDATA[개요 이 포스팅에서는 Kotlin 언어와 Spring Boot 프레임워크로 REST Api 서비스를 구축하는 과정을 담고자 합니다. 만약 Kotlin…]]></description><link>https://luckydavekim.github.io/development/create-kotlin-spring-boot</link><guid isPermaLink="false">https://luckydavekim.github.io/development/create-kotlin-spring-boot</guid><pubDate>Wed, 25 Sep 2019 01:05:34 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+&lt;/ol&gt;</content:encoded></item><item><title><![CDATA[Kotlin과 Spring Boot로 REST API 서비스 구축]]></title><description><![CDATA[개요 이 포스팅에서는 Kotlin 언어와 Spring Boot 프레임워크로 REST Api 서비스를 구축하는 과정을 담고자 합니다. 만약 Kotlin…]]></description><link>https://luckydavekim.github.io/development/back-end/create-kotlin-spring-boot</link><guid isPermaLink="false">https://luckydavekim.github.io/development/back-end/create-kotlin-spring-boot</guid><pubDate>Wed, 25 Sep 2019 01:05:34 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
 &lt;p&gt;이 포스팅에서는 &lt;a href=&quot;https://kotlinlang.org/&quot;&gt;Kotlin&lt;/a&gt; 언어와 &lt;a href=&quot;https://spring.io/projects/spring-boot&quot;&gt;Spring Boot&lt;/a&gt; 프레임워크로 REST Api 서비스를 구축하는 과정을 담고자 합니다.&lt;/p&gt;
 &lt;p&gt;만약 Kotlin에 대해 자세히 알고 싶으시면 &lt;a href=&quot;https://kotlinlang.org/docs/reference/&quot;&gt;참고 문서&lt;/a&gt;를 읽어보시고, &lt;a href=&quot;https://play.kotlinlang.org/koans/overview&quot;&gt;웹 튜토리얼&lt;/a&gt;을 통해 쉽게 배우실 수 있습니다.&lt;/p&gt;
 &lt;h1&gt;목표&lt;/h1&gt;
@@ -731,7 +1063,7 @@ class ReadTodoTests(@Autowired val mockMvc: MockMvc) { &amp;lt;=== (2)
 &lt;/ul&gt;
 &lt;h1&gt;줄이며…&lt;/h1&gt;
 &lt;p&gt;지금까지 Kotlin-Spring Boot 프로젝트 생성부터 간단한 REST Api 작성 및 테스트를 진행하였습니다.&lt;br&gt;
-다음에는 DB 연결을 진행하도록 하겠습니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Vue.js 사용하기]]></title><description><![CDATA[Vue CLI란? Vue CLI는 커멘드라인 인터페이스 기반의 Vue 프로젝트 생성 도구이며, 사용자가 어플리케이션 개발에 집중할 수 있도록 프로젝트 구성을 도와준다. Vue CLI…]]></description><link>https://luckydavekim.github.io/development/create-vuejs</link><guid isPermaLink="false">https://luckydavekim.github.io/development/create-vuejs</guid><pubDate>Mon, 09 Sep 2019 01:20:55 GMT</pubDate><content:encoded>&lt;h1&gt;Vue CLI란?&lt;/h1&gt;
+다음에는 DB 연결을 진행하도록 하겠습니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Vue.js 사용하기]]></title><description><![CDATA[Vue CLI란? Vue CLI는 커멘드라인 인터페이스 기반의 Vue 프로젝트 생성 도구이며, 사용자가 어플리케이션 개발에 집중할 수 있도록 프로젝트 구성을 도와준다. Vue CLI…]]></description><link>https://luckydavekim.github.io/development/front-end/create-vuejs</link><guid isPermaLink="false">https://luckydavekim.github.io/development/front-end/create-vuejs</guid><pubDate>Mon, 09 Sep 2019 01:20:55 GMT</pubDate><content:encoded>&lt;h1&gt;Vue CLI란?&lt;/h1&gt;
 &lt;p&gt;Vue CLI는 커멘드라인 인터페이스 기반의 Vue 프로젝트 생성 도구이며, 사용자가 어플리케이션 개발에 집중할 수 있도록 프로젝트 구성을 도와준다.&lt;/p&gt;
 &lt;p&gt;Vue CLI 3의 목표는 다음 두가지 &lt;a href=&quot;https://github.com/vuejs/vue-cli/issues/589&quot;&gt;문제점&lt;/a&gt;을 해결하는 것 이다.&lt;/p&gt;
 &lt;ol&gt;
@@ -887,7 +1219,7 @@ class ReadTodoTests(@Autowired val mockMvc: MockMvc) { &amp;lt;=== (2)
 &lt;h1&gt;끝으로…&lt;/h1&gt;
 &lt;p&gt;여기까지 Vue CLI를 사용하여 기본 프로젝트를 생성하는 방법에 대해 알아보았다.&lt;br&gt;
 다음에는 생성한 프로젝트의 구조에 대해 좀더 자세히 알아보도록 하자.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[ES6?! ES2015?! ECMAScript란 도대체 무엇인가?]]></title><description><![CDATA[ES6은 뭐고 ES2015는 뭐야?! 가끔씩 볼때마다 헷갈리는 ECMAScript 버전!! 도대체 어떻게 버전관리를 하는거야 ㅠㅠ.
-다음부터 헷갈리지 않게 한번 정리해놔야겠다. 자바스크립트(JavaScript) 잘 알고있니? ECMAScript…]]></description><link>https://luckydavekim.github.io/development/what-is-the-ecmascript</link><guid isPermaLink="false">https://luckydavekim.github.io/development/what-is-the-ecmascript</guid><pubDate>Wed, 07 Feb 2018 11:30:04 GMT</pubDate><content:encoded>&lt;h1&gt;ES6은 뭐고 ES2015는 뭐야?!&lt;/h1&gt;
+다음부터 헷갈리지 않게 한번 정리해놔야겠다. 자바스크립트(JavaScript) 잘 알고있니? ECMAScript…]]></description><link>https://luckydavekim.github.io/development/front-end/what-is-the-ecmascript</link><guid isPermaLink="false">https://luckydavekim.github.io/development/front-end/what-is-the-ecmascript</guid><pubDate>Wed, 07 Feb 2018 11:30:04 GMT</pubDate><content:encoded>&lt;h1&gt;ES6은 뭐고 ES2015는 뭐야?!&lt;/h1&gt;
 &lt;p&gt;가끔씩 볼때마다 헷갈리는 ECMAScript 버전!! 도대체 어떻게 버전관리를 하는거야 ㅠㅠ.
 다음부터 헷갈리지 않게 한번 정리해놔야겠다.&lt;/p&gt;
 &lt;h1&gt;자바스크립트(JavaScript) 잘 알고있니?&lt;/h1&gt;
@@ -951,7 +1283,7 @@ this를 강제로 바인딩 시켜주는 메소드이다. 좀 더 명확하게 t
 &lt;/ul&gt;
 &lt;h1&gt;이제 좀 명쾌하네~!&lt;/h1&gt;
 &lt;p&gt;ES3에서 ES5까지 10년, ES6까지 7년의 공백 때문에 많은 변화가 있었는데, 앞으로 매년 표준을 제정하며 그런 혼란을 줄일 예정인 것 같다. 또한 이후에 나올 ES를 통칭해서 ES.Next라고 부른다. 다음 ES9(ES2018)은 어떨까..?
-이번에는 전반적인 ES에 대해 알아보느라 메소드 하나하나 자세히 알아보지는 못한것 같다. 다음 시간에는 각 메소드를 자세히 알아보도록 하자.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[윈도우에서 JDK 8 설치 및 환경설정]]></title><description><![CDATA[개요 이 포스팅에서는 JDK 8 설치 및 환경설정하는 방법에 대해 소개하고자 합니다.  JDK 다운로드 JDK 다운로드를 클릭하여 JDK를 다운로드 하거나, 혹은 다음 절차를 따라 다운로드 한다. Oracle…]]></description><link>https://luckydavekim.github.io/development/install-jdk-with-setting-at-windows</link><guid isPermaLink="false">https://luckydavekim.github.io/development/install-jdk-with-setting-at-windows</guid><pubDate>Sun, 28 Jan 2018 06:53:25 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+이번에는 전반적인 ES에 대해 알아보느라 메소드 하나하나 자세히 알아보지는 못한것 같다. 다음 시간에는 각 메소드를 자세히 알아보도록 하자.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[윈도우에서 JDK 8 설치 및 환경설정]]></title><description><![CDATA[개요 이 포스팅에서는 JDK 8 설치 및 환경설정하는 방법에 대해 소개하고자 합니다.  JDK 다운로드 JDK 다운로드를 클릭하여 JDK를 다운로드 하거나, 혹은 다음 절차를 따라 다운로드 한다. Oracle…]]></description><link>https://luckydavekim.github.io/development/etc/install-jdk-with-setting-at-windows</link><guid isPermaLink="false">https://luckydavekim.github.io/development/etc/install-jdk-with-setting-at-windows</guid><pubDate>Sun, 28 Jan 2018 06:53:25 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
 &lt;p&gt;이 포스팅에서는 JDK 8 설치 및 환경설정하는 방법에 대해 소개하고자 합니다.&lt;/p&gt;
 &lt;p&gt;&lt;span
       class=&quot;gatsby-resp-image-wrapper&quot;
@@ -1516,7 +1848,7 @@ this를 강제로 바인딩 시켜주는 메소드이다. 좀 더 명확하게 t
       /&gt;
   &lt;/a&gt;
     &lt;/span&gt;&lt;/li&gt;
-&lt;/ol&gt;</content:encoded></item><item><title><![CDATA[윈도우10 부팅 USB 만들기]]></title><description><![CDATA[개요 이 포스팅에서는 윈도우10 부팅 USB 만드는 방법에 대해 소개하고자 합니다. 준비물 USB (최소 8GB) MediaCreationTool USB 포멧 USB를 삽입한다. 내컴퓨터에서 삽입된 USB…]]></description><link>https://luckydavekim.github.io/development/make-windows-booting-usb</link><guid isPermaLink="false">https://luckydavekim.github.io/development/make-windows-booting-usb</guid><pubDate>Sat, 18 Nov 2017 17:06:00 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+&lt;/ol&gt;</content:encoded></item><item><title><![CDATA[윈도우10 부팅 USB 만들기]]></title><description><![CDATA[개요 이 포스팅에서는 윈도우10 부팅 USB 만드는 방법에 대해 소개하고자 합니다. 준비물 USB (최소 8GB) MediaCreationTool USB 포멧 USB를 삽입한다. 내컴퓨터에서 삽입된 USB…]]></description><link>https://luckydavekim.github.io/development/etc/make-windows-booting-usb</link><guid isPermaLink="false">https://luckydavekim.github.io/development/etc/make-windows-booting-usb</guid><pubDate>Sat, 18 Nov 2017 17:06:00 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
 &lt;p&gt;이 포스팅에서는 윈도우10 부팅 USB 만드는 방법에 대해 소개하고자 합니다.&lt;/p&gt;
 &lt;h1&gt;준비물&lt;/h1&gt;
 &lt;ul&gt;
@@ -1758,7 +2090,7 @@ this를 강제로 바인딩 시켜주는 메소드이다. 좀 더 명확하게 t
         loading=&quot;lazy&quot;
       /&gt;
   &lt;/a&gt;
-    &lt;/span&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[검색엔진에서 페이지 검색 가능하게 하기]]></title><description><![CDATA[개요 이 포스팅에서는 검색엔진에서 페이지 검색이 가능하도록 등록하는 방법에 대해 소개하고자 합니다. 왜 이런 일을 해야 하나요? 기본 옵션의 GitHub Pages…]]></description><link>https://luckydavekim.github.io/development/add-blog-to-search-engine</link><guid isPermaLink="false">https://luckydavekim.github.io/development/add-blog-to-search-engine</guid><pubDate>Thu, 02 Nov 2017 04:48:18 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+    &lt;/span&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[검색엔진에서 페이지 검색 가능하게 하기]]></title><description><![CDATA[개요 이 포스팅에서는 검색엔진에서 페이지 검색이 가능하도록 등록하는 방법에 대해 소개하고자 합니다. 왜 이런 일을 해야 하나요? 기본 옵션의 GitHub Pages…]]></description><link>https://luckydavekim.github.io/development/front-end/add-blog-to-search-engine</link><guid isPermaLink="false">https://luckydavekim.github.io/development/front-end/add-blog-to-search-engine</guid><pubDate>Thu, 02 Nov 2017 04:48:18 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
 &lt;p&gt;이 포스팅에서는 검색엔진에서 페이지 검색이 가능하도록 등록하는 방법에 대해 소개하고자 합니다.&lt;/p&gt;
 &lt;h1&gt;왜 이런 일을 해야 하나요?&lt;/h1&gt;
 &lt;p&gt;기본 옵션의 GitHub Pages는 일반 포털사이트의 블로그와 달리 검색엔진에서 검색이 되지 않는다. 즉, 검색엔진에 등록하지 않으면 혼자만 사용하는 홈페이지가 되는 것이다. 다양한 사람과 소통하기 위해 만든 홈페이지라면 검색엔진에 등록하는 것이 필수이다.&lt;/p&gt;
@@ -1907,7 +2239,7 @@ this를 강제로 바인딩 시켜주는 메소드이다. 좀 더 명확하게 t
 — RubyDevKit
 — Jekyll
 — Rouge Python
-— Pygements Ruby…]]></description><link>https://luckydavekim.github.io/development/install-jekyll</link><guid isPermaLink="false">https://luckydavekim.github.io/development/install-jekyll</guid><pubDate>Thu, 02 Nov 2017 04:45:30 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+— Pygements Ruby…]]></description><link>https://luckydavekim.github.io/development/front-end/install-jekyll</link><guid isPermaLink="false">https://luckydavekim.github.io/development/front-end/install-jekyll</guid><pubDate>Thu, 02 Nov 2017 04:45:30 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
 &lt;p&gt;이 포스팅에서는 Jekyll을 설치하고 GitHub에 적용하는 방법에 대해 소개하고자 합니다.&lt;/p&gt;
 &lt;p&gt;&lt;span
       class=&quot;gatsby-resp-image-wrapper&quot;
@@ -2093,7 +2425,7 @@ highlighter:Pygments&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;$ jekyll serve&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;/li&gt;
 &lt;li&gt;Browser에서 &lt;a href=&quot;http://127.0.0.1:4000/&quot;&gt;실행한 Jekyll 홈페이지&lt;/a&gt;로 접속한다.&lt;/li&gt;
-&lt;/ol&gt;</content:encoded></item><item><title><![CDATA[GitHub Pages 생성]]></title><description><![CDATA[개요 이 포스팅에서는 GitHub Pages를 생성하는 방법에 대해 소개하고자 합니다.  GitHub 계정생성 GitHub 홈페이지에서 계정생성한다. GitHub Pages 생성 Pages를 위한 Repository 생성 GitHub…]]></description><link>https://luckydavekim.github.io/development/create-github-pages</link><guid isPermaLink="false">https://luckydavekim.github.io/development/create-github-pages</guid><pubDate>Wed, 01 Nov 2017 14:32:43 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+&lt;/ol&gt;</content:encoded></item><item><title><![CDATA[GitHub Pages 생성]]></title><description><![CDATA[개요 이 포스팅에서는 GitHub Pages를 생성하는 방법에 대해 소개하고자 합니다.  GitHub 계정생성 GitHub 홈페이지에서 계정생성한다. GitHub Pages 생성 Pages를 위한 Repository 생성 GitHub…]]></description><link>https://luckydavekim.github.io/development/front-end/create-github-pages</link><guid isPermaLink="false">https://luckydavekim.github.io/development/front-end/create-github-pages</guid><pubDate>Wed, 01 Nov 2017 14:32:43 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
 &lt;p&gt;이 포스팅에서는 GitHub Pages를 생성하는 방법에 대해 소개하고자 합니다.&lt;/p&gt;
 &lt;p&gt;&lt;span
       class=&quot;gatsby-resp-image-wrapper&quot;
