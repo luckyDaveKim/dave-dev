@@ -4,6 +4,7 @@
 <url> <loc>https://luckydavekim.github.io/2</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/3</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/algorithm/leetcode/subsets</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/algorithm/leetcode/word-search</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/algorithm/leetcode/minimum-path-sum</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/algorithm/leetcode/set-matrix-zeroes</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/development/front-end/install-gatsby-3</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
