@@ -127,6 +127,7 @@ s contains only digits and may contain leading zero(s).</code></pre></div>
 <li><code class="language-text">i</code>번째 수와 <code class="language-text">i - 1</code>번째 수가 10(J) ~ 26(Z)사이의 숫자인 경우. 즉, 두자리 수로 문자를 만들 수 있는 경우.
 이 경우에는 한자리 수를 통한 디코딩과 두자리 수를 통한 디코딩이 가능하므로, ”<code class="language-text">i - 1</code>번째 까지의 디코딩 방식” + ”<code class="language-text">i - 1</code>번째 까지의 한자리 수를 통한 디코딩 방식 (그래야 <code class="language-text">i - 1</code>번째 수와 <code class="language-text">i</code>번째를 합친 두자리 수로 디코딩이 가능하다)” 로 나타낼 수 있습니다.</li>
 </ol>
+<h3>Java 코드</h3>
 <div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DecodeWays</span> <span class="token punctuation">{</span>
 
 	<span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">numDecodings</span><span class="token punctuation">(</span><span class="token class-name">String</span> s<span class="token punctuation">)</span> <span class="token punctuation">{</span>
