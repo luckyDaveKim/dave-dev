@@ -1,4 +1,429 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[DevDave]]></title><description><![CDATA[The blog for dave]]></description><link>https://luckydavekim.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Tue, 27 Oct 2020 18:24:12 GMT</lastBuildDate><item><title><![CDATA[[LeetCode] #91. Decode Ways]]></title><description><![CDATA[문제 #91. Decode Ways A message containing letters from A-Z is being encoded to numbers using the following mapping:   ‘A’ -> 1 ‘B’ -> 2 … ‘Z…]]></description><link>https://luckydavekim.github.io/algorithm/leetcode/decode-ways</link><guid isPermaLink="false">https://luckydavekim.github.io/algorithm/leetcode/decode-ways</guid><pubDate>Tue, 27 Oct 2020 18:09:18 GMT</pubDate><content:encoded>&lt;h1&gt;문제&lt;/h1&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[DevDave]]></title><description><![CDATA[The blog for dave]]></description><link>https://luckydavekim.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Tue, 17 Nov 2020 16:03:56 GMT</lastBuildDate><item><title><![CDATA[Java 접근 제어자 (Access Modifier)]]></title><description><![CDATA[개요 이 포스팅에서는 Java의 접근 제어자의 종류에 대해 알아보고, 각 접근제어자별 차이점에 대해 알아보도록 하겠습니다. 접근 제어자(Access Modifier) 란? Java…]]></description><link>https://luckydavekim.github.io/development/back-end/java/what-is-the-access-modifier</link><guid isPermaLink="false">https://luckydavekim.github.io/development/back-end/java/what-is-the-access-modifier</guid><pubDate>Wed, 18 Nov 2020 03:50:10 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+&lt;p&gt;이 포스팅에서는 Java의 접근 제어자의 종류에 대해 알아보고, 각 접근제어자별 차이점에 대해 알아보도록 하겠습니다.&lt;/p&gt;
+&lt;h1&gt;접근 제어자(Access Modifier) 란?&lt;/h1&gt;
+&lt;p&gt;Java의 인터페이스, 클래스, 메서드 그리고 변수 앞에 선언하며, 접근할 수 있는 범위를 한정해 주는 역할을 합니다.&lt;br&gt;
+접근 제어자의 종류는 4가지로 &lt;code class=&quot;language-text&quot;&gt;private&lt;/code&gt; &amp;#x3C; &lt;code class=&quot;language-text&quot;&gt;default&lt;/code&gt; &amp;#x3C; &lt;code class=&quot;language-text&quot;&gt;protected&lt;/code&gt; &amp;#x3C; &lt;code class=&quot;language-text&quot;&gt;public&lt;/code&gt; 가 존재하며, 오른쪽으로 갈수록 접근 허용 범위가 커집니다.&lt;br&gt;
+이러한 접근제어자를 통해 클래스 외부에 불필요한 노출을 줄일 수 있으며, 보다 유지보수가 용이한 프로그래밍이 가능하도록 도와줍니다.&lt;br&gt;
+또한, 접근 제어를 통해 객체지향 프로그래밍(OOP, Object Oriented Programing)의 4대 특성 중 하나인, 캡슐화(Encapsulation)를 가능하도록 합니다.&lt;/p&gt;
+&lt;h1&gt;접근 제어자의 종류 및 예시&lt;/h1&gt;
+&lt;p&gt;접근 제어자의 종류와 특성을 예시를 통해 알아보도록 하겠습니다.&lt;br&gt;
+예시에 사용될 프로젝트 구조는 다음과 같습니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;.
+└─ com.example
+│ └─ home
+│ │ └─ IMyMeMine.java
+│ │ └─ Main.java
+│ └─ Child.java
+│ └─ Dog.java
+│ └─ Cow.java&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Private 제어자&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;private&lt;/code&gt; 제어자가 붙은 인터페이스, 클래스, 메서드 그리고 변수는 해당 클래스 내에서만 접근이 가능합니다.&lt;br&gt;
+&lt;strong&gt;즉, &lt;code class=&quot;language-text&quot;&gt;private&lt;/code&gt; 제어자의 접근 허용 범위는 동일 클래스입니다.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1280px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/9285d377061d669ce88c15bdb91662d2/bbbf7/private.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 56.199999999999996%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAv0lEQVQoz42T0QrFIAhA/f9fi176iPUSo9FLq21eFBzO62CCpOXONA1QyXVdrGLLep7nw7cxWuALTPQLFOwfLOw4jod6UP0d6EMvszEG7vuOvXc+k30vAVLw7sErkaTWemfpZcdATReItQWWUsJlWdj3roBLFoMAc85HE3QglRxjxFIK79FVkFooaIcOCSpBkqU0J4SA27bdQB37B9QwWm0nW2uYc8Z1XdmnGC8O3gbUGyXPtzbYtnv6NlreQ/gBu+tmr0U3Ek8AAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;private&quot;
+        title=&quot;private&quot;
+        src=&quot;/static/9285d377061d669ce88c15bdb91662d2/bbbf7/private.png&quot;
+        srcset=&quot;/static/9285d377061d669ce88c15bdb91662d2/0eb09/private.png 500w,
+/static/9285d377061d669ce88c15bdb91662d2/1263b/private.png 1000w,
+/static/9285d377061d669ce88c15bdb91662d2/bbbf7/private.png 1280w&quot;
+        sizes=&quot;(max-width: 1280px) 100vw, 1280px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;IMyMeMine&lt;/code&gt; 클래스를 살펴보겠습니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;IMyMeMine&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;token class-name&quot;&gt;IMyMeMine&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;/* private 변수 사용 */&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; myName &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;name&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* private 메서드 사용 */&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;say&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* private 클래스 사용 */&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;Wallet&lt;/span&gt; myWallet &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Wallet&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;say&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Storable&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;store&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token comment&quot;&gt;/* private 인터페이스 사용 */&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Wallet&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Storable&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Wallet&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;store&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;IMyMeMine&lt;/code&gt; 클래스 내부에서, 동일 클래스 내의 &lt;code class=&quot;language-text&quot;&gt;private&lt;/code&gt; 제어자를 자유롭게 접근할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;이번에는 &lt;code class=&quot;language-text&quot;&gt;Main&lt;/code&gt; 클래스를 살펴보겠습니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Main&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; args&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;IMyMeMine&lt;/span&gt; iMyMeMine &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;IMyMeMine&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* private 변수 사용불가 */&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// String myName = iMyMeMine.name;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* private 메서드 사용불가 */&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// iMyMeMine.say();&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* private 클래스 사용불가 */&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// IMyMeMine.Wallet wallet = new IMyMeMine.Wallet();&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  
+  &lt;span class=&quot;token comment&quot;&gt;/* private 인터페이스 사용불가 */&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;// public static class NestedClass implements IMyMeMine.Storable {&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;//   @Override&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;//   public void store() {}&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;// }&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;Main&lt;/code&gt; 클래스는 &lt;code class=&quot;language-text&quot;&gt;IMyMeMine&lt;/code&gt; 클래스와 동일 클래스가 아니므로, &lt;code class=&quot;language-text&quot;&gt;Main&lt;/code&gt; 클래스 에서는 &lt;code class=&quot;language-text&quot;&gt;IMyMeMine&lt;/code&gt; 클래스 내부의 &lt;code class=&quot;language-text&quot;&gt;private&lt;/code&gt; 제어자로 선언된 클래스, 인터페이스, 메서드 그리고 변수를 사용할 수 없습니다.&lt;/p&gt;
+&lt;h2&gt;Default 제어자&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;default&lt;/code&gt; 제어자는 아무 접근 제어자도 설정하지 않을 경우에 &lt;code class=&quot;language-text&quot;&gt;default&lt;/code&gt; 제어자가 설정 되며, &lt;code class=&quot;language-text&quot;&gt;default&lt;/code&gt; 제어자가 붙은 인터페이스, 클래스, 메서드 그리고 변수는 &lt;code class=&quot;language-text&quot;&gt;private&lt;/code&gt; 접근 권한 + 동일 패키지 내에서만 접근이 가능합니다.&lt;br&gt;
+&lt;strong&gt;즉, &lt;code class=&quot;language-text&quot;&gt;default&lt;/code&gt; 제어자의 접근 허용 범위는 동일 클래스 + 동일 패키지입니다.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1280px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/eeb3be98056fb60d687e18111fe7a908/bbbf7/default.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 56.199999999999996%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAA/0lEQVQoz41S6cqEMAzs+7+U7yD4Q1c88ELFG8E7ywQi/Vz9dgOhaTuZToYq0uI4Dk6pEdu2UZ7nNAzDI0YP9Y0syzJyXZeCIPiJVF1fEMC6rpQkCTmOQ3VdMyGI+77/wOq10l+Uw3meKY5j8jyPFZZlSWma8pnv+9S27UeP1OrOB3iGxnEcT7WIrutYdRiGNE3T7fh/FO77fl42TcMeyugY2bIssm2bJwAW91cvT4UAoBkgBMaSB+BhVVVkmiYrX5aFsVivpErfiCLUIEBCKQjho2EY9Hq9GPOVUMiwIqEODUjxL4oiKori9FW81X1UTx/0v7j7Lrcj/5pPnxvrG0g+XNHTCe1hAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;default&quot;
+        title=&quot;default&quot;
+        src=&quot;/static/eeb3be98056fb60d687e18111fe7a908/bbbf7/default.png&quot;
+        srcset=&quot;/static/eeb3be98056fb60d687e18111fe7a908/0eb09/default.png 500w,
+/static/eeb3be98056fb60d687e18111fe7a908/1263b/default.png 1000w,
+/static/eeb3be98056fb60d687e18111fe7a908/bbbf7/default.png 1280w&quot;
+        sizes=&quot;(max-width: 1280px) 100vw, 1280px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;IMyMeMine&lt;/code&gt; 클래스를 살펴보겠습니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;IMyMeMine&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;token class-name&quot;&gt;IMyMeMine&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;/* default 변수 사용 */&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; myName &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;name&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* default 메서드 사용 */&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;say&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* default 클래스 사용 */&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;Wallet&lt;/span&gt; myWallet &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Wallet&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;say&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Storable&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;store&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token comment&quot;&gt;/* default 인터페이스 사용 */&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Wallet&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Storable&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Wallet&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;store&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;default&lt;/code&gt; 제어자는 &lt;code class=&quot;language-text&quot;&gt;private&lt;/code&gt; 제어자의 접근 권한을 포함하므로, 클래스 내부에서는 &lt;code class=&quot;language-text&quot;&gt;default&lt;/code&gt; 제어자를 자유롭게 접근할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;이번에는 &lt;code class=&quot;language-text&quot;&gt;Main&lt;/code&gt; 클래스를 살펴보겠습니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Main&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; args&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;IMyMeMine&lt;/span&gt; iMyMeMine &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;IMyMeMine&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* private 변수 사용 */&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; myName &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; iMyMeMine&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;name&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* private 메서드 사용 */&lt;/span&gt;
+    iMyMeMine&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;say&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* private 클래스 사용 */&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;IMyMeMine&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Wallet&lt;/span&gt; wallet &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;IMyMeMine&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Wallet&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  
+  &lt;span class=&quot;token comment&quot;&gt;/* private 인터페이스 사용 */&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;NestedClass&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;IMyMeMine&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Storable&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;store&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;Main&lt;/code&gt; 클래스와 &lt;code class=&quot;language-text&quot;&gt;IMyMeMine&lt;/code&gt; 클래스는 동일 패키지에 있으므로, &lt;code class=&quot;language-text&quot;&gt;private&lt;/code&gt; 제어자 때와는 다르게 &lt;code class=&quot;language-text&quot;&gt;Main&lt;/code&gt; 클래스에서 &lt;code class=&quot;language-text&quot;&gt;IMyMeMine&lt;/code&gt; 클래스의 &lt;code class=&quot;language-text&quot;&gt;default&lt;/code&gt; 제어자로 선언된 클래스, 인터페이스, 메서드 그리고 변수 사용이 가능합니다.&lt;/p&gt;
+&lt;p&gt;이번에는 &lt;code class=&quot;language-text&quot;&gt;Child&lt;/code&gt; 클래스를 살펴보겠습니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Child&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token class-name&quot;&gt;Child&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;/* default 클래스 사용불가 */&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// IMyMeMine iMyMeMine = new IMyMeMine();&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* default 변수 사용불가 */&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// String myName = iMyMeMine.name;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* default 메서드 사용불가 */&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// iMyMeMine.say();&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* default 클래스 사용불가 */&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// IMyMeMine.Wallet wallet = new IMyMeMine.Wallet();&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token comment&quot;&gt;/* default 인터페이스 사용불가 */&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;// public static class NestedClass implements IMyMeMine.Storable {&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;//   @Override&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;//   public void store() {}&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;// }&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;Child&lt;/code&gt; 클래스는 &lt;code class=&quot;language-text&quot;&gt;IMyMeMine&lt;/code&gt; 클래스와 다른 패키지에 있으므로, &lt;code class=&quot;language-text&quot;&gt;Child&lt;/code&gt; 클래스에서 &lt;code class=&quot;language-text&quot;&gt;IMyMeMine&lt;/code&gt; 클래스의 &lt;code class=&quot;language-text&quot;&gt;default&lt;/code&gt; 제어자로 선언된 클래스, 인터페이스, 메서드 그리고 변수를 사용할 수 없습니다.&lt;/p&gt;
+&lt;h2&gt;Protected 제어자&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;protected&lt;/code&gt; 제어자가 붙은 인터페이스, 클래스, 메서드 그리고 변수는 &lt;code class=&quot;language-text&quot;&gt;default&lt;/code&gt; 접근 권한 + 자식 클래스에서 접근이 가능합니다.&lt;br&gt;
+&lt;strong&gt;즉, &lt;code class=&quot;language-text&quot;&gt;protected&lt;/code&gt; 제어자의 접근 허용 범위는 동일 클래스 + 동일 패키지 + 자식 클래스입니다.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1280px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/b578b646af478fd5e18d0e5f6e3bce2e/bbbf7/protected.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 56.199999999999996%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABEUlEQVQoz61SWaqEQAzs+x9Gj+ABxAERf0RccEPEcUPczVCBHnoW33sfryDQdieVShlBCs7z5JBnYN93KsuShmG4zFEhfiMrioJ836coiv5EKt47yIRt2yjLMvI8j+73OxOCuO/7j1z1LNSO8nJZFkrTlIIgYIVVVVGe53wXhiG1bfuhUNaLbz7AMxSO4/hUC3Rdx6rjOKZ5nj/UMaHKfhzH87FpGvZQjo6RXddlC6ZpotvtRpZlcc3LyPKABxSDBMBYsgE8rOuaHMdh5SDSdZ00TWPiF4Xqh1SEMwgQUApC+GgYBiu0bZtM0+RAE1WlUFdEKkQgaV1XDulfkiRMDGCFvv1xcbWgP+F9XS5H/o94AFRhVow/et5PAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;protected&quot;
+        title=&quot;protected&quot;
+        src=&quot;/static/b578b646af478fd5e18d0e5f6e3bce2e/bbbf7/protected.png&quot;
+        srcset=&quot;/static/b578b646af478fd5e18d0e5f6e3bce2e/0eb09/protected.png 500w,
+/static/b578b646af478fd5e18d0e5f6e3bce2e/1263b/protected.png 1000w,
+/static/b578b646af478fd5e18d0e5f6e3bce2e/bbbf7/protected.png 1280w&quot;
+        sizes=&quot;(max-width: 1280px) 100vw, 1280px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;IMyMeMine&lt;/code&gt; 클래스를 살펴보겠습니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;IMyMeMine&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;IMyMeMine&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; myName &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;name&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;say&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;Wallet&lt;/span&gt; myWallet &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Wallet&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;say&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Storable&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;store&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Wallet&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Storable&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Wallet&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;store&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;protected&lt;/code&gt; 제어자는 &lt;code class=&quot;language-text&quot;&gt;default&lt;/code&gt; 제어자의 접근 권한을 포함하므로, 클래스 내부에서는 &lt;code class=&quot;language-text&quot;&gt;protected&lt;/code&gt; 제어자를 자유롭게 접근할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;이번에는 &lt;code class=&quot;language-text&quot;&gt;Child&lt;/code&gt; 클래스를 살펴보겠습니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Child&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;IMyMeMine&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token class-name&quot;&gt;Child&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;/* protected 변수 사용 */&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; myName &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;name&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* protected 메서드 사용 */&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;say&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* protected 클래스 사용 */&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;Wallet&lt;/span&gt; myWallet &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Wallet&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token comment&quot;&gt;/* protected 인터페이스 사용 */&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;NestedClass&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;IMyMeMine&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Storable&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;store&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;Child&lt;/code&gt; 클래스는 &lt;code class=&quot;language-text&quot;&gt;IMyMeMine&lt;/code&gt; 클래스를 상속하였으므로, &lt;code class=&quot;language-text&quot;&gt;Child&lt;/code&gt; 클래스에서 &lt;code class=&quot;language-text&quot;&gt;IMyMeMine&lt;/code&gt; 클래스의 &lt;code class=&quot;language-text&quot;&gt;protected&lt;/code&gt; 제어자로 선언된 클래스, 인터페이스, 메서드 그리고 변수 사용이 가능합니다.&lt;/p&gt;
+&lt;p&gt;이번에는 &lt;code class=&quot;language-text&quot;&gt;Dog&lt;/code&gt; 클래스를 살펴보겠습니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Dog&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token class-name&quot;&gt;Dog&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;/* protected 변수 사용불가 */&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// String myName = this.name;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* protected 메서드 사용불가 */&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// this.say();&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* protected 클래스 사용불가 */&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// Wallet myWallet = new Wallet();&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token comment&quot;&gt;/* protected 인터페이스 사용불가 */&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;// public static class NestedClass implements Storable {&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;//   @Override&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;//   public void store() {}&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;// }&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;Dog&lt;/code&gt; 클래스는 &lt;code class=&quot;language-text&quot;&gt;IMyMeMine&lt;/code&gt; 클래스를 상속하지 않았으므로, &lt;code class=&quot;language-text&quot;&gt;Dog&lt;/code&gt; 클래스에서 &lt;code class=&quot;language-text&quot;&gt;IMyMeMine&lt;/code&gt; 클래스의 &lt;code class=&quot;language-text&quot;&gt;protected&lt;/code&gt; 제어자로 선언된 클래스, 인터페이스, 메서드 그리고 변수를 사용할 수 없습니다.&lt;/p&gt;
+&lt;h2&gt;Public 제어자&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;public&lt;/code&gt; 제어자가 붙은 인터페이스, 클래스, 메서드 그리고 변수는 동일 프로젝트 내에서는 어디서든 자유롭게 접근이 가능합니다.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1280px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/c9ed329bdcb07bd3929def4d8873d31f/bbbf7/public.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 56.199999999999996%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABJElEQVQoz6VRWYqEUAz0/ofRDw/gAaRFEX8a24W2FRV3xaWXDBV44rT2zMAEgiEvVlUqEm3i9XpxihrxeDwoTVPquu7jzDak38CSJCHXdSkIgj+BSu8MYuB+v9PtdqPz+UxlWTIggNu23c1ua2nL+Hw+uTnPM0VRRJ7nscI8zymOY+75vk91Xe8UCgzpyIcsy1jRMAyrWkTTNKw6DEOapmmnjgFFUVUVs8MnAAAUisXqIHAchy0Yx5EMw6DT6bRuta4sGvBHVVX+4Xq90uVy4T7e4WFRFGTbNpMCSFEUkmWZgb8p3F4UqkzTZO8AgIRyAMJHTdOY0LIs0nWdEyRblSsg1sAF8e37nh+XZeEU/kE5gBGw5uji0qfz/xTv84cri4f/5hcNyVIz5RDzOwAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;public&quot;
+        title=&quot;public&quot;
+        src=&quot;/static/c9ed329bdcb07bd3929def4d8873d31f/bbbf7/public.png&quot;
+        srcset=&quot;/static/c9ed329bdcb07bd3929def4d8873d31f/0eb09/public.png 500w,
+/static/c9ed329bdcb07bd3929def4d8873d31f/1263b/public.png 1000w,
+/static/c9ed329bdcb07bd3929def4d8873d31f/bbbf7/public.png 1280w&quot;
+        sizes=&quot;(max-width: 1280px) 100vw, 1280px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;IMyMeMine&lt;/code&gt; 클래스를 살펴보겠습니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;IMyMeMine&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;IMyMeMine&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; myName &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;name&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;say&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;Wallet&lt;/span&gt; myWallet &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Wallet&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;say&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Storable&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;store&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Wallet&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Storable&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Wallet&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;store&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;이번에는 &lt;code class=&quot;language-text&quot;&gt;Cow&lt;/code&gt; 클래스를 살펴보겠습니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Cow&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Cow&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;IMyMeMine&lt;/span&gt; iMyMeMine &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;IMyMeMine&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* public 변수 사용 */&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; myName &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; iMyMeMine&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;name&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* public 메서드 사용 */&lt;/span&gt;
+    iMyMeMine&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;say&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* public 클래스 사용 */&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;IMyMeMine&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Wallet&lt;/span&gt; wallet &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;IMyMeMine&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Wallet&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token comment&quot;&gt;/* public 인터페이스 사용 */&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;NestedClass&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;IMyMeMine&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Storable&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;store&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;IMyMeMine&lt;/code&gt; 클래스와 &lt;code class=&quot;language-text&quot;&gt;Cow&lt;/code&gt; 클래스에서 모두 &lt;code class=&quot;language-text&quot;&gt;IMyMeMine&lt;/code&gt; 클래스의 &lt;code class=&quot;language-text&quot;&gt;public&lt;/code&gt; 제어자로 선언된 클래스, 인터페이스, 메서드 그리고 변수 사용이 가능합니다.&lt;/p&gt;
+&lt;h1&gt;요약&lt;/h1&gt;
+&lt;p&gt;지금까지 예시를 통한 각각의 접근 제어자에 대해 알아보았습니다.&lt;br&gt;
+접근 제어자별 접근 가능한 권한을 표로 한눈에 나타내자면 다음과 같습니다.  &lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&quot;center&quot;&gt;구분 \ 접근 제어자&lt;/th&gt;
+&lt;th align=&quot;center&quot;&gt;private&lt;/th&gt;
+&lt;th align=&quot;center&quot;&gt;default&lt;/th&gt;
+&lt;th align=&quot;center&quot;&gt;protected&lt;/th&gt;
+&lt;th align=&quot;center&quot;&gt;public&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;동일 클래스&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;O&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;O&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;O&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;O&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;동일 패키지&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;X&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;O&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;O&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;O&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;자식 클래스&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;X&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;X&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;O&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;O&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;모든 클래스&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;X&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;X&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;X&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;O&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;</content:encoded></item><item><title><![CDATA[[LeetCode] #91. Decode Ways]]></title><description><![CDATA[문제 #91. Decode Ways A message containing letters from A-Z is being encoded to numbers using the following mapping:   ‘A’ -> 1 ‘B’ -> 2 … ‘Z…]]></description><link>https://luckydavekim.github.io/algorithm/leetcode/decode-ways</link><guid isPermaLink="false">https://luckydavekim.github.io/algorithm/leetcode/decode-ways</guid><pubDate>Tue, 27 Oct 2020 18:09:18 GMT</pubDate><content:encoded>&lt;h1&gt;문제&lt;/h1&gt;
 &lt;h2&gt;&lt;a href=&quot;https://leetcode.com/problems/decode-ways&quot;&gt;#91. Decode Ways&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;A message containing letters from A-Z is being encoded to numbers using the following mapping:  &lt;/p&gt;
 &lt;p&gt;‘A’ -&gt; 1&lt;br&gt;
