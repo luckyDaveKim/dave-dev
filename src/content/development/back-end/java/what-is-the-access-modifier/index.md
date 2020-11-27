@@ -8,7 +8,7 @@ excerpt: Java의 접근 제어자(Access Modifier)의 종류 및 차이에 대�
 tags:
   - java
   - access_modifier
-  - interview
+  - 기술_면접_질문
 ---
 
 # 개요
