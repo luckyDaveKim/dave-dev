@@ -1,4 +1,681 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[DevDave]]></title><description><![CDATA[The blog for dave]]></description><link>https://luckydavekim.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Thu, 19 Nov 2020 14:11:18 GMT</lastBuildDate><item><title><![CDATA[HSTS (HTTP Strict Transport Security) 개념과 Spring Security의 HSTS 설정 및 이슈 해결 과정]]></title><description><![CDATA[개요  이 포스팅에서는 HSTS(HTTP Strict Transport Security)의 개념에 대해 알아보고,
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[DevDave]]></title><description><![CDATA[The blog for dave]]></description><link>https://luckydavekim.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Tue, 01 Dec 2020 05:31:37 GMT</lastBuildDate><item><title><![CDATA[Java Phantom Reachable, Phantom Reference 란]]></title><description><![CDATA[개요 이 포스팅에서는 Java의 References 종류 중 Phantom Reference의 사용 예시와 Phantom reachable의 특징에 대해 알아보겠습니다.    Reference 종류는 왜 나누어져 있는가? Java의 Reference…]]></description><link>https://luckydavekim.github.io/development/back-end/java/phantom-reference-in-java</link><guid isPermaLink="false">https://luckydavekim.github.io/development/back-end/java/phantom-reference-in-java</guid><pubDate>Tue, 01 Dec 2020 05:26:02 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+&lt;p&gt;이 포스팅에서는 Java의 References 종류 중 &lt;strong&gt;Phantom Reference&lt;/strong&gt;의 사용 예시와 &lt;strong&gt;&lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/java/lang/ref/package-summary.html&quot;&gt;Phantom reachable&lt;/a&gt;&lt;/strong&gt;의 특징에 대해 알아보겠습니다.   &lt;/p&gt;
+&lt;h1&gt;Reference 종류는 왜 나누어져 있는가?&lt;/h1&gt;
+&lt;p&gt;Java의 Reference를 나누어 놓은 이유는 효율적인 GC 처리를 위함입니다.&lt;br&gt;
+개발자는 적절한 Reference 사용하여, GC에 의해 제거될 데이터에 우선순위를 적용하여 좀더 효율적인 메모리 관리를 하기 위해 Reference의 종류를 나누어 제공하는 것 입니다.&lt;br&gt;
+Reference는 4가지 종류 &lt;strong&gt;&lt;a href=&quot;/development/back-end/java/strong-reference-in-java&quot;&gt;Strong Reference&lt;/a&gt;&lt;/strong&gt;,
+&lt;strong&gt;&lt;a href=&quot;/development/back-end/java/soft-reference-in-java&quot;&gt;Soft Reference&lt;/a&gt;&lt;/strong&gt;,
+&lt;strong&gt;&lt;a href=&quot;/development/back-end/java/weak-reference-in-java&quot;&gt;Weak Reference&lt;/a&gt;&lt;/strong&gt;, &lt;strong&gt;Phantom Reference&lt;/strong&gt; 로 구분되어 있으며,
+뒤로 갈수록 GC에 의해 제거될 우선순위가 높습니다.&lt;/p&gt;
+&lt;h1&gt;Phantom Rechable, Phantom Reference 란?&lt;/h1&gt;
+&lt;p&gt;Phantom Reference는 &lt;strong&gt;Soft Reference&lt;/strong&gt;, &lt;strong&gt;Weak Reference&lt;/strong&gt;와 다르게, 사용하기 위함 보다는 &lt;strong&gt;올바르게 삭제&lt;/strong&gt;하고
+&lt;strong&gt;삭제 이후 작업을 조작&lt;/strong&gt;하기 위함입니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;올바르게 삭제&lt;br&gt;
+Java의 최상위 객체인 &lt;code class=&quot;language-text&quot;&gt;Object&lt;/code&gt;에는 여러 메서드들이 있는데 그중 &lt;code class=&quot;language-text&quot;&gt;finalize()&lt;/code&gt; 메서드가 있습니다. 이 메서드는 GC에 의해 호출 되지만, &lt;strong&gt;&lt;em&gt;몇가지 문제점&lt;/em&gt;&lt;/strong&gt;이 있으며 잘못된 구현시 문제가 발생할 수 있습니다.&lt;br&gt;
+잘못된 구현의 예로는 GC에 의해 제거된 객체가 &lt;strong&gt;부활(resurrect)&lt;/strong&gt;하는 것인데, 이는 &lt;code class=&quot;language-text&quot;&gt;finalize()&lt;/code&gt; 메서드에 &lt;strong&gt;Strong Reference&lt;/strong&gt;를 갖도록 코딩되어 있을 경우 발생합니다.&lt;br&gt;
+하지만 &lt;strong&gt;Phantom Reference&lt;/strong&gt;는 메모리에서 해지된 후 &lt;code class=&quot;language-text&quot;&gt;enqueue&lt;/code&gt;되기 때문에 &lt;code class=&quot;language-text&quot;&gt;finalize()&lt;/code&gt;에서 객체가 부활되는 문제가 없습니다.&lt;br&gt;
+(&lt;strong&gt;Phantom Reference&lt;/strong&gt;의 &lt;code class=&quot;language-text&quot;&gt;enqueue&lt;/code&gt;에 대해서는 아래에서 좀더 자세히 알아보겠습니다.)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;finalize()&lt;/code&gt;의 문제점&lt;br&gt;
+첫째, 언제 실행이 될지 모릅니다.&lt;br&gt;
+둘째, GC에 따라 실행이 되지 않을 수 있습니다.&lt;br&gt;
+셋째, 예외가 발생되면 무시됩니다.&lt;br&gt;
+넷째, 성능 저가하 발생할 수 있습니다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;삭제 이후 작업을 조작&lt;br&gt;
+대용량의 데이터를 연속적으로 조작하는 경우, 데이터의 크기가 너무 크기 때문에 선행된 데이터가 삭제된 후에 다음 데이터를 조작해야 하는 경우가 있을 수 있습니다.&lt;br&gt;
+이럴 경우 &lt;strong&gt;Phantom Referece&lt;/strong&gt;를 사용하여 메모리에서 데이터가 실질적으로 삭제된 후 다음 작업을 진행하도록 조작 할 수 있습니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;객체가 &lt;strong&gt;Phantom reachable&lt;/strong&gt; 하다는 것은, &lt;strong&gt;Strongly reachable&lt;/strong&gt;, &lt;strong&gt;Softly reachable&lt;/strong&gt;, &lt;strong&gt;Weakly reachable&lt;/strong&gt; 하지 않으며
+오직 &lt;strong&gt;&lt;a href=&quot;https://docs.oracle.com/javase/8/docs/api/java/lang/ref/PhantomReference.html&quot;&gt;PhantomReference&lt;/a&gt;&lt;/strong&gt; 객체를 통해 도달할 수 있는 상태의 객체를 말합니다.&lt;/p&gt;
+&lt;p&gt;다음으로 &lt;strong&gt;Phantom Reference&lt;/strong&gt;의 특징과 사용방법에 대해 알아보겠습니다.&lt;br&gt;
+&lt;strong&gt;Phantom Reference&lt;/strong&gt;는 &lt;strong&gt;Soft Reference&lt;/strong&gt;, &lt;strong&gt;Weak Reference&lt;/strong&gt;와 다르게 생성시 필수적으로 &lt;code class=&quot;language-text&quot;&gt;ReferenceQueue&lt;/code&gt;가 필요하며,
+&lt;code class=&quot;language-text&quot;&gt;PhantomReference&lt;/code&gt;의 참조값을 수동으로 &lt;code class=&quot;language-text&quot;&gt;clear()&lt;/code&gt; 메서드를 실행해야하고, &lt;code class=&quot;language-text&quot;&gt;PhantomReference.get()&lt;/code&gt; 메서드는 항상 null을
+반환한다는 특징이 있습니다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;PhantomReference.get()&lt;/code&gt; 메서드 확인해 보면, 다음과 같이 항상 null을 반환하도록 되어 있습니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;PhantomReference&lt;/span&gt;&lt;span class=&quot;token generics&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Reference&lt;/span&gt;&lt;span class=&quot;token generics&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;// ...&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/blockquote&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;PhantomReferenceExample&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; args&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;ReferenceQueue&lt;/span&gt;&lt;span class=&quot;token generics&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt; referenceQueue &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ReferenceQueue&lt;/span&gt;&lt;span class=&quot;token generics&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;token generics&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;PhantomReference&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt; phantomReferences &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;token generics&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;token generics&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt; largeObjects &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;token generics&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token keyword&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; i &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; i &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; i&lt;span class=&quot;token operator&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token comment&quot;&gt;/* 1) Strong Reference로 생성 */&lt;/span&gt;
+      &lt;span class=&quot;token class-name&quot;&gt;Object&lt;/span&gt; largeObject &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Ojbect&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+      &lt;span class=&quot;token comment&quot;&gt;/* 2) 생성한 largeObject를 largeObjects에 담기 */&lt;/span&gt;
+      largeObjects&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;largeObject&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+      &lt;span class=&quot;token comment&quot;&gt;/* 3) Phantom Reference로 생성 */&lt;/span&gt;
+      phantomReferences&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;PhantomReference&lt;/span&gt;&lt;span class=&quot;token generics&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;largeObject&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; referenceQueue&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/*
+      4) largeObjects에 null 할당
+      Strong Reference인 largeObject를 unreachable 상태로 만듬
+    */&lt;/span&gt;
+    largeObjects &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/*
+      5) GC를 실행합니다.
+      `System.gc()`을 호출 하더라도 바로 GC가 동작한다고 보장할수는 없지만, 예제상 GC가 동작하였다고 가정함
+    */&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;gc&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token keyword&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;PhantomReference&lt;/span&gt;&lt;span class=&quot;token generics&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt; phantomReference&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; phantomReferences&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token comment&quot;&gt;/* 6) phantomReference가 ReferenceQueue에 들어갔는지 확인함 */&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;phantomReference&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;isEnqueued&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;token class-name&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;out&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;enqueued&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;token class-name&quot;&gt;Reference&lt;/span&gt;&lt;span class=&quot;token generics&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt; referenceFromQueue&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;referenceFromQueue &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; referenceQueue&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;poll&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token comment&quot;&gt;/* 7) phantomReference 제거 전 수행할 업무를 처리함 */&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;LargeObjectFinalizer&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; referenceFromQueue&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;finalizeResources&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+      &lt;span class=&quot;token comment&quot;&gt;/* 8) phantomReference 객체를 수동으로 clear() */&lt;/span&gt;
+      referenceFromQueue&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;clear&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;LargeObjectFinalizer&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;LargeObjectFinalizer&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Object&lt;/span&gt; referent&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ReferenceQueue&lt;/span&gt;&lt;span class=&quot;token generics&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;super&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt; q&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;referent&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; q&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;finalizeResources&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token class-name&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;out&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;clearing...&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Strong Reference&lt;/strong&gt;로 &lt;code class=&quot;language-text&quot;&gt;Object&lt;/code&gt; 클래스의 인스턴스를 생성하여 &lt;code class=&quot;language-text&quot;&gt;largeObject&lt;/code&gt;변수에 할당합니다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;largeObject&lt;/code&gt;를 &lt;code class=&quot;language-text&quot;&gt;largeObjects&lt;/code&gt; 리스트에 담습니다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1024px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/339b9d8f619d139463ea58d2df01b0f0/42a19/strongly-reachable-object.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 47.800000000000004%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAKCAIAAAA7N+mxAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABQUlEQVQoz21Sy46CQBDk/08c+AJiAh494NFAPJt4UHkoBFlWRWVheQsBtphW4ma3Dj0901NT1Z3hHo9HURRN01Dsui7P8+INdV3THQKq2PYM3OFwMAxDVVXLslzX9TwP0ff9DwZsl8vler0eT5Ds9/ssywYyyliqqkLc7Xa2bSOBfv8ClNu27d+AyxAYyHgMC5V1XT8ej7TtXiACnYzP/UPebrdk5C8ZQKtwSz2TxtM2RkXK9OTIQVKWZZqmcRzLsjyZTCRJCoIAnQ9kWkgZkyMjUEiSJGC43+9hGOJwOp3yPC8IwifDQF6tVqZpbjYbTHuxWGCw3wzgv+sjzudzURShfL1eyS+naZqiKLPZDBFkTBs1+IRyzPDFgOR0OjmOg27h7nw+D2Rcut1uURQh0j9BAW4vl0vwG7gA/+gCCbX5AxGbKGEmjfRGAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Strongly reachable object&quot;
+        title=&quot;Strongly reachable object&quot;
+        src=&quot;/static/339b9d8f619d139463ea58d2df01b0f0/42a19/strongly-reachable-object.png&quot;
+        srcset=&quot;/static/339b9d8f619d139463ea58d2df01b0f0/0eb09/strongly-reachable-object.png 500w,
+/static/339b9d8f619d139463ea58d2df01b0f0/1263b/strongly-reachable-object.png 1000w,
+/static/339b9d8f619d139463ea58d2df01b0f0/42a19/strongly-reachable-object.png 1024w&quot;
+        sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;largeObject&lt;/code&gt;의 &lt;strong&gt;Phantom Reference&lt;/strong&gt;를 생성하여 &lt;code class=&quot;language-text&quot;&gt;phantomReferences&lt;/code&gt;에 담습니다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1024px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/aa6ca3f3dcf26bdacc1a6e3c6058d628/42a19/phantom-reference-object.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 47.800000000000004%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAKCAIAAAA7N+mxAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABiElEQVQoz22SSYvCQBBG/fueRFDQkzt6EPUiouKuiOAKgrvoxNG4JO6O+8xLgjID8x2qm656Xf1VortcLqfT6Xa7afH5fLL5+iUOr9fr6aXj8QjyrUrX7/fb7XY6ne52u6PRSBAE4ocqQVU2m63VasJLk8mk1+sdDgcFpojlfD4TO51OpVLx+/2JRCISiRSLRS4NhULhcHg4HFLAu7RiGigwl7E8Hg/iYDAA0+v1DofDarUGAgG3222xWNhXq9U3jIt/4Hq9ns/nDQaD3W43m83BYNDpdJpMJvhyuXy/3/f7veZ5PB4rMN22260oiiRyuVyr1WIE5DDGIa/l8aVSqdls2mw2j8fj9Xrn8znOFZhcPB73+XyQ0WgUgFNtwrIsr9drrqaaOQMbjUYe8qlKgQuFQjKZBMtkMsRGowGw2Wx2u53m8G2VEbhcLjovFgttzDoaxmIxZktMpVJ8OXJYAN6oklXRfzqd4gJHjGk2mykwRVRLkkTU/hMSoqr5X61WK0nVcrnUBvwD+YMH1vyb5yUAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Phantom reference object&quot;
+        title=&quot;Phantom reference object&quot;
+        src=&quot;/static/aa6ca3f3dcf26bdacc1a6e3c6058d628/42a19/phantom-reference-object.png&quot;
+        srcset=&quot;/static/aa6ca3f3dcf26bdacc1a6e3c6058d628/0eb09/phantom-reference-object.png 500w,
+/static/aa6ca3f3dcf26bdacc1a6e3c6058d628/1263b/phantom-reference-object.png 1000w,
+/static/aa6ca3f3dcf26bdacc1a6e3c6058d628/42a19/phantom-reference-object.png 1024w&quot;
+        sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;largeObjects&lt;/code&gt;에 null을 할당하여 &lt;code class=&quot;language-text&quot;&gt;largeObject&lt;/code&gt;를 Phantom reachable 상태로 만듭니다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1024px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/38e940a4d5db064a2c1a1ce32da61e9c/42a19/phantom-rechable-object.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 47.800000000000004%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAKCAIAAAA7N+mxAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABfElEQVQoz22Ry4/BYBTF++9bWVSCpcfCQsRGvEI8I6kICwn17pSg1Hh2qDDza78xsZizuP3yfffcc+6pdLvdLMu63++iPp9PDl9v4NK2beuFy+UC5duFNBqN+v1+qVQaDAaz2UzXdeqHC91FpVJpt9v6C/P5fDgcns9nh0wTn+v1SlVVtdVqxePxQqGQTqcbjQZDk8lkKpWaTCY04Es0I+CQGcbn8XhQx+MxNI/HEw6Hg8FgIpGIRqOBQIAz4n9ktviH3Ol0arWa1+sNhUI+nw9yJBKRZdnv9zebTRpEKJA1TXPIqB0Oh9VqdTqdYPZ6PSLQXKzXa9wqioIsl6xqmuZ2uyXFXzKL5fP5WCxWrVYzmcxyuRRGkIKMFK3H45HRWOUVGQIXSUn1er1YLGazWbJhCuPp5pd0u10RqdiTccza7Xb7/Z7AptOpQ0Ywl8uRLbVcLuNzs9kgRQfrfL4AB888wV8sFsKgRJ9hGDxQ8YNPHhAR9R2GC3EQAf8AYO4QJdjbnccAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Phantom reachable object&quot;
+        title=&quot;Phantom reachable object&quot;
+        src=&quot;/static/38e940a4d5db064a2c1a1ce32da61e9c/42a19/phantom-rechable-object.png&quot;
+        srcset=&quot;/static/38e940a4d5db064a2c1a1ce32da61e9c/0eb09/phantom-rechable-object.png 500w,
+/static/38e940a4d5db064a2c1a1ce32da61e9c/1263b/phantom-rechable-object.png 1000w,
+/static/38e940a4d5db064a2c1a1ce32da61e9c/42a19/phantom-rechable-object.png 1024w&quot;
+        sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;GC를 실행합니다. &lt;code class=&quot;language-text&quot;&gt;System.gc()&lt;/code&gt;을 호출 하더라도 바로 GC가 동작한다고 보장할수는 없지만, 예제상 GC가 동작하였다고 가정합니다.&lt;br&gt;
+GC에 의해 &lt;code class=&quot;language-text&quot;&gt;phantomReference&lt;/code&gt;의 참조값이 메모리에서 제거된 후, &lt;code class=&quot;language-text&quot;&gt;referenceQueue&lt;/code&gt;에 삽입됩니다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1024px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/0ad61e11fae81167b43a0d4025ac51d8/42a19/enqueue-object.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 47.800000000000004%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAKCAIAAAA7N+mxAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABfklEQVQoz22SSYvCQBCF8/c9efAkgqgnBUEP4oriigQUPQjuSxLjrmNc4obOfEmPwzBMHV4X3fVeVb1Eut1upmk+Hg+Br9eL5PIruLzf7+Y7zuczlE87pMFg0Ol08vl8r9ebTCaapoGqqpKodhSLxUajMZ1ONTtI+v3+6XSyyDxzXK9XsNvt1uv1cDiczWbj8bgsyzAjkUgsFkOaAuYSxTSwyIhxPJ9PcDgcQnM4HIFAwO12R6PRUCjk9Xo9Hk8qlRJMgi3+ITebzXK57HQ6fT6fy+WCHAwGUfH7/eS73U5UQlYUxSLTzTCMxWJxPB5httttLFDsWK1WSLdaLZasVquVSmW/3282G1z8JnObyWToUCqVksnkfD4X8rVabblc0kR4ezgcsA05CjBcOCWhl8vlWAnDUaEJwnwSGgpLf1adzWZMTnMMG4/HFpmG6XQ6kUiAhUJhNBqt12v6UME6VH+8g5wnUNd1MaBEHcNst1uQefgleGBggX+CGoHC4C/N4g+nuVmZNgAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Enqueue object&quot;
+        title=&quot;Enqueue object&quot;
+        src=&quot;/static/0ad61e11fae81167b43a0d4025ac51d8/42a19/enqueue-object.png&quot;
+        srcset=&quot;/static/0ad61e11fae81167b43a0d4025ac51d8/0eb09/enqueue-object.png 500w,
+/static/0ad61e11fae81167b43a0d4025ac51d8/1263b/enqueue-object.png 1000w,
+/static/0ad61e11fae81167b43a0d4025ac51d8/42a19/enqueue-object.png 1024w&quot;
+        sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;phantomReferences&lt;/code&gt;의 요소들이 &lt;code class=&quot;language-text&quot;&gt;referenceQueue&lt;/code&gt;에 삽입되었는지 확인합니다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;phantomReference&lt;/code&gt;가 제거된 후 처리할 로직을 수행합니다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;phantomReference&lt;/code&gt;의 &lt;code class=&quot;language-text&quot;&gt;clear()&lt;/code&gt; 메소드를 직접 수행합니다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;위 코드를 실행시 출력은 다음과 같습니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;enqueued
+enqueued
+enqueued
+clearing...
+clearing...
+clearing...&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;줄이며…&lt;/h1&gt;
+&lt;p&gt;지금까지 Java의 References 중 하나인 &lt;strong&gt;Phantom Reference&lt;/strong&gt;에 대해 알아보았습니다.&lt;br&gt;
+&lt;strong&gt;Phantom Reference&lt;/strong&gt;에 대한 정보와 사용에 대한 레퍼런스가 적어 정보를 확인함에 있어 어려움이 있었으나,
+그만큼 스스로 오래 남을 것 같습니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Java Weakly Reachable, Weak Reference 란]]></title><description><![CDATA[개요 이 포스팅에서는 Java의 References 종류 중 Weak Reference의 사용 예시와 Weakly reachable의 특징에 대해 알아보겠습니다.    Reference 종류는 왜 나누어져 있는가? Java의 Reference…]]></description><link>https://luckydavekim.github.io/development/back-end/java/weak-reference-in-java</link><guid isPermaLink="false">https://luckydavekim.github.io/development/back-end/java/weak-reference-in-java</guid><pubDate>Tue, 01 Dec 2020 04:25:27 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+&lt;p&gt;이 포스팅에서는 Java의 References 종류 중 &lt;strong&gt;Weak Reference&lt;/strong&gt;의 사용 예시와 &lt;strong&gt;&lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/java/lang/ref/package-summary.html&quot;&gt;Weakly reachable&lt;/a&gt;&lt;/strong&gt;의 특징에 대해 알아보겠습니다.   &lt;/p&gt;
+&lt;h1&gt;Reference 종류는 왜 나누어져 있는가?&lt;/h1&gt;
+&lt;p&gt;Java의 Reference를 나누어 놓은 이유는 효율적인 GC 처리를 위함입니다.&lt;br&gt;
+개발자는 적절한 Reference 사용하여, GC에 의해 제거될 데이터에 우선순위를 적용하여 좀더 효율적인 메모리 관리를 하기 위해 Reference의 종류를 나누어 제공하는 것 입니다.&lt;br&gt;
+Reference는 4가지 종류 &lt;strong&gt;&lt;a href=&quot;/development/back-end/java/strong-reference-in-java&quot;&gt;Strong Reference&lt;/a&gt;&lt;/strong&gt;,
+&lt;strong&gt;&lt;a href=&quot;/development/back-end/java/soft-reference-in-java&quot;&gt;Soft Reference&lt;/a&gt;&lt;/strong&gt;, &lt;strong&gt;Weak Reference&lt;/strong&gt;,
+&lt;strong&gt;&lt;a href=&quot;/development/back-end/java/phantom-reference-in-java&quot;&gt;Phantom Reference&lt;/a&gt;&lt;/strong&gt; 로 구분되어 있으며, 뒤로 갈수록 GC에 의해
+제거될 우선순위가 높습니다.&lt;/p&gt;
+&lt;h1&gt;Weakly Rechable, Weak Reference 란?&lt;/h1&gt;
+&lt;p&gt;객체가 &lt;strong&gt;Weakly reachable&lt;/strong&gt; 하다는 것은, &lt;strong&gt;Strongly reachable&lt;/strong&gt;, &lt;strong&gt;Softly reachable&lt;/strong&gt; 하지 않으며 오직
+&lt;strong&gt;&lt;a href=&quot;https://docs.oracle.com/javase/8/docs/api/java/lang/ref/WeakReference.html&quot;&gt;WeakReference&lt;/a&gt;&lt;/strong&gt; 객체를 통해
+도달할 수 있는 상태의 객체를 말합니다.&lt;br&gt;
+&lt;strong&gt;Weakly reachable&lt;/strong&gt;한 객체는 GC가 실행될 때 항상! GC의 메모리 회수 대상이 되며, 사용 방법은 다음과 같습니다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;GC의 메모리 회수 대상이 된다고 하여도 즉각적으로 회수된다는 보장은 하지 못하며,
+실질적인 메모리 회수 시점은 GC 알고리즘에 따라 다릅니다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;WeakReferenceExample&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; args&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;/* 1) Strong Reference로 생성 */&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;Printer&lt;/span&gt; printer &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Printer&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* 2) print() 메서드 호출 */&lt;/span&gt;
+    printer&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* 3) Weak Reference로 생성 */&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;WeakReference&lt;/span&gt;&lt;span class=&quot;token generics&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Printer&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt; weakReference &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;WeakReference&lt;/span&gt;&lt;span class=&quot;token generics&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;printer&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* 4) Weak Reference값의 printer() 메서드 호출 */&lt;/span&gt;
+    weakReference&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* 5) printer에 null 할당 */&lt;/span&gt;
+    printer &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/*
+      6) GC를 실행합니다.
+      `System.gc()`을 호출 하더라도 바로 GC가 동작한다고 보장할수는 없지만, 예제상 GC가 동작하였다고 가정함
+    */&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;gc&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/*
+      7) Weak Reference값의 printer() 메서드 호출
+      `NullPointerException`이 날수도 있고, 아닐수도 있음
+    */&lt;/span&gt;
+    softReference&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Printer&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token class-name&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;out&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;printing...&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol&gt;
+&lt;li&gt;Strong Reference로 &lt;code class=&quot;language-text&quot;&gt;Printer&lt;/code&gt; 클래스의 인스턴스를 생성하여 &lt;code class=&quot;language-text&quot;&gt;printer&lt;/code&gt;변수에 할당합니다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1024px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/1a2df56fe5d80f556a7e4f1a583cccd9/42a19/strongly-reachable-printer.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 47.800000000000004%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAKCAIAAAA7N+mxAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABKUlEQVQoz32Sy46CUBBE/f/vYedCwK0SWYBERIFBEUhAfBAVBuZAz8NJnKlFcft2VXffDqP7/V5VVV3Xwm3bXq/X6gmPx0M0ArKE3YDRer12HEdV1dVq5ft+GIZwFEVvAwh1XV8sFnIGpFzXvVwuvZmYz+12g23b9jyPA/27L7wP6J6AmAa9mZKigJfLZRAEEuKXy8PhsN1uvQFZlnHD2C/MlmWJWTrD5/PZNM0kSebzeVEUm82Ge7Ygss+xWZV0lpLUOp1O9DwejxgoOpvNyO73+19mFvDdmc0hpVscx/RpmkZSHJgCFtmP2TAMniQDj8djFkuu+xcIsPTm6XQ6mUwURYE1TWPsPM+ZFi5eoSzL3W7HaL2Zt7EPpLyQH4CqJJK/gSxNU5n/A5M2LkwGuQH0AAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Strongly reachable printer&quot;
+        title=&quot;Strongly reachable printer&quot;
+        src=&quot;/static/1a2df56fe5d80f556a7e4f1a583cccd9/42a19/strongly-reachable-printer.png&quot;
+        srcset=&quot;/static/1a2df56fe5d80f556a7e4f1a583cccd9/0eb09/strongly-reachable-printer.png 500w,
+/static/1a2df56fe5d80f556a7e4f1a583cccd9/1263b/strongly-reachable-printer.png 1000w,
+/static/1a2df56fe5d80f556a7e4f1a583cccd9/42a19/strongly-reachable-printer.png 1024w&quot;
+        sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;printer&lt;/code&gt;의 메서드 &lt;code class=&quot;language-text&quot;&gt;print()&lt;/code&gt;를 호출합니다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;printer&lt;/code&gt;의 Weak Reference인 &lt;code class=&quot;language-text&quot;&gt;weakReference&lt;/code&gt;를 생성합니다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1024px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/fd59df99e4e8d529e6b36fe7d242540c/42a19/weak-reference-printer.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 47.800000000000004%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAKCAIAAAA7N+mxAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABQklEQVQoz3WS246CQBBE/f8PIsEXDV5IDCGaIBoEEVBgNYIKyHpB98Bkb4nWQzPTU9VdPUPrcrmcz+fb7Sbi4/Eoy/LzGySv16vgCBRFwfbZoGXb9nw+73a7lmWtVivP81jYDRaLhe/7vV5vPB4HQeA3WK/X5PM8r8Xs+dCESBXTNKfTKUrHcYhRFOGlqqrnH0CmTS2mJB9xDHs4HKKfTCaqqu52OxYQoDoNyEDD9gsxPdHgXPjH1Gw26/f72+1W07Q0TZfLJTRugdNaTG3XdcV47Xab8qJ2kiRksixDQFHEFArD8J9YURRd1w3D4FYkSeI+TqdTHMeHw0HYId7vdyYnisyvmCGx2ul0RqMRYoz8vMQ7IMZsLR4MBkwlyzIRF2QxTFti+grH43Gz2fAKtViY3O/37PkBqMri4z0gc3/C/xeH6yJDxGkyUAAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Weak reference printer&quot;
+        title=&quot;Weak reference printer&quot;
+        src=&quot;/static/fd59df99e4e8d529e6b36fe7d242540c/42a19/weak-reference-printer.png&quot;
+        srcset=&quot;/static/fd59df99e4e8d529e6b36fe7d242540c/0eb09/weak-reference-printer.png 500w,
+/static/fd59df99e4e8d529e6b36fe7d242540c/1263b/weak-reference-printer.png 1000w,
+/static/fd59df99e4e8d529e6b36fe7d242540c/42a19/weak-reference-printer.png 1024w&quot;
+        sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;Weak Reference인 &lt;code class=&quot;language-text&quot;&gt;printer&lt;/code&gt;를 가져와서 &lt;code class=&quot;language-text&quot;&gt;print()&lt;/code&gt;를 호출합니다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;printer&lt;/code&gt;에 null을 할당하여 &lt;code class=&quot;language-text&quot;&gt;printer&lt;/code&gt;를 Weak reachable 상태로 만듭니다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1024px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/162cd3e1ebf334b6cd225e541763b666/42a19/weakly-reachable-printer.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 47.800000000000004%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAKCAIAAAA7N+mxAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABS0lEQVQoz32R246CMBRF/f//0URfNIK3Fy8ZNUYxXITgIGaQKFBunQU4yZiMs1NOy+lZ7W7bEkJEUZRlWRPLsozjOPkRyTRNm5pGj8eDX1mrpWnabrcbDAb7/d4wDNM0GWi1DoeDZVmqqiyXS9s+nU4WzbZt8vf7vYKZpmMTIqtst9vNZgN5PB6JrutmeVEUufwlitmmglmQjnki1ePxGH61Wk2nU9/3F4uFiH2ZX0vhVS0LKeMcf8DsOZlMcE7SrIVDx/yQRSgjXRYPmV5qOGWqgtlE1/XmeL1eD7dkr0/5iRCluMjEkbEhE1dmwQs8HA7n8/l6veZW2u0290G20+lgnkH5VFHHnO8F5pBY7ff7s9ms2+1ioan4R8CYreDRaKSqKhhRURSy2A2C4OuNbreb4zi8QgWHYXg+nwH45/VYlcHne1HseV5zwd+DcSYj4gHLdwAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Weakly reachable printer&quot;
+        title=&quot;Weakly reachable printer&quot;
+        src=&quot;/static/162cd3e1ebf334b6cd225e541763b666/42a19/weakly-reachable-printer.png&quot;
+        srcset=&quot;/static/162cd3e1ebf334b6cd225e541763b666/0eb09/weakly-reachable-printer.png 500w,
+/static/162cd3e1ebf334b6cd225e541763b666/1263b/weakly-reachable-printer.png 1000w,
+/static/162cd3e1ebf334b6cd225e541763b666/42a19/weakly-reachable-printer.png 1024w&quot;
+        sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;GC를 실행합니다. &lt;code class=&quot;language-text&quot;&gt;System.gc()&lt;/code&gt;을 호출 하더라도 바로 GC가 동작한다고 보장할수는 없지만, 예제상 GC가 동작하였다고 가정합니다.&lt;br&gt;
+GC에 의해 무조건 &lt;code class=&quot;language-text&quot;&gt;weakReference&lt;/code&gt;의 참조값은 메모리 회수 대상이 됩니다.&lt;/li&gt;
+&lt;li&gt;Weak Reference인 &lt;code class=&quot;language-text&quot;&gt;printer&lt;/code&gt;를 가져와서 &lt;code class=&quot;language-text&quot;&gt;print()&lt;/code&gt;를 호출합니다.&lt;br&gt;
+GC의 판단에 의해 &lt;code class=&quot;language-text&quot;&gt;weakReference&lt;/code&gt;의 참조값이 메모리 회수되었다면 NullPointerException이 발생하고,
+그렇지 않다면 정상적으로 &lt;code class=&quot;language-text&quot;&gt;print()&lt;/code&gt; 메서드가 실행됩니다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;위 코드를 실행시 출력은 다음과 같습니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;printing...
+printing...
+printing... or NullPointerException&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;이와 같이 &lt;strong&gt;Weakly reachable&lt;/strong&gt;한 객체는 GC가 동작할 때 마다 메모리 회수 대상이 되지만, GC가 즉각적으로 메모리를 제거한다는 보장은
+할 수 없으며, 메모리 회수 시점은 GC 알고리즘에 따라 다름을 알 수 있습니다.&lt;br&gt;
+이러한 특성을 이용하여 캐싱(Caching) 기능을 구현시 사용되며,
+&lt;strong&gt;&lt;a href=&quot;https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/WeakHashMap.html&quot;&gt;WeakHashMap&lt;/a&gt;&lt;/strong&gt;을 사용하여
+손쉽게 사용이 가능합니다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Soft Reference는 캐싱에 적합하지 않습니다.&lt;br&gt;
+GC 동작시 메모리가 부족할 경우 메모리 회수 대상이 되므로 Soft Reference를 캐싱에 사용시 다른 비즈니스 로직에 필요한
+다수의 메모리를 캐싱에서 사용하게되어, 잦은 GC가 동작하여 성능에 이슈가 있을 수 있기 때문입니다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1&gt;줄이며…&lt;/h1&gt;
+&lt;p&gt;지금까지 Java의 References 중 하나인 &lt;strong&gt;Weak Reference&lt;/strong&gt;에 대해 알아보았습니다.&lt;br&gt;
+&lt;strong&gt;Weak Reference&lt;/strong&gt;는 GC에 의한 메모리 회수 우선순위가 높은점을 이용하여 캐싱에 활용도가 높다는 것을 알 수 있었습니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Java Softly Reachable, Soft Reference 란]]></title><description><![CDATA[개요 이 포스팅에서는 Java의 References 종류 중 Soft Reference의 사용 예시와 Softly reachable의 특징에 대해 알아보겠습니다.    Reference 종류는 왜 나누어져 있는가? Java의 Reference…]]></description><link>https://luckydavekim.github.io/development/back-end/java/soft-reference-in-java</link><guid isPermaLink="false">https://luckydavekim.github.io/development/back-end/java/soft-reference-in-java</guid><pubDate>Tue, 01 Dec 2020 03:49:05 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+&lt;p&gt;이 포스팅에서는 Java의 References 종류 중 &lt;strong&gt;Soft Reference&lt;/strong&gt;의 사용 예시와 &lt;strong&gt;&lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/java/lang/ref/package-summary.html&quot;&gt;Softly reachable&lt;/a&gt;&lt;/strong&gt;의 특징에 대해 알아보겠습니다.   &lt;/p&gt;
+&lt;h1&gt;Reference 종류는 왜 나누어져 있는가?&lt;/h1&gt;
+&lt;p&gt;Java의 Reference를 나누어 놓은 이유는 효율적인 GC 처리를 위함입니다.&lt;br&gt;
+개발자는 적절한 Reference 사용하여, GC에 의해 제거될 데이터에 우선순위를 적용하여 좀더 효율적인 메모리 관리를 하기 위해 Reference의 종류를 나누어 제공하는 것 입니다.&lt;br&gt;
+Reference는 4가지 종류 &lt;strong&gt;&lt;a href=&quot;/development/back-end/java/strong-reference-in-java&quot;&gt;Strong Reference&lt;/a&gt;&lt;/strong&gt;, &lt;strong&gt;Soft Reference&lt;/strong&gt;,
+&lt;strong&gt;&lt;a href=&quot;/development/back-end/java/weak-reference-in-java&quot;&gt;Weak Reference&lt;/a&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;a href=&quot;/development/back-end/java/phantom-reference-in-java&quot;&gt;Phantom Reference&lt;/a&gt;&lt;/strong&gt; 로
+구분되어 있으며, 뒤로 갈수록 GC에 의해 제거될 우선순위가 높습니다.&lt;/p&gt;
+&lt;h1&gt;Softly Rechable, Soft Reference 란?&lt;/h1&gt;
+&lt;p&gt;객체가 &lt;strong&gt;Softly reachable&lt;/strong&gt; 하다는 것은, &lt;strong&gt;Strongly reachable&lt;/strong&gt; 하지 않으며
+오직 &lt;strong&gt;&lt;a href=&quot;https://docs.oracle.com/javase/8/docs/api/java/lang/ref/SoftReference.html&quot;&gt;SoftReference&lt;/a&gt;&lt;/strong&gt; 객체를 통해
+도달할 수 있는 상태의 객체를 말합니다.&lt;br&gt;
+&lt;strong&gt;Softly reachable&lt;/strong&gt;한 객체는 GC가 실행될 때 GC 알고리즘에 의해 메모리가 부족하다고 판단되면 메모리 제거 대상이 될수 있으며, 사용 방법은 다음과 같습니다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;GC의 메모리 회수 대상이 된다고 하여도 즉각적으로 회수된다는 보장은 하지 못하며,
+실질적인 메모리 회수 시점은 GC 알고리즘에 따라 다릅니다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;SoftReferenceExample&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; args&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;/* 1) Strong Reference로 생성 */&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;Printer&lt;/span&gt; printer &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Printer&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* 2) print() 메서드 호출 */&lt;/span&gt;
+    printer&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* 3) Soft Reference로 생성 */&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;SoftReference&lt;/span&gt;&lt;span class=&quot;token generics&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Printer&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt; softReference &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;SoftReference&lt;/span&gt;&lt;span class=&quot;token generics&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;printer&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* 4) Soft Reference값의 printer() 메서드 호출 */&lt;/span&gt;
+    softReference&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* 5) printer에 null 할당 */&lt;/span&gt;
+    printer &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/*
+      6) GC를 실행합니다.
+      `System.gc()`을 호출 하더라도 바로 GC가 동작한다고 보장할수는 없지만, 예제상 GC가 동작하였다고 가정함
+    */&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;gc&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/*
+      7) Soft Reference값의 printer() 메서드 호출
+      `NullPointerException`이 날수도 있고, 아닐수도 있음
+    */&lt;/span&gt;
+    softReference&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Printer&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token class-name&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;out&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;printing...&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol&gt;
+&lt;li&gt;Strong Reference로 &lt;code class=&quot;language-text&quot;&gt;Printer&lt;/code&gt; 클래스의 인스턴스를 생성하여 &lt;code class=&quot;language-text&quot;&gt;printer&lt;/code&gt;변수에 할당합니다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1024px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/1a2df56fe5d80f556a7e4f1a583cccd9/42a19/strongly-reachable-printer.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 47.800000000000004%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAKCAIAAAA7N+mxAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABKUlEQVQoz32Sy46CUBBE/f/vYedCwK0SWYBERIFBEUhAfBAVBuZAz8NJnKlFcft2VXffDqP7/V5VVV3Xwm3bXq/X6gmPx0M0ArKE3YDRer12HEdV1dVq5ft+GIZwFEVvAwh1XV8sFnIGpFzXvVwuvZmYz+12g23b9jyPA/27L7wP6J6AmAa9mZKigJfLZRAEEuKXy8PhsN1uvQFZlnHD2C/MlmWJWTrD5/PZNM0kSebzeVEUm82Ge7Ygss+xWZV0lpLUOp1O9DwejxgoOpvNyO73+19mFvDdmc0hpVscx/RpmkZSHJgCFtmP2TAMniQDj8djFkuu+xcIsPTm6XQ6mUwURYE1TWPsPM+ZFi5eoSzL3W7HaL2Zt7EPpLyQH4CqJJK/gSxNU5n/A5M2LkwGuQH0AAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Strongly reachable printer&quot;
+        title=&quot;Strongly reachable printer&quot;
+        src=&quot;/static/1a2df56fe5d80f556a7e4f1a583cccd9/42a19/strongly-reachable-printer.png&quot;
+        srcset=&quot;/static/1a2df56fe5d80f556a7e4f1a583cccd9/0eb09/strongly-reachable-printer.png 500w,
+/static/1a2df56fe5d80f556a7e4f1a583cccd9/1263b/strongly-reachable-printer.png 1000w,
+/static/1a2df56fe5d80f556a7e4f1a583cccd9/42a19/strongly-reachable-printer.png 1024w&quot;
+        sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;printer&lt;/code&gt;의 메서드 &lt;code class=&quot;language-text&quot;&gt;print()&lt;/code&gt;를 호출합니다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;printer&lt;/code&gt;의 Soft Reference인 &lt;code class=&quot;language-text&quot;&gt;softReference&lt;/code&gt;를 생성합니다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1024px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/ac08e81a6e55311182bd11d95ec9bad3/42a19/soft-reference-printer.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 47.800000000000004%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAKCAIAAAA7N+mxAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABQklEQVQoz3WRW4+CQAyF+f+/SMMDhGiUy4MaUSOu4gLqgooSweWi7geTuLuJ9qHTaXt6TmekPM+zLCvLUvj7/X69Xr8bIyBZFIXoEZamKddHY9JisZjNZqqqzudz13XX6zUBSfxyufQ8T9O0wWBA8NmY7/uO41wulxrMnQMePFMmk4lt25RXqxUeHvK32+3xx2iGpgYz8lmGsNfrjUYjwzDG47Hg3+/3SPhoLIoi2pD9AgwMMAVo0Y8o4k6nE4ahZVlxHDOFNl6Bag1GJCkYmCLLMjBRPhwOQRAgG0J6AE+n081m8w8M1XA4RCQeMO+RJMlutzudTkIOvqoqfgEvMr/gfr+v67qiKKZptlotHvb5E+8MsBAodbtdtmq323h+hSWPxyO0+PiVnc9n1tlutzVYiGRD7mzIVIKv90Yz7yf0/wBN+iLlVuFxAwAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Soft reference printer&quot;
+        title=&quot;Soft reference printer&quot;
+        src=&quot;/static/ac08e81a6e55311182bd11d95ec9bad3/42a19/soft-reference-printer.png&quot;
+        srcset=&quot;/static/ac08e81a6e55311182bd11d95ec9bad3/0eb09/soft-reference-printer.png 500w,
+/static/ac08e81a6e55311182bd11d95ec9bad3/1263b/soft-reference-printer.png 1000w,
+/static/ac08e81a6e55311182bd11d95ec9bad3/42a19/soft-reference-printer.png 1024w&quot;
+        sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;Soft Reference인 &lt;code class=&quot;language-text&quot;&gt;printer&lt;/code&gt;를 가져와서 &lt;code class=&quot;language-text&quot;&gt;print()&lt;/code&gt;를 호출합니다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;printer&lt;/code&gt;에 null을 할당하여 &lt;code class=&quot;language-text&quot;&gt;printer&lt;/code&gt;를 Soft reachable 상태로 만듭니다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1024px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/0a6b5f5b1b6818651e67f6a9eed36b46/42a19/softly-reachable-printer.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 47.800000000000004%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAKCAIAAAA7N+mxAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABQ0lEQVQoz32RW4+CQAyF/f8/yMT4oFkxXp7UoDFoUASjq4jACjgMl/2YySZrsu4J6XTanvZ0aAkh0jSVUmpbVVWWZU8FHIJ5nusajSRJuNYKre12u16v+/2+ZVn7/d5xHByCWNu2Xdf9GAxms5nnea4CzmazeTweDflwOHAwB0uX1Wq1XC5J73Y7LHPKoijKsv4FihnTkGnGUao0A0ej0WKxmE6npmlqUXldx1kRpZIvEwVlLPIHGRpk5weIQqRlu09ZX2MhZEkXTSbbkBHJbmxIl263i080CALf98MwpC5MRJDk1y9xT2UiXsmMms/niMRC1kLa7TbL41QKpbbqeCGPx+PJZNLr9dgTMhJ0xT+AzHM25OFwaBhGp9MxFIjebjcE398giqLj8Xg6nRpyHMfn8xkCd/4eXXE+34Piy+WiH/gbWwUm0+pPbsUAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Softly reachable printer&quot;
+        title=&quot;Softly reachable printer&quot;
+        src=&quot;/static/0a6b5f5b1b6818651e67f6a9eed36b46/42a19/softly-reachable-printer.png&quot;
+        srcset=&quot;/static/0a6b5f5b1b6818651e67f6a9eed36b46/0eb09/softly-reachable-printer.png 500w,
+/static/0a6b5f5b1b6818651e67f6a9eed36b46/1263b/softly-reachable-printer.png 1000w,
+/static/0a6b5f5b1b6818651e67f6a9eed36b46/42a19/softly-reachable-printer.png 1024w&quot;
+        sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;GC를 실행합니다. &lt;code class=&quot;language-text&quot;&gt;System.gc()&lt;/code&gt;을 호출 하더라도 바로 GC가 동작한다고 보장할수는 없지만, 예제상 GC가 동작하였다고 가정합니다.&lt;br&gt;
+GC의 알고리즘에 의해 메모리가 부족하다고 판단되면, &lt;code class=&quot;language-text&quot;&gt;softReference&lt;/code&gt;의 참조값은 메모리 회수 대상이 됩니다.&lt;/li&gt;
+&lt;li&gt;Soft Reference인 &lt;code class=&quot;language-text&quot;&gt;printer&lt;/code&gt;를 가져와서 &lt;code class=&quot;language-text&quot;&gt;print()&lt;/code&gt;를 호출합니다.&lt;br&gt;
+GC의 판단에 의해 &lt;code class=&quot;language-text&quot;&gt;softReference&lt;/code&gt;의 참조값이 메모리 회수 대상이 되었고, 실질적으로 메모리가 회수 되었다면
+NullPointerException이 발생하고, 그렇지 않다면 정상적으로 &lt;code class=&quot;language-text&quot;&gt;print()&lt;/code&gt; 메서드가 실행됩니다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;위 코드를 실행시 출력은 다음과 같습니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;printing...
+printing...
+printing... or NullPointerException&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;이와 같이 &lt;strong&gt;Softly reachable&lt;/strong&gt;한 객체는 GC가 동작할 때 GC의 알고리즘에 의해 메모리 회수 대상이 결정되며,
+메모리 회수 대상이 되더라도 GC가 즉각적으로 메모리를 제거한다는 보장은 할 수 없으며, 메모리 회수 시점은 GC 알고리즘에 따라 다름을 알 수 있습니다.&lt;br&gt;
+하지만 GC에 의해 메모리 회수 대상이 된다는 점을 활용하여 캐싱에 &lt;strong&gt;Soft Reference&lt;/strong&gt;를 사용시 문제가 발생할 수 있습니다.&lt;br&gt;
+메모리가 부족할 때 GC가 동작하므로 &lt;strong&gt;Soft Reference&lt;/strong&gt;를 사용하여 캐싱을 구현시, 다른 비즈니스 로직에 필요한 메모리가 부족하여
+잦은 GC 동작으로 인해 성능에 이슈가 있을 수 있기 때문입니다.&lt;/p&gt;
+&lt;h1&gt;줄이며…&lt;/h1&gt;
+&lt;p&gt;지금까지 Java의 References 중 하나인 &lt;strong&gt;Soft Reference&lt;/strong&gt;에 대해 알아보았습니다.&lt;br&gt;
+또한, 캐싱을 위해서는 &lt;strong&gt;Soft Reference&lt;/strong&gt; 보다는 &lt;strong&gt;Weak Reference&lt;/strong&gt;가 적절하다는 것을 알아가면 좋을 것 같습니다. &lt;/p&gt;</content:encoded></item><item><title><![CDATA[Java Strongly Reachable, Strong Reference 란]]></title><description><![CDATA[개요 이 포스팅에서는 Java의 References 종류 중 Strong Reference의 사용 예시와 Strongly reachable의 특징에 대해 알아보겠습니다.    Reference 종류는 왜 나누어져 있는가? Java의 Reference…]]></description><link>https://luckydavekim.github.io/development/back-end/java/strong-reference-in-java</link><guid isPermaLink="false">https://luckydavekim.github.io/development/back-end/java/strong-reference-in-java</guid><pubDate>Tue, 01 Dec 2020 02:19:15 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+&lt;p&gt;이 포스팅에서는 Java의 References 종류 중 &lt;strong&gt;Strong Reference&lt;/strong&gt;의 사용 예시와 &lt;strong&gt;Strongly reachable&lt;/strong&gt;의 특징에 대해 알아보겠습니다.   &lt;/p&gt;
+&lt;h1&gt;Reference 종류는 왜 나누어져 있는가?&lt;/h1&gt;
+&lt;p&gt;Java의 Reference를 나누어 놓은 이유는 효율적인 GC 처리를 위함입니다.&lt;br&gt;
+개발자는 적절한 Reference 사용하여, GC에 의해 제거될 데이터에 우선순위를 적용하여 좀더 효율적인 메모리 관리를 하기 위해 Reference의 종류를 나누어 제공하는 것 입니다.&lt;br&gt;
+Reference는 4가지 종류 &lt;strong&gt;Strong Reference&lt;/strong&gt;, &lt;strong&gt;&lt;a href=&quot;/development/back-end/java/soft-reference-in-java&quot;&gt;Soft Reference&lt;/a&gt;&lt;/strong&gt;,
+&lt;strong&gt;&lt;a href=&quot;/development/back-end/java/weak-reference-in-java&quot;&gt;Weak Reference&lt;/a&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;a href=&quot;/development/back-end/java/phantom-reference-in-java&quot;&gt;Phantom Reference&lt;/a&gt;&lt;/strong&gt; 로
+구분되어 있으며, 뒤로 갈수록 GC에 의해 제거될 우선순위가 높습니다.&lt;/p&gt;
+&lt;h1&gt;Strongly Rechable, Strong Reference 란?&lt;/h1&gt;
+&lt;p&gt;객체가 &lt;strong&gt;Strongly reachable&lt;/strong&gt; 하다는 것은, 특정 스레드(thread)로 부터 해당 객체까지 어떠한 참조 객체도 통하지 않고 도달할 수 있는 상태의 객체를 말합니다.&lt;br&gt;
+&lt;strong&gt;Strong Reference&lt;/strong&gt;는 GC가 실행될 때 unreachable 상태일 경우 GC에 의해 제거될 수 있으며,
+사용 방법은 우리가 기본적으로 Java에서 변수를 선언하는 방식으로 다음과 같습니다.  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;StrongReferenceExample&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; args&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;/* 1) Strong Reference로 생성 */&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;Printer&lt;/span&gt; printer &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Printer&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* 2) print() 메서드 호출 */&lt;/span&gt;
+    printer&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/*
+      3) printer에 null 할당
+      이제부터 printer의 heap 데이터는 GC에 의해 제거될 가능성이 있음
+    */&lt;/span&gt;
+    printer &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Printer&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token class-name&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;out&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;printing...&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Strong Reference&lt;/strong&gt;로 &lt;code class=&quot;language-text&quot;&gt;Printer&lt;/code&gt; 클래스의 인스턴스를 생성하여 &lt;code class=&quot;language-text&quot;&gt;printer&lt;/code&gt; 변수에 할당합니다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1024px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/1a2df56fe5d80f556a7e4f1a583cccd9/42a19/strongly-reachable-printer.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 47.800000000000004%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAKCAIAAAA7N+mxAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABKUlEQVQoz32Sy46CUBBE/f/vYedCwK0SWYBERIFBEUhAfBAVBuZAz8NJnKlFcft2VXffDqP7/V5VVV3Xwm3bXq/X6gmPx0M0ArKE3YDRer12HEdV1dVq5ft+GIZwFEVvAwh1XV8sFnIGpFzXvVwuvZmYz+12g23b9jyPA/27L7wP6J6AmAa9mZKigJfLZRAEEuKXy8PhsN1uvQFZlnHD2C/MlmWJWTrD5/PZNM0kSebzeVEUm82Ge7Ygss+xWZV0lpLUOp1O9DwejxgoOpvNyO73+19mFvDdmc0hpVscx/RpmkZSHJgCFtmP2TAMniQDj8djFkuu+xcIsPTm6XQ6mUwURYE1TWPsPM+ZFi5eoSzL3W7HaL2Zt7EPpLyQH4CqJJK/gSxNU5n/A5M2LkwGuQH0AAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Strongly reachable printer&quot;
+        title=&quot;Strongly reachable printer&quot;
+        src=&quot;/static/1a2df56fe5d80f556a7e4f1a583cccd9/42a19/strongly-reachable-printer.png&quot;
+        srcset=&quot;/static/1a2df56fe5d80f556a7e4f1a583cccd9/0eb09/strongly-reachable-printer.png 500w,
+/static/1a2df56fe5d80f556a7e4f1a583cccd9/1263b/strongly-reachable-printer.png 1000w,
+/static/1a2df56fe5d80f556a7e4f1a583cccd9/42a19/strongly-reachable-printer.png 1024w&quot;
+        sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;printer&lt;/code&gt;의 메서드 &lt;code class=&quot;language-text&quot;&gt;print()&lt;/code&gt;를 호출합니다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;printer&lt;/code&gt;에 null을 할당하여, Heap 메모리의 &lt;code class=&quot;language-text&quot;&gt;Printer&lt;/code&gt; 클래스의 인스턴스는 unreachable 상태가 되고, 향후 GC에 의해 제거될 수 있습니다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1024px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/73f08d209c8791010c7402b0430c82d0/42a19/unreachable-printer.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 47.800000000000004%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAKCAIAAAA7N+mxAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABLElEQVQoz4VS2W6DMBDM/39PngmC9ygPXAqBBArlUMPhYg4Tm45xGiVSo47Q2Mvu7CVvpmnq+36eZ8VCCEpp/wTGmIpRgBfmsmJzOp08z9N1/Xg8Xi6XOI7BSZJ8rIBpmsbhcHj8wcX3/a7rpBhuHOM4gh3HCYIAF9RffsHmmXO+PAHBKCDFSIZDuV3XjaJImWKFjJ06QWveVfIbqUzH2B9i27ZVI0oGHoaBlAn0vP4UbOC0VmJV4942VgXG8ColIaRtWzA2dENBUt7qjJMvMXy/iLGAR2WIwzDEZbvdWpZ1b0G2v06xzvIi3u/35/MZDcPWNA07X/4DxJBIsWmau90OpcCGYaDt6/XaNE39BhgnTdMsy6QYgxVFUVVVnud4AMgKR/EeCCvLUo35A3ZlMhkWP7dpAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Unreachable printer&quot;
+        title=&quot;Unreachable printer&quot;
+        src=&quot;/static/73f08d209c8791010c7402b0430c82d0/42a19/unreachable-printer.png&quot;
+        srcset=&quot;/static/73f08d209c8791010c7402b0430c82d0/0eb09/unreachable-printer.png 500w,
+/static/73f08d209c8791010c7402b0430c82d0/1263b/unreachable-printer.png 1000w,
+/static/73f08d209c8791010c7402b0430c82d0/42a19/unreachable-printer.png 1024w&quot;
+        sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;위 코드를 실행시 출력은 다음과 같습니다.  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;printing...&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;이와 같이 &lt;strong&gt;Strong Reference&lt;/strong&gt;는 개발자가 임의로 null을 할당 하거나, 객체가 unreachable 상태가 되어야 메모리에서 해제가 된다는 것을 알아 가시면 좋을 것 같습니다.&lt;/p&gt;
+&lt;h1&gt;줄이며…&lt;/h1&gt;
+&lt;p&gt;지금까지 Java의 References 중 하나인 &lt;strong&gt;Strong Reference&lt;/strong&gt;에 대해 알아보았으나, 일반적으로 사용하던 방식이라 별다른 특별한 점을 느끼지는 못하셨을 것 같습니다.&lt;br&gt;
+이번 포스팅은 &lt;strong&gt;Strong Reference&lt;/strong&gt; 보다는 이후 설명드릴 다른 References와 비교를 위한 자리로 봐주시면 감사하겠습니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[HSTS (HTTP Strict Transport Security) 개념과 Spring Security의 HSTS 설정 및 이슈 해결 과정]]></title><description><![CDATA[개요  이 포스팅에서는 HSTS(HTTP Strict Transport Security)의 개념에 대해 알아보고,
 Nginx + Tomcat의 환경에서
 Spring Security의 HSTS 설정중 겪은 이슈에 대해 공유하려 합니다. HSTS(HTTP…]]></description><link>https://luckydavekim.github.io/development/back-end/spring-security/what-is-the-hsts</link><guid isPermaLink="false">https://luckydavekim.github.io/development/back-end/spring-security/what-is-the-hsts</guid><pubDate>Thu, 19 Nov 2020 08:30:21 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
 &lt;p&gt; 이 포스팅에서는 HSTS(HTTP Strict Transport Security)의 개념에 대해 알아보고,
