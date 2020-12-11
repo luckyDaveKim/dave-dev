@@ -1,4 +1,177 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[DevDave]]></title><description><![CDATA[The blog for dave]]></description><link>https://luckydavekim.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Wed, 09 Dec 2020 17:41:05 GMT</lastBuildDate><item><title><![CDATA[Java Phantom Reachable, Phantom Reference 란]]></title><description><![CDATA[개요 이 포스팅에서는 Java의 References 종류 중 Phantom Reference의 사용 예시와 Phantom reachable의 특징에 대해 알아보겠습니다.    Reference 종류는 왜 나누어져 있는가? Java의 Reference…]]></description><link>https://luckydavekim.github.io/development/back-end/java/phantom-reference-in-java</link><guid isPermaLink="false">https://luckydavekim.github.io/development/back-end/java/phantom-reference-in-java</guid><pubDate>Tue, 01 Dec 2020 05:26:02 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[DevDave]]></title><description><![CDATA[The blog for dave]]></description><link>https://luckydavekim.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Fri, 11 Dec 2020 05:12:47 GMT</lastBuildDate><item><title><![CDATA[[LeetCode] #98. Validate Binary Search Tree]]></title><description><![CDATA[문제 #98. Validate Binary Search Tree Given the root of a binary tree, determine if it is a valid binary search tree (BST). A valid BST is…]]></description><link>https://luckydavekim.github.io/algorithm/leetcode/validate-binary-search-tree</link><guid isPermaLink="false">https://luckydavekim.github.io/algorithm/leetcode/validate-binary-search-tree</guid><pubDate>Thu, 10 Dec 2020 08:04:21 GMT</pubDate><content:encoded>&lt;h1&gt;문제&lt;/h1&gt;
+&lt;h2&gt;&lt;a href=&quot;https://leetcode.com/problems/validate-binary-search-tree&quot;&gt;#98. Validate Binary Search Tree&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Given the root of a binary tree, determine if it is a valid binary search tree (BST).&lt;br&gt;
+A &lt;strong&gt;valid BST&lt;/strong&gt; is defined as follows:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The left subtree of a node contains only nodes with keys &lt;strong&gt;less than&lt;/strong&gt; the node’s key.&lt;/li&gt;
+&lt;li&gt;The right subtree of a node contains only nodes with keys &lt;strong&gt;greater than&lt;/strong&gt; the node’s key.&lt;/li&gt;
+&lt;li&gt;Both the left and right subtrees must also be binary search trees.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Example 1.&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;Input: root = [2,1,3]
+Output: true&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Example 2.&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;Input: root = [5,1,4,null,null,3,6]
+Output: false
+Explanation: The root node&amp;#39;s value is 5 but its right child&amp;#39;s value is 4.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Constraints.&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;The number of nodes in the tree is in the range [1, 104].
+-2^31 &amp;lt;= Node.val &amp;lt;= 2^31 - 1&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+&lt;h1&gt;해법&lt;/h1&gt;
+&lt;p&gt;특정 노드 (A)를 기준으로 왼쪽 자식노드 (A-1)는 부모노드 (A)보다 값이 작아야 하며, 오른쪽 자식노드 (A-2)는 부모노드 (A)보다 값이 커야 합니다.&lt;br&gt;
+뿐만 아니라, 왼쪽 자식노드 (A-1)의 오른쪽 자식노드 (A-1-2)는 부모노드 (A-1)보다는 커야하며,
+조상노드 (A)보다는 작아야 하는 조건을 만족해야 한다는 부분이 중요합니다.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 701px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/1095832b31c4de55b1eb278df7f30c2e/62230/tree.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 85.6%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAARCAIAAABSJhvpAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABRElEQVQ4y5VTy4qDQBD0/z/JgAg5eFB8Iopi8CAmxrf4jrpbpMHdFaNsH4aZdqqrunpkvg5jWZZhGKZp2v3KHIP7vgfyE57ZZZvnGSv2XddhHcfx9Xr9jxlsbduCnFYqdwIuiuJ+v4MTapd3IAlmagEBXVswXQJSURTHcTRN2xQFpmkatLCq2ILDMHRdFxtZljc6AQZsdfEPmMQ8n8/L5QLy6/VKFX+XAC21syMb9TzPi6IIR9M0q6raNXnHMNu2dV1nWZYkoQrP88gkSbI2tQVTNssycsj3fViNDY5lWYIcLXwEr5pVVQU52OhhwDlkDMMIguAcXNc1FFqWlaYpJdN3nPQMn4EkD2+3G8dxRE5su5w/PWNuwMOnOI7RIfhFUaQhrY/pCEz3MCRJkvI8FwTh02+4lY1hrqOH2/Dp8XgcC6b4BvTv3Kij2lClAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Tree&quot;
+        title=&quot;Tree&quot;
+        src=&quot;/static/1095832b31c4de55b1eb278df7f30c2e/62230/tree.png&quot;
+        srcset=&quot;/static/1095832b31c4de55b1eb278df7f30c2e/0eb09/tree.png 500w,
+/static/1095832b31c4de55b1eb278df7f30c2e/62230/tree.png 701w&quot;
+        sizes=&quot;(max-width: 701px) 100vw, 701px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;h2&gt;나의 해법 (Recursion)&lt;/h2&gt;
+&lt;h3&gt;성능&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;시간 복잡도 : &lt;code class=&quot;language-text&quot;&gt;O(n)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;공간 복잡도 : &lt;code class=&quot;language-text&quot;&gt;O(n)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;해법&lt;/h3&gt;
+&lt;p&gt;재귀 호출을 통한 후위 순회(Inorder)를 이용한 해법으로, &lt;code class=&quot;language-text&quot;&gt;root&lt;/code&gt; 노드로부터 시작하여 노드의 값이 유효한지 체크하고, 유효하다면 재귀 호출을 통해 자식노드를 확인한다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;root&lt;/code&gt; 노드부터 &lt;code class=&quot;language-text&quot;&gt;isValidBST()&lt;/code&gt; 함수를 호출한다.&lt;br&gt;
+최소 한계값 및 최대 한계값은 없으므로 null을 입력한다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;isValidBST()&lt;/code&gt; 함수 내에서 입력받은 &lt;code class=&quot;language-text&quot;&gt;node&lt;/code&gt;의 값이 null이면 true를 반환한다.&lt;/li&gt;
+&lt;li&gt;최소 한계값인 &lt;code class=&quot;language-text&quot;&gt;minLimit&lt;/code&gt;이 존재한다면, &lt;code class=&quot;language-text&quot;&gt;node&lt;/code&gt;의 값이 &lt;strong&gt;최소 한계값&lt;/strong&gt;보다 &lt;strong&gt;작거나 같다&lt;/strong&gt;면 false를 반환한다.&lt;/li&gt;
+&lt;li&gt;최대 한계값인 &lt;code class=&quot;language-text&quot;&gt;maxLimit&lt;/code&gt;이 존재한다면, &lt;code class=&quot;language-text&quot;&gt;node&lt;/code&gt;의 값이 &lt;strong&gt;최대 한계값&lt;/strong&gt;보다 &lt;strong&gt;크거나 같다&lt;/strong&gt;면 false를 반환한다. &lt;/li&gt;
+&lt;li&gt;왼쪽 자식노드가 유효한지 확인한다.&lt;br&gt;
+5-1. &lt;code class=&quot;language-text&quot;&gt;isValidBST()&lt;/code&gt; 함수를 재귀 호출하며, 인자로 왼쪽 자식노드 &lt;code class=&quot;language-text&quot;&gt;node.left&lt;/code&gt;, 최소 한계값 &lt;code class=&quot;language-text&quot;&gt;minLimit&lt;/code&gt; 그리고 최대 한계값으로 현재 노드의 값 &lt;code class=&quot;language-text&quot;&gt;node.val&lt;/code&gt;을 전달한다.&lt;br&gt;
+(왼쪽 자식노드는 부모 노드보다 작아야 하기 때문에 최대 한계값으로 현재 노드의 값을 전달한다.)&lt;br&gt;
+5-2. 왼쪽 자식노드가 유효하지 않다면 false를 반환한다.&lt;/li&gt;
+&lt;li&gt;오른쪽 자식노드가 유효한지 확인한다.&lt;br&gt;
+6-1. &lt;code class=&quot;language-text&quot;&gt;isValidBST()&lt;/code&gt; 함수를 재귀 호출하며, 인자로 오른쪽 자식노드 &lt;code class=&quot;language-text&quot;&gt;node.right&lt;/code&gt;, 최소 한계값으로 현재 노드의 값 &lt;code class=&quot;language-text&quot;&gt;node.val&lt;/code&gt; 그리고 최대 한계값 &lt;code class=&quot;language-text&quot;&gt;maxLimit&lt;/code&gt;을 전달한다.&lt;br&gt;
+(오른쪽 자식노드는 부모 노드보다 커야 하기 때문에 최소 한계값으로 현재 노드의 값을 전달한다.)&lt;br&gt;
+6-2. 오른쪽 자식노드가 유효하지 않다면 false를 반환한다.&lt;/li&gt;
+&lt;li&gt;최종적으로 모든 노드가 유효하다면 true를 반환한다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;Java 코드&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ValidateBinarySearchTree&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;isValidBST&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;TreeNode&lt;/span&gt; root&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;isValidBST&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;root&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;isValidBST&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;TreeNode&lt;/span&gt; node&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Integer&lt;/span&gt; minLimit&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Integer&lt;/span&gt; maxLimit&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;node &lt;span class=&quot;token operator&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;minLimit &lt;span class=&quot;token operator&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; node&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;val &lt;span class=&quot;token operator&quot;&gt;&amp;lt;=&lt;/span&gt; minLimit&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;maxLimit &lt;span class=&quot;token operator&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; node&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;val &lt;span class=&quot;token operator&quot;&gt;&gt;=&lt;/span&gt; maxLimit&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;isValidBST&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;node&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;left&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; minLimit&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; node&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;val&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;isValidBST&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;node&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;right&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; node&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;val&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; maxLimit&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;나의 해법 (Iteration)&lt;/h2&gt;
+&lt;h3&gt;성능&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;시간 복잡도 : &lt;code class=&quot;language-text&quot;&gt;O(n)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;공간 복잡도 : &lt;code class=&quot;language-text&quot;&gt;O(n)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;해법&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;Stack&lt;/code&gt;을 사용하여 재귀 호출 대신 반복문을 통한 중위 순회(Inorder)를 이용한 해법이다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;현재 노드 &lt;code class=&quot;language-text&quot;&gt;node&lt;/code&gt;에 루트 노드 &lt;code class=&quot;language-text&quot;&gt;root&lt;/code&gt;를 할당한다.&lt;/li&gt;
+&lt;li&gt;스텍 &lt;code class=&quot;language-text&quot;&gt;nodeStack&lt;/code&gt;에 값이 존재하거나, 현재 노드 &lt;code class=&quot;language-text&quot;&gt;node&lt;/code&gt;가 존재하는 동안 반복한다.&lt;br&gt;
+2-1. 현재 노드 &lt;code class=&quot;language-text&quot;&gt;node&lt;/code&gt;가 존재하는 동안 반복한다.&lt;br&gt;
+2-1-1. &lt;code class=&quot;language-text&quot;&gt;nodeStack&lt;/code&gt;에 &lt;code class=&quot;language-text&quot;&gt;node&lt;/code&gt;를 담는다.&lt;br&gt;
+2-1-2. &lt;code class=&quot;language-text&quot;&gt;node&lt;/code&gt;에 왼쪽 자식노드 &lt;code class=&quot;language-text&quot;&gt;node.left&lt;/code&gt;를 할당한다.&lt;br&gt;
+2-2. &lt;code class=&quot;language-text&quot;&gt;nodeStack&lt;/code&gt;에서 노드를 하나 빼서 &lt;code class=&quot;language-text&quot;&gt;node&lt;/code&gt;에 할당한다.&lt;br&gt;
+2-3. &lt;code class=&quot;language-text&quot;&gt;untilMinVal&lt;/code&gt;에 값이 존재하면, 현재 노드의 값 &lt;code class=&quot;language-text&quot;&gt;node.val&lt;/code&gt;과 비교하여 유효하지 않을 경우 false를 반환한다.&lt;br&gt;
+(중위 순회를 통해 진행하므로, 조회되는 노드의 값은 오름차순으로 조회되어야 유효하다.)&lt;br&gt;
+2-4. &lt;code class=&quot;language-text&quot;&gt;untilMinVal&lt;/code&gt;에 현재 노드의 값 &lt;code class=&quot;language-text&quot;&gt;node.val&lt;/code&gt;을 할당한다.&lt;br&gt;
+2-5. &lt;code class=&quot;language-text&quot;&gt;node&lt;/code&gt;에 오른쪽 자식노드 &lt;code class=&quot;language-text&quot;&gt;node.right&lt;/code&gt;를 할당한다.  &lt;/li&gt;
+&lt;li&gt;모든 순회가 끝나면 true를 반환한다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;Java 코드&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ValidateBinarySearchTree&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;isValidBST&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;TreeNode&lt;/span&gt; root&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;Stack&lt;/span&gt;&lt;span class=&quot;token generics&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;TreeNode&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt; nodeStack &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Stack&lt;/span&gt;&lt;span class=&quot;token generics&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token class-name&quot;&gt;Integer&lt;/span&gt; untilMinVal &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;TreeNode&lt;/span&gt; node &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; root&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;while&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;!&lt;/span&gt;nodeStack&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;isEmpty&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;||&lt;/span&gt; node &lt;span class=&quot;token operator&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;while&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;node &lt;span class=&quot;token operator&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        nodeStack&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;push&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;node&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        node &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; node&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;left&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+      node &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; nodeStack&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;pop&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;untilMinVal &lt;span class=&quot;token operator&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; untilMinVal &lt;span class=&quot;token operator&quot;&gt;&gt;=&lt;/span&gt; node&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;val&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+      untilMinVal &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; node&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;val&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+      node &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; node&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;right&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;코멘트&lt;/h1&gt;
+&lt;p&gt;여기서의 핵심은, 특정 노드의 유효성을 확인할 때 부모노드 하고만 비교하는 것이 아니라, 조상 노드도 고려해야 한다는 것 입니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Java Phantom Reachable, Phantom Reference 란]]></title><description><![CDATA[개요 이 포스팅에서는 Java의 References 종류 중 Phantom Reference의 사용 예시와 Phantom reachable의 특징에 대해 알아보겠습니다.    Reference 종류는 왜 나누어져 있는가? Java의 Reference…]]></description><link>https://luckydavekim.github.io/development/back-end/java/phantom-reference-in-java</link><guid isPermaLink="false">https://luckydavekim.github.io/development/back-end/java/phantom-reference-in-java</guid><pubDate>Tue, 01 Dec 2020 05:26:02 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
 &lt;p&gt;이 포스팅에서는 Java의 References 종류 중 &lt;strong&gt;Phantom Reference&lt;/strong&gt;의 사용 예시와 &lt;strong&gt;&lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/java/lang/ref/package-summary.html&quot;&gt;Phantom reachable&lt;/a&gt;&lt;/strong&gt;의 특징에 대해 알아보겠습니다.   &lt;/p&gt;
 &lt;h1&gt;Reference 종류는 왜 나누어져 있는가?&lt;/h1&gt;
 &lt;p&gt;Java의 Reference를 나누어 놓은 이유는 효율적인 GC 처리를 위함입니다.&lt;br&gt;
@@ -1514,7 +1687,7 @@ Output: false&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 3-5. 추가로 찾을 단어가 남았다면, 현재 좌표를 기준으로 상/하/좌/우로 탐색을 계속 진행한다.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h3&gt;Java 코드&lt;/h3&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;WordSearch2&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;WordSearch&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
 
 	&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;exist&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;char&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; board&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; word&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
 		&lt;span class=&quot;token keyword&quot;&gt;boolean&lt;/span&gt; isExistsBoard &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; board &lt;span class=&quot;token operator&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; board&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
