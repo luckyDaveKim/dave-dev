@@ -5,6 +5,6 @@
 <url> <loc>https://luckydavekim.github.io/development</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/development/2</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/development/3</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
-<url> <loc>https://luckydavekim.github.io/about/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
-<url> <loc>https://luckydavekim.github.io/tags/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/about</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 </urlset>
