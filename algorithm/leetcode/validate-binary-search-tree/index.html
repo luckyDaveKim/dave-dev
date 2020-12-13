@@ -37,7 +37,7 @@ Explanation: The root node&#x27;s value is 5 but its right child&#x27;s value is
 <li>공간 복잡도 : <code class="language-text">O(n)</code></li>
 </ul>
 <h3>해법</h3>
-<p>재귀 호출을 통한 후위 순회(Inorder)를 이용한 해법으로, <code class="language-text">root</code> 노드로부터 시작하여 노드의 값이 유효한지 체크하고, 유효하다면 재귀 호출을 통해 자식노드를 확인한다.</p>
+<p>재귀 호출을 통한 후위 순회(Postorder)를 이용한 해법으로, <code class="language-text">root</code> 노드로부터 시작하여 노드의 값이 유효한지 체크하고, 유효하다면 재귀 호출을 통해 자식노드를 확인한다.</p>
 <ol>
 <li><code class="language-text">root</code> 노드부터 <code class="language-text">isValidBST()</code> 함수를 호출한다.<br/>
 최소 한계값 및 최대 한계값은 없으므로 null을 입력한다.</li>
