@@ -5,6 +5,7 @@
 <url> <loc>https://luckydavekim.github.io/3</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/4</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/5</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/development/back-end/effective-java/item1-consider-static-factory-methods-instead-of-constructors</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/algorithm/leetcode/construct-binary-tree-from-preorder-and-inorder-traversal</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/algorithm/leetcode/binary-tree-level-order-traversal</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/algorithm/leetcode/validate-binary-search-tree</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
@@ -32,10 +33,12 @@
 <url> <loc>https://luckydavekim.github.io/development/front-end/add-blog-to-search-engine</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/development/front-end/install-jekyll</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/development/front-end/create-github-pages</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/effective-java</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/java</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/creating-and-destroying-objects</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/tags/leet-code</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/tags/algorithm</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/tags/medium-level</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
-<url> <loc>https://luckydavekim.github.io/tags/java</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/tags/array</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/tags/tree</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/tags/depth-first-search</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
@@ -97,7 +100,4 @@
 <url> <loc>https://luckydavekim.github.io/tags/windows</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/tags/windows-10</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/tags/booting-usb</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
-<url> <loc>https://luckydavekim.github.io/tags/jekyll</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
-<url> <loc>https://luckydavekim.github.io/tags/search-engine</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
-<url> <loc>https://luckydavekim.github.io/tags/github</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 </urlset>
