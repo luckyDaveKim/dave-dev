@@ -5,6 +5,7 @@
 <url> <loc>https://luckydavekim.github.io/3</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/4</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/5</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/development/back-end/effective-java/item2-consider-a-builder-when-faced-with-many-constructor-parameters</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/development/back-end/effective-java/item1-consider-static-factory-methods-instead-of-constructors</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/algorithm/leetcode/construct-binary-tree-from-preorder-and-inorder-traversal</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/algorithm/leetcode/binary-tree-level-order-traversal</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
@@ -99,5 +100,4 @@
 <url> <loc>https://luckydavekim.github.io/tags/jdk-8</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/tags/windows</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/tags/windows-10</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
-<url> <loc>https://luckydavekim.github.io/tags/booting-usb</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 </urlset>
