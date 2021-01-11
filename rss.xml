@@ -1,4 +1,344 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[DevDave]]></title><description><![CDATA[The blog for dave]]></description><link>https://luckydavekim.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Sun, 10 Jan 2021 11:56:19 GMT</lastBuildDate><item><title><![CDATA[[이펙티브 자바 3] 객체 생성과 파괴 | 생성자에 매개변수가 많다면 빌더를 고려하라]]></title><description><![CDATA[본 내용은 이펙티브 자바 3판(Joshua Bloch…]]></description><link>https://luckydavekim.github.io/development/back-end/effective-java/item2-consider-a-builder-when-faced-with-many-constructor-parameters</link><guid isPermaLink="false">https://luckydavekim.github.io/development/back-end/effective-java/item2-consider-a-builder-when-faced-with-many-constructor-parameters</guid><pubDate>Tue, 05 Jan 2021 19:11:02 GMT</pubDate><content:encoded>&lt;blockquote&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[DevDave]]></title><description><![CDATA[The blog for dave]]></description><link>https://luckydavekim.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Mon, 11 Jan 2021 08:47:20 GMT</lastBuildDate><item><title><![CDATA[Java 직렬화 (Serialization)와 역 직렬화 (Deserialization) 란]]></title><description><![CDATA[개요 이 포스팅에서는 Java 객체의 직렬화(Serialization)와 직렬화된 정보를 Java 객체로 만드는 역 직렬화(Deserialization…]]></description><link>https://luckydavekim.github.io/development/back-end/java/serialization-java</link><guid isPermaLink="false">https://luckydavekim.github.io/development/back-end/java/serialization-java</guid><pubDate>Mon, 11 Jan 2021 08:43:16 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+&lt;p&gt;이 포스팅에서는 Java 객체의 직렬화(Serialization)와 직렬화된 정보를 Java 객체로 만드는 역 직렬화(Deserialization)에 대해 알아보겠습니다.&lt;/p&gt;
+&lt;h1&gt;자바 직렬화, 역 직렬화란?&lt;/h1&gt;
+&lt;p&gt;우리는 살면서 중요한 정보를 잊지 않기 위해 메모를 합니다. 이처럼 자바의 객체를 비휘발성 메모리에 저장했다가 꺼내 쓸 수 있고,
+프로그램을 재시작한 후에도 저장된 객체 정보를 불러올 수 있다면 어떨까요? 이를 가능하게 하는 것이 &lt;strong&gt;직렬화&lt;/strong&gt;, &lt;strong&gt;역 직렬화&lt;/strong&gt;입니다.&lt;/p&gt;
+&lt;p&gt;자바 &lt;strong&gt;직렬화&lt;/strong&gt;는 객체를 스트림을 통해 연속적(serial)인 데이터로 변환하고, 다시 데이터를 객체로 &lt;strong&gt;역 직렬화&lt;/strong&gt; 할 수 있습니다.
+직렬화를 활용하면 단순히 객체를 저장 및 복원하는 것이 아니라, 다양한 자바 서비스 간 객체 정보를 유기적으로 공유할 수도 있습니다.&lt;/p&gt;
+&lt;h1&gt;자바 직렬화 사용방법&lt;/h1&gt;
+&lt;p&gt;자바의 직렬화는 &lt;code class=&quot;language-text&quot;&gt;ObjectOutputStream.writeObject(Object o)&lt;/code&gt; 메소드를 사용하여 객체를 직렬화할 수 있으며,
+직렬화 대상 객체는 &lt;strong&gt;직렬화 가능한 클래스&lt;/strong&gt;의 인스턴스여야 합니다.&lt;br&gt;
+이러한 &lt;strong&gt;직렬화 가능한 클래스&lt;/strong&gt;가 되는 방법은 두 가지가 있습니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;Serializable&lt;/code&gt; 인터페이스를 구현(implements)한다.&lt;/li&gt;
+&lt;li&gt;직렬화 가능한 클래스를 상속한다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Serializable 인터페이스&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;Serializable&lt;/code&gt; 인터페이스는 구현해야 하는 메소드가 없는, 객체 직렬화를 명시하는 용도의 마크 인터페이스입니다.
+다음은 &lt;code class=&quot;language-text&quot;&gt;Serializable&lt;/code&gt; 인터페이스를 통해 어떤 식으로 직렬화를 수행하는지 알아보겠습니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ObjectOutputStream&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;OutputStream&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ObjectOutput&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ObjectStreamConstants&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token comment&quot;&gt;// ...&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;writeObject0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Object&lt;/span&gt; obj&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;boolean&lt;/span&gt; unshared&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;IOException&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// ...&lt;/span&gt;
+    
+    &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;obj &lt;span class=&quot;token keyword&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token function&quot;&gt;writeString&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; obj&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; unshared&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;cl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;isArray&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token function&quot;&gt;writeArray&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;obj&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; desc&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; unshared&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;obj &lt;span class=&quot;token keyword&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Enum&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token function&quot;&gt;writeEnum&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Enum&lt;/span&gt;&lt;span class=&quot;token generics&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; obj&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; desc&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; unshared&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;obj &lt;span class=&quot;token keyword&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Serializable&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token function&quot;&gt;writeOrdinaryObject&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;obj&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; desc&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; unshared&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;extendedDebugInfo&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;NotSerializableException&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;cl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;\n&quot;&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; debugInfoStack&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;NotSerializableException&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;cl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+    
+    &lt;span class=&quot;token comment&quot;&gt;// ...&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;ObjectOutputStream&lt;/code&gt; 클래스의 private 메소드인 &lt;code class=&quot;language-text&quot;&gt;writeObject0()&lt;/code&gt; 내부에서 &lt;code class=&quot;language-text&quot;&gt;String&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;Array&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;Enum&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;Serializable&lt;/code&gt; 이외의
+객체의 경우에는 &lt;code class=&quot;language-text&quot;&gt;NotSerializableException&lt;/code&gt; 예외를 던지는 것을 볼 수 있습니다.&lt;/p&gt;
+&lt;p&gt;다시 자바 직렬화 사용방법으로 돌아와서, 직렬화를 통해 객체를 byte로 변환하는 예를 살펴보겠습니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Serializable&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; age&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; age&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;name &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;age &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; age&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Main&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; args&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;IOException&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ClassNotFoundException&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;User&lt;/span&gt; user &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Dave&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;30&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* 직렬화 */&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;byte&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; bytes &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;serialize&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;user&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token comment&quot;&gt;/* 직렬화 메소드 */&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;byte&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;serialize&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Object&lt;/span&gt; o&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;IOException&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;ByteArrayOutputStream&lt;/span&gt; baos &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ByteArrayOutputStream&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;ObjectOutputStream&lt;/span&gt; oos &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ObjectOutputStream&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;baos&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        oos&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;writeObject&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;o&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; baos&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;toByteArray&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol&gt;
+&lt;li&gt;직렬화 가능한 클래스 :&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;User&lt;/code&gt; 객체를 &lt;strong&gt;직렬화 가능한 클래스&lt;/strong&gt;로 만들기 위해 &lt;code class=&quot;language-text&quot;&gt;Serializable&lt;/code&gt; 인터페이스를 구현했습니다.&lt;/li&gt;
+&lt;li&gt;직렬화 :&lt;br&gt;
+&lt;strong&gt;객체 직렬화&lt;/strong&gt;는 &lt;code class=&quot;language-text&quot;&gt;ObjectOutputStream&lt;/code&gt; 클래스의 &lt;code class=&quot;language-text&quot;&gt;writeObject()&lt;/code&gt; 메소드를 통해 직렬화할 객체를 전달하고,
+&lt;code class=&quot;language-text&quot;&gt;ByteArrayOutputStream&lt;/code&gt; 클래스의 &lt;code class=&quot;language-text&quot;&gt;toByteArray()&lt;/code&gt; 메소드를 통해 객체를 직렬화한 byte 값을 얻습니다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1&gt;어디까지 직렬화가 될까?&lt;/h1&gt;
+&lt;p&gt;자바의 직렬화를 하는 방법에 대해서 간단하게 알아보았습니다. 그렇다면 자바의 직렬화는 어디까지 가능할까요?&lt;br&gt;
+다음 몇 가지 예시를 통해서 알아보도록 하겠습니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;부모 클래스에 &lt;code class=&quot;language-text&quot;&gt;Serializable&lt;/code&gt; 구현&lt;/li&gt;
+&lt;li&gt;자식 클래스에 &lt;code class=&quot;language-text&quot;&gt;Serializable&lt;/code&gt; 구현&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;직렬화 가능한 클래스&lt;/strong&gt;가 직렬화 불가능한 객체를 맴버 변수로 참조&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;위 각각의 경우에 대해 직렬화 범위에 대해 알아보겠습니다.&lt;/p&gt;
+&lt;h2&gt;부모 클래스에 &lt;code class=&quot;language-text&quot;&gt;Serializable&lt;/code&gt; 구현&lt;/h2&gt;
+&lt;p&gt;부모 클래스가 &lt;code class=&quot;language-text&quot;&gt;Serializable&lt;/code&gt;을 구현하여, &lt;strong&gt;직렬화 가능한 클래스&lt;/strong&gt;일 때 부모 클래스와 자식 클래스의 직렬화 가능성에 대해 알아보겠습니다.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 350px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/ab5738b83094a5d350fdc2817031572e/f8bcd/parent.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 114.28571428571428%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAXCAIAAACEf/j0AAAACXBIWXMAAA7DAAAOwwHHb6hkAAADYklEQVQ4y5VU+VNSURTmf+unpqZmKqfCFCkNRUW2BAUBERVZHpvIOrRgYupzqTTNhkINrAGBAJVxAzSX9gQCER5dfCOCY02dd+bdM+fe7373vvOdh8meZZlMJvsHQxAkH2P+tCgS3vQH/EvAlpf8AZ/X5/H5P/h9/lg0nt8Cc4oKDV5MT9xmXKNBFRQxroZ/o15YShKW1gqwVBlObYLQExQwI9lMCkEOs0gayaazPGFzbdd1mhTP0hGo0gqKBEfqvEXgXjfMtHLUpP3vMZQcgx4AHhvkK5hqs6THLFWYhCQ+nibDM1SVdNltGoSnSvHgTRbhmJqqFlVD9OcxGAzpVIYquEsUllDl5QzNHYq8vMNCblLfZeuqVePs0WA3vKgYCsjHN7R0Jb6OVxE/vnYOHP0ZF+gaTXMCzRTPYG3TveL3THJ6pjjyp82G13yLW9LrFJvfi4YCCpa+qoFbeZBInYBj+7/atPTxsOb5mvb5es6frWpGlrsB58iyanhJObysGvIrJkK6Zn0VhUtIJQ/zYAQ8LWI6v4/Y2U9u661v72voHCD3vGzRWVu7J9nQKAMaaYTGGKoJFgUqq+fhE/Fk0Qfb2vr4yjo9M2ez298CN5oMF7HnSgjnbxAvYBsulJEv48hXsHWX7jSVPOw3nq5zoXqcTmcymdzb3dtY3wiHwqFQKByObEa2IuEIUE76MH1aYUAb6SMDgcvlTKVS/y1PdMLn8/1F24WGycNQchC73W7AnD62/KGAFdKe3RgrKyv/yoxu9u3rt4UFVzAYXF1b9Xg8jnmH9Y3VZntjtzvm59857I7Z2VmbbWZne6fw2hjkqD94EmYV52oNF1vNudkoq6RCOKAH7n2ieIjeNUATDdLF8D0RTGVLKPFooqhUifhBE1TXbiGxtAS2vhoIm2eqZetrJHAjKjLg8KJyIqJlqYl7O5+LwPs/YkDbw0Hl8KIKOFAiHFDCAcWgT/7EIxvw5vyJGxoJqjiaut3tvSLwQeKQKSE+9naYXZ2PnB3AH7uFFq/I4hX3ebrMLpDPJQeWJHSo8tPulxMwOvTDvfxuhtjAE+ly3mVoERpZQmMzCNCMSM8VqJkPLMYsclapcn+SY+WBvon+iO1/j6Ldl6NK5xacLZJ8YcHHR7JFiwozGSRTOPkbTNRf4RD6ArYAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Serializable Parent&quot;
+        title=&quot;Serializable Parent&quot;
+        src=&quot;/static/ab5738b83094a5d350fdc2817031572e/f8bcd/parent.png&quot;
+        srcset=&quot;/static/ab5738b83094a5d350fdc2817031572e/f8bcd/parent.png 350w&quot;
+        sizes=&quot;(max-width: 350px) 100vw, 350px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Parent&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Serializable&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Parent&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;name &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Child&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Parent&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Child&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;name&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;Parent&lt;/code&gt; : 부모 클래스인 &lt;code class=&quot;language-text&quot;&gt;Parent&lt;/code&gt;는 &lt;code class=&quot;language-text&quot;&gt;Serializable&lt;/code&gt;을 구현하였기 때문에 직렬화가 가능합니다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;Child&lt;/code&gt; : 자식 클래스인 &lt;code class=&quot;language-text&quot;&gt;Child&lt;/code&gt;는 &lt;strong&gt;직렬화 가능한 클래스&lt;/strong&gt;인 &lt;code class=&quot;language-text&quot;&gt;Parent&lt;/code&gt; 클래스를 상속하였기 때문에 직렬화가 가능합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;자식 클래스에 &lt;code class=&quot;language-text&quot;&gt;Serializable&lt;/code&gt; 구현&lt;/h2&gt;
+&lt;p&gt;부모 클래스는 &lt;strong&gt;직렬화 가능한 클래스&lt;/strong&gt;가 아니며, 자식 클래스는 &lt;code class=&quot;language-text&quot;&gt;Serializable&lt;/code&gt;을 구현하여 &lt;strong&gt;직렬화 가능한 클래스&lt;/strong&gt;일 때
+부모 클래스와 자식 클래스의 직렬화 가능성에 대해 알아보겠습니다.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 350px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/ef5bf377cea773103f94cf2f31685ee9/f8bcd/child.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 114.28571428571428%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAXCAIAAACEf/j0AAAACXBIWXMAAA7DAAAOwwHHb6hkAAAC7UlEQVQ4y61SWU9aURDm//WhabSNWmK0omAEJWoVcQFl3y6bqWxtGimRTRDB+qAP9kWrAiKLSqCWCNFYU6VAWa/YgatYaNPYtJPJcC7nfPPNfDO4m38w3H8AX19fP+R1uVz+PTibzebz+UKhkMvl0lVLpVIQM5lM+s5QFK0DY8lWV1f1er3T6VxeXrbb7Var1Ww2YweTyWQ0GiEaDAaHw/FzjRVmoFKr1RaLBe7W1tYAv729DenW19ePj4+xujBOyHh6elqrvwK+uroCWDKZjMViZ2dniUTipGrhcPj8/Bxg0A4QwEuXy9UIBhiU92fZMGbggNR1YLjQ6XR7e3ter3dnZ8ftdgcCgUgkEo1GQ6HQ7u4u/AlXwWAQnkGZ92DsJx6Pb2xsbG5uQrcfqgYNQ/9w+Fi1ra0teIBJUBsY7tcxAjPW4V8sCSYpRI/XAwqhlQ+0hJZKpWLF4QBfaKlxVA3M0PADFw5Xg2HMcADwxZcL3bxKrhMqdWK5VijT8RENV6rlIXM8376vTu0GO4nFFRpJO/0Rba5rTN1FEbVSETxZ2EJiPeXb+icQaj5bxPC3al9+vfR6PbAV0U8Rvy8wNEnpF+LJbPyQpHNQ1DHAbyeznxMZLcr34yzNcDqZuQPfVMBMMY0w1dTLaCNNtY7ICMOyFzNvKXzjoNRBQ5ZGIcpddOXK+IAIP8zvSX+7A1d2+3uBjpA5C/3jKuKEhsRdoDLf9NFVJKHlpf1IaTtULB4qLEHZSkw9puomT3Xksvl7cCqZYatHbGGF7UAJbg3KwS0BqdkvNfokVUcWvBJIRFd3Uxk9xXzpHlzIlcbEfYZ9rt7Dm3dzwU0B8dLRLCRaDCksfhm42S9zRudorwgD04R8rlAnmHHx3czsqEjLFKgYyGv2EIfYOfmYImrr5Twjspp7pptIbIjN3awnNAG5jvl2yYrlMno7wJPPcZ6YxZUwhUo2ouHItQKFRixVCWRaYegg2Djn2kqB+Jj+D7Ef/1mPMXU18K4AAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Serializable Child&quot;
+        title=&quot;Serializable Child&quot;
+        src=&quot;/static/ef5bf377cea773103f94cf2f31685ee9/f8bcd/child.png&quot;
+        srcset=&quot;/static/ef5bf377cea773103f94cf2f31685ee9/f8bcd/child.png 350w&quot;
+        sizes=&quot;(max-width: 350px) 100vw, 350px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Parent&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Parent&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;name &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Child&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Parent&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Serializable&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Child&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;name&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;Parent&lt;/code&gt; : 부모 클래스인 &lt;code class=&quot;language-text&quot;&gt;Parent&lt;/code&gt;는 &lt;strong&gt;직렬화 가능한 클래스&lt;/strong&gt;가 아니므로 직렬화가 불가능합니다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;Child&lt;/code&gt; : 자식 클래스인 &lt;code class=&quot;language-text&quot;&gt;Child&lt;/code&gt;는 &lt;code class=&quot;language-text&quot;&gt;Serializable&lt;/code&gt;을 구현하였기 때문에 직렬화가 가능합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;&lt;strong&gt;직렬화 가능한 클래스&lt;/strong&gt;가 직렬화 불가능한 객체를 맴버 변수로 참조&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;직렬화 가능한 클래스&lt;/strong&gt;가 직렬화 불가능한 객체를 맴버 변수로 참조하는 경우 해당 클래스의 직렬화 가능성에 대해 알아보겠습니다.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 350px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/8494ef41afc0a76fb37124e8be776541/f8bcd/composition.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 85.71428571428571%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAARCAIAAABSJhvpAAAACXBIWXMAAA7DAAAOwwHHb6hkAAACqUlEQVQ4y4WT+0/TUBTH97f5Nxh/QHHDGYkY2r1aYAhbt7Vs654MBtvabco7oKgI4yGI4fWD+gMRJspGjIkYIMC27tm1nbdFt6Gip9/03nPSz7k355zKKleb8Der/0B2FfaPjP+BgR0dHe8n9g8ODpLJRPxjfGf3w258J5FIloolKUcdzIvGCQLP8WXgLq++Umiu61xKrUMJEbdR712wV9sValJODw9Uz5f9cSsevHt6McQv1/ubsWgr6lNqPU1al0LtkFPrWLcPLubYn9e+yHH47dAzaHNQmIMyuSi81dCkIsGBSrVDZC70wNLgeKazBJB8tliFxaNwV/d1+BpE3tT55C3Ejc7APcjaCNsbreOaiW3XyDv76HsSCLI3tJMthVypVjCOFcz9aGTTEl4jolsEvW6h1rDwhjmwYhh6a53+3Pv0k/dJ3Pti34/239GZ7/NloQZnM3k80Da157aNIeBW7mGjewizRfREBDFRaiyo7u6DMRqe3vPpfIoOq0qq6S+YLZR7Qvr+ZT3pJNdXt2Zn5udmFqanni/MLa4svR4ZGv2S/Do5Odkb63gYam7tauJYvgoL4CFDRtesbjb2EoTSmVSGyRRLRSCWZRmGAcHFxSX/Uhdsv+Xpc9a3SoSdtMk5o40tzIkl4Ln65nEcdwF7Y+1YQHXy/fQyzFdswS7PPBp9FC0XhNPj89RpJn3GAIENcPlSZWJ8whNDiTB6dnJegwVp0ozutuFt3DqGGAZgQwDCgjBOITiNmimtMQgZB1XEY+3Yjg30KZvO1WAwlmDZ2FzTOyF7RG8Ld9ojnSIW0pgoDUG3WcMdOKXDacTg1ay8Wa5O4aXxBK3PpvPZdEFSPnOeZVI5KZJngFK5Yp79bZZl1aoI0v/LCzyQuFYkr+pKkTJXrod/ADbHNVTVyojbAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Serializable Composition&quot;
+        title=&quot;Serializable Composition&quot;
+        src=&quot;/static/8494ef41afc0a76fb37124e8be776541/f8bcd/composition.png&quot;
+        srcset=&quot;/static/8494ef41afc0a76fb37124e8be776541/f8bcd/composition.png 350w&quot;
+        sizes=&quot;(max-width: 350px) 100vw, 350px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Parent&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Serializable&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Composition&lt;/span&gt; composition&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Parent&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Composition&lt;/span&gt; composition&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;name &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;composition &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; composition&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Composition&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Composition&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;name &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;위 경우에는 &lt;code class=&quot;language-text&quot;&gt;Parent&lt;/code&gt; 클래스가 &lt;strong&gt;직렬화 가능한 클래스&lt;/strong&gt;이지만, 직렬화 불가능한 객체인 &lt;code class=&quot;language-text&quot;&gt;Composition&lt;/code&gt;을 맴버 변수로 참조하여
+직렬화 시, &lt;code class=&quot;language-text&quot;&gt;NotSerializableException&lt;/code&gt; 예외가 발생합니다.
+이를 해결하기 위해서는 두 가지 방법이 있습니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;Composition&lt;/code&gt; 클래스를 &lt;strong&gt;직렬화 가능한 클래스&lt;/strong&gt;로 만든다.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;Parent&lt;/code&gt; 클래스에서 직렬화 불가능한 객체의 맴버 변수 &lt;code class=&quot;language-text&quot;&gt;composition&lt;/code&gt;에 &lt;code class=&quot;language-text&quot;&gt;transient&lt;/code&gt;를 붙여,
+&lt;code class=&quot;language-text&quot;&gt;composition&lt;/code&gt;을 직렬화 대상에서 명시적으로 제외한다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;다음은 &lt;code class=&quot;language-text&quot;&gt;transient&lt;/code&gt;을 사용한 예를 살펴보겠습니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Parent&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Serializable&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;transient&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Composition&lt;/span&gt; composition&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Parent&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Composition&lt;/span&gt; composition&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;name &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;composition &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; composition&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Composition&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Composition&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;name &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;위와 같이 &lt;code class=&quot;language-text&quot;&gt;Parent&lt;/code&gt; 클래스 내부의 &lt;code class=&quot;language-text&quot;&gt;composition&lt;/code&gt; 맴버 변수에 &lt;code class=&quot;language-text&quot;&gt;transient&lt;/code&gt;를 붙이게 되면, &lt;code class=&quot;language-text&quot;&gt;Parent&lt;/code&gt; 객체를 직렬화 할 때,
+&lt;code class=&quot;language-text&quot;&gt;composition&lt;/code&gt;을 제외하고 직렬화를 수행하여 &lt;code class=&quot;language-text&quot;&gt;NotSerializableException&lt;/code&gt; 예외가 발생하지 않습니다.&lt;/p&gt;
+&lt;p&gt;지금까지 자바의 직렬화에 대해 알아보았습니다.&lt;br&gt;
+다음으로는 역 직렬화에 대해 알아보겠습니다.&lt;/p&gt;
+&lt;h1&gt;자바 역 직렬화 사용방법&lt;/h1&gt;
+&lt;p&gt;자바의 역 직렬화는 &lt;code class=&quot;language-text&quot;&gt;ObjectInputStream.readObject()&lt;/code&gt; 메소드를 사용하여 데이터를 객체로 역 직렬화할 수 있으며,&lt;/p&gt;
+&lt;p&gt;자바 객체를 직렬화하여 얻은 데이터를 가지고 다시 클래스로 만드는 역 직렬화를 할 수 있으며, 다음 두 가지 조건을 만족해야 합니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;직렬화된 객체의 클래스가 Class Path에 존재해야 한다.&lt;/li&gt;
+&lt;li&gt;직렬화된 객체의 클래스가 import된 상태여야 한다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;다음은 직렬화로 얻은 byte를 가지고 다시 객체로 만드는 역 직렬화의 예를 살펴보겠습니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Serializable&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; age&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; age&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;name &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; name&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;age &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; age&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Main&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; args&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;IOException&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ClassNotFoundException&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;User&lt;/span&gt; user &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Dave&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;30&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;/* 직렬화 */&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;byte&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; bytes &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;serialize&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;user&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    
+    &lt;span class=&quot;token comment&quot;&gt;/* 역 직렬화 */&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;User&lt;/span&gt; newUser &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;deserialize&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;bytes&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token comment&quot;&gt;/* 직렬화 메소드 */&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;byte&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;serialize&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Object&lt;/span&gt; o&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;IOException&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;ByteArrayOutputStream&lt;/span&gt; baos &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ByteArrayOutputStream&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;ObjectOutputStream&lt;/span&gt; oos &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ObjectOutputStream&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;baos&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        oos&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;writeObject&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;o&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; baos&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;toByteArray&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token comment&quot;&gt;/* 역 직렬화 메소드 */&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;deserialize&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;byte&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; bytes&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;IOException&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ClassNotFoundException&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;ByteArrayInputStream&lt;/span&gt; bais &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ByteArrayInputStream&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;bytes&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;ObjectInputStream&lt;/span&gt; ois &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ObjectInputStream&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;bais&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; ois&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;readObject&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol&gt;
+&lt;li&gt;역 직렬화 :&lt;br&gt;
+&lt;strong&gt;객체 역 직렬화&lt;/strong&gt;는 &lt;code class=&quot;language-text&quot;&gt;ByteArrayInputStream&lt;/code&gt; 클래스에 직렬화된 byte 값을 전달하고, &lt;code class=&quot;language-text&quot;&gt;ObjectInputStream&lt;/code&gt; 클래스의 &lt;code class=&quot;language-text&quot;&gt;readObject()&lt;/code&gt; 메소드를
+통해 객체를 얻은 후, 명시적 형 변환을 통해 올바른 객체로 변환합니다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;지금까지 자바 직렬화와 역 직렬화에 대해 알아보았습니다. 예시에는 &lt;code class=&quot;language-text&quot;&gt;ByteArrayOutStream&lt;/code&gt;을 사용하여 객체를 byte 데이터로 변환하였으나,
+&lt;code class=&quot;language-text&quot;&gt;FileOutputStream&lt;/code&gt; 등을 사용하여 다양한 종류의 데이터로 변환이 가능합니다.&lt;/p&gt;
+&lt;h1&gt;줄이며…&lt;/h1&gt;
+&lt;p&gt;자바의 직렬화를 사용하기 위해서는 &lt;code class=&quot;language-text&quot;&gt;Serializable&lt;/code&gt; 인터페이스를 구현해야 하며, 모든 맴버변수 또한 &lt;strong&gt;직렬화 가능한 클래스&lt;/strong&gt;여야 합니다.&lt;/p&gt;
+&lt;p&gt;이어서 자바 직렬화의 &lt;code class=&quot;language-text&quot;&gt;SerialVersionUID&lt;/code&gt;에 대해 알아보겠습니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[[이펙티브 자바 3] 객체 생성과 파괴 | 생성자에 매개변수가 많다면 빌더를 고려하라]]></title><description><![CDATA[본 내용은 이펙티브 자바 3판(Joshua Bloch…]]></description><link>https://luckydavekim.github.io/development/back-end/effective-java/item2-consider-a-builder-when-faced-with-many-constructor-parameters</link><guid isPermaLink="false">https://luckydavekim.github.io/development/back-end/effective-java/item2-consider-a-builder-when-faced-with-many-constructor-parameters</guid><pubDate>Tue, 05 Jan 2021 19:11:02 GMT</pubDate><content:encoded>&lt;blockquote&gt;
 &lt;p&gt;본 내용은 &lt;strong&gt;이펙티브 자바 3판&lt;/strong&gt;(Joshua Bloch 지음, 이복연 옮김)을 읽은 후, 생각을 정리한 내용입니다.&lt;br&gt;
 보다 상세한 내용이 궁금하신 분은 해당 책을 읽어보는 것을 추천합니다. &lt;/p&gt;
 &lt;/blockquote&gt;
