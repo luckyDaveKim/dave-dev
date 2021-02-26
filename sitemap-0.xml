@@ -5,6 +5,8 @@
 <url> <loc>https://luckydavekim.github.io/3</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/4</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/5</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/6</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/development/back-end/gang-of-four-design-patterns/abstract-factory-pattern</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/development/back-end/java/serialization-java</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/development/back-end/effective-java/item2-consider-a-builder-when-faced-with-many-constructor-parameters</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/development/back-end/effective-java/item1-consider-static-factory-methods-instead-of-constructors</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
@@ -35,6 +37,8 @@
 <url> <loc>https://luckydavekim.github.io/development/front-end/add-blog-to-search-engine</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/development/front-end/install-jekyll</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/development/front-end/create-github-pages</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/gang-of-four-design-patterns</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/creational-patterns</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/tags/serialization</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/tags/deserialization</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/tags/serializable</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
@@ -96,8 +100,4 @@
 <url> <loc>https://luckydavekim.github.io/tags/javascript</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/tags/js</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/tags/ecmascript</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
-<url> <loc>https://luckydavekim.github.io/tags/es-5</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
-<url> <loc>https://luckydavekim.github.io/tags/es-6</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
-<url> <loc>https://luckydavekim.github.io/tags/es-2015</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
-<url> <loc>https://luckydavekim.github.io/tags/es-2016</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 </urlset>

@@ -1,4 +1,117 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[DevDave]]></title><description><![CDATA[The blog for dave]]></description><link>https://luckydavekim.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Thu, 14 Jan 2021 02:38:46 GMT</lastBuildDate><item><title><![CDATA[Java 직렬화 (Serialization)와 역 직렬화 (Deserialization) 란]]></title><description><![CDATA[개요 이 포스팅에서는 Java 객체의 직렬화(Serialization)와 직렬화된 정보를 Java 객체로 만드는 역 직렬화(Deserialization…]]></description><link>https://luckydavekim.github.io/development/back-end/java/serialization-java</link><guid isPermaLink="false">https://luckydavekim.github.io/development/back-end/java/serialization-java</guid><pubDate>Mon, 11 Jan 2021 08:43:16 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[DevDave]]></title><description><![CDATA[The blog for dave]]></description><link>https://luckydavekim.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Fri, 26 Feb 2021 10:40:21 GMT</lastBuildDate><item><title><![CDATA[[GoF의 디자인 패턴] 생성 패턴 | 추상 팩토리(Abstract Factory) 패턴]]></title><description><![CDATA[본 내용은 GoF의 디자인 패턴(Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides…]]></description><link>https://luckydavekim.github.io/development/back-end/gang-of-four-design-patterns/abstract-factory-pattern</link><guid isPermaLink="false">https://luckydavekim.github.io/development/back-end/gang-of-four-design-patterns/abstract-factory-pattern</guid><pubDate>Fri, 26 Feb 2021 10:33:22 GMT</pubDate><content:encoded>&lt;blockquote&gt;
+&lt;p&gt;본 내용은 &lt;strong&gt;GoF의 디자인 패턴&lt;/strong&gt;(Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides 지음, 김정아 옮김)을 읽은 후, 생각을 정리한 내용입니다.&lt;br&gt;
+보다 상세한 내용이 궁금하신 분은 해당 책을 읽어보는 것을 추천합니다. &lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1&gt;개요&lt;/h1&gt;
+&lt;p&gt; 생성 패턴중 하나인, 추상 팩토리 패턴에 대해 알아봅니다.&lt;/p&gt;
+&lt;h1&gt;의도 (Intent)&lt;/h1&gt;
+&lt;p&gt; 다양한 구성요소를 조합하여 일관된 객체(제품군)를 생성하기 위한 인터페이스를 제공합니다.&lt;/p&gt;
+&lt;h1&gt;다른 이름 (Also Known As)&lt;/h1&gt;
+&lt;p&gt; Kit(키트)&lt;/p&gt;
+&lt;h1&gt;활용성 (Applicability)&lt;/h1&gt;
+&lt;p&gt; 추상 팩토리는 다음의 경우에 사용합니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;객체 생성 방식에 의존적이지 않은 시스템을 만들 때&lt;/li&gt;
+&lt;li&gt;여러 제품군(다양한 구성요소가 조합된 객체) 중 하나를 선택해 시스템을 구성하고, 향후 다른 제품군으로 대체가 가능해야 할 때&lt;/li&gt;
+&lt;li&gt;연관된 구성요소끼리 함께 조합되어 일관된 제품군으로 사용되도록 강제하고 싶을 때&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;추가로 추상 팩토리를 사용하는 경우로&lt;br&gt;
+“제품에 대한 클래스 라이브러리를 제공하고, 그들의 구현이 아닌 인터페이스를 노출시키고 싶을 때” 가 있는데,&lt;br&gt;
+해당 내용은 올바르게 이해하지 못했습니다.&lt;br&gt;
+혹시 위 내용에 대해 이해하신 분은 답글로 알려주시면 감사하겠습니다. :)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1&gt;동기 (Motivation)&lt;/h1&gt;
+&lt;p&gt; 최근 관심이 있어 사이드 프로젝트로 진행하는 &lt;a href=&quot;https://github.com/luckyDaveKim/WUBU&quot;&gt;주식 거래 솔루션&lt;/a&gt;을 예로 들겠습니다.
+주식 거래에 필요한 &lt;strong&gt;구성요소&lt;/strong&gt;로는 &lt;em&gt;시세 조회&lt;/em&gt;, &lt;em&gt;매수&lt;/em&gt;, &lt;em&gt;매도&lt;/em&gt; 등이 있으며, 이 구성요소는 다양한 국가에 따라 구현 방법이
+다르다고 가정하겠습니다.&lt;/p&gt;
+&lt;p&gt; 만약, &lt;strong&gt;한국 주식 거래 솔루션&lt;/strong&gt; 사용이 필요할 경우 &lt;code class=&quot;language-text&quot;&gt;KrStockSeller&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;KrStockBuyer&lt;/code&gt; 등의 구성요소를 조합해야 합니다.
+그리고 실제 프로젝트에서는 예시로 든 두개의 구성요소가 아닌 무수히 많은 구성요소가 존재할 것이며, 단 하나의 구성요소라도
+잘못 조합할 경우 시스템은 문제를 이르킬 것입니다.&lt;br&gt;
+또한, 기존 &lt;strong&gt;한국 주식 거래 솔루션&lt;/strong&gt;이 아닌 &lt;strong&gt;미국 주식 거래 솔루션&lt;/strong&gt;으로 대체해야 할 경우 여러 구성요소를 다시 재조합해야 합니다.&lt;/p&gt;
+&lt;p&gt; 해결 방법으로는 위와 같은 방법 대신 &lt;strong&gt;추상 팩토리&lt;/strong&gt;를 사용하여 &lt;em&gt;한국 주식 팩토리&lt;/em&gt;, &lt;em&gt;미국 주식 팩토리&lt;/em&gt; 인스턴스를 사용합니다.&lt;br&gt;
+사용자는 &lt;code class=&quot;language-text&quot;&gt;StockFactory&lt;/code&gt;를 사용하며, &lt;code class=&quot;language-text&quot;&gt;StockFactory&lt;/code&gt;를 상속받은 어떤 구체적인 서브 클래스가 어떤 구성요소를 조합하여 결과를 반환하는지
+알 수 없고, 알 필요도 없습니다.&lt;br&gt;
+또한, &lt;strong&gt;한국 주식 거래 솔루션&lt;/strong&gt;에서 &lt;strong&gt;미국 주식 거래 솔루션&lt;/strong&gt;으로 변경이 필요하면
+단순히 &lt;code class=&quot;language-text&quot;&gt;EnStockFactory&lt;/code&gt;를 할당하여 사용하면 됩니다.&lt;/p&gt;
+&lt;h1&gt;구조 (Structure)&lt;/h1&gt;
+&lt;p&gt; 추상 팩토리 패턴의 주요 구조는 다음과 같습니다.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 903px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/6d3a8af581da5623482478c32b61238a/8728b/abstact-factory-pattern-structure.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 59.4%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAIAAADtbgqsAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABdklEQVQoz3WS246CQBBE+f8fMkYTfdGgxERFoiyXaLwgCsgChkUu7pFRoptsP5Dpnq6qrh6kex1ZlhmGoWmaaZrb7fb7nwjDMI7j3W43m808z5OqqgJMtdfrjcdjWZZVVYXr5zOyOjjkee44zmAweICFcpIky+Xyqw6U758hBJpDWZaXy4XDE0wOJTOnadq0Nt2u606nU0bdbDaMjSaTP8G3241JIMMzfcfjEXvvgufzeTgcKopyOByKoqCfyhNMK2Cq6PPFP/jGjq7rkK7Xa3pYh23bQRD4vg+1RBVKVrVarShhWKljPp/TzZyj0YiUw+l0YnjOvAvKzC+xJ2CLxYKL/X7PwqBHajKZAGYWMZqwgzVWw84RZ/kPZcuyWBV8Qhk8KV86aAWM1U6n0+/3qSOIr+v1+gALn8IwpSbFEgpUYGRmqJEBDJJbGLmS3t+T/P2dCNbTarWQZW147na77XYbg+Dx8gFmt1EUxa9I6qDy5w9ten4BaoOYFST03hgAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Abstract Factory Structure&quot;
+        title=&quot;Abstract Factory Structure&quot;
+        src=&quot;/static/6d3a8af581da5623482478c32b61238a/8728b/abstact-factory-pattern-structure.png&quot;
+        srcset=&quot;/static/6d3a8af581da5623482478c32b61238a/0eb09/abstact-factory-pattern-structure.png 500w,
+/static/6d3a8af581da5623482478c32b61238a/8728b/abstact-factory-pattern-structure.png 903w&quot;
+        sizes=&quot;(max-width: 903px) 100vw, 903px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;StockFactory&lt;/strong&gt; 추상 클래스 :&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;CreateStockSeller()&lt;/code&gt; 메서드는 &lt;code class=&quot;language-text&quot;&gt;StockSeller&lt;/code&gt; 추상 클래스를 반환하고,
+&lt;code class=&quot;language-text&quot;&gt;CreateStockBuyer()&lt;/code&gt; 메서드는 &lt;code class=&quot;language-text&quot;&gt;StockBuyer&lt;/code&gt; 추상 클래스를 반환합니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;KrStockFactory&lt;/strong&gt;, &lt;strong&gt;EnStockFactory&lt;/strong&gt; 클래스 :&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;StockFactory&lt;/code&gt; 추상 클래스를 상속하고, &lt;code class=&quot;language-text&quot;&gt;CreateStockSeller()&lt;/code&gt; 메서드는
+각각의 알맞는 &lt;code class=&quot;language-text&quot;&gt;KrStockSeller&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;EnStockSeller&lt;/code&gt; 클래스를 생성해서 반환합니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;StockSeller&lt;/strong&gt;, &lt;strong&gt;StockBuyer&lt;/strong&gt; 추상 클래스 :&lt;br&gt;
+주식 거래 솔루션에 필요한 다양한 &lt;em&gt;구성요소&lt;/em&gt;들 이고, 이의 서브 클래스들은 &lt;code class=&quot;language-text&quot;&gt;StockFactory&lt;/code&gt; 추상 클래스의 서브 클래스에서
+알맞게 조합되어 반환됩니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Client&lt;/strong&gt; 클래스 :&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;StockFactory&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;StockSeller&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;StockBuyer&lt;/code&gt; 등의 추상 클래스만을 통해 제어하며, 어떤 구체적인 서브 클래스가 조합되는지 알 수
+없고, 알 필요도 없습니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;결과 (Consequences)&lt;/h1&gt;
+&lt;p&gt; 추상 팩토리 패턴을 사용함에 따라 다음과 같은 장/단점이 있습니다.&lt;/p&gt;
+&lt;h2&gt;장점&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;구체적인 클래스를 분리합니다.&lt;/strong&gt;&lt;br&gt;
+추상 팩토리 패턴을 사용하면 응용프로그램이 사용할 클래스를 제어할 수 있습니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;제품군을 쉽게 대체할 수 있습니다.&lt;/strong&gt;&lt;br&gt;
+구체 팩토리 클래스는 응용프로그램에서 한 번만 나타나기 때문에, 응용 프로그램이 사용할 구체 팩토리를 변경하기 쉽습니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;구성요소 사이의 일관성을 지킵니다.&lt;/strong&gt;&lt;br&gt;
+연관된 구성요소들이 함께 사용됨을 보장할 수 있습니다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;단점&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;새로운 종류의 구성요소를 추가하기 어렵습니다.&lt;/strong&gt;&lt;br&gt;
+새로운 종류의 구성요소를 추가하기 위해서는 기존의 추상 팩토리와 모든 서브 클래스의 변경이 필요합니다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1&gt;구현 (Implementation)&lt;/h1&gt;
+&lt;p&gt;추상 팩토리 패턴을 구현하는 방법입니다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;추상 팩토리를 상속하는 하나의 팩토리를 정의합니다.&lt;/strong&gt;&lt;br&gt;
+응용프로그램은 한 제품군에 대해 하나의 팩토리만 있으면 됩니다.&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;StockFactory&lt;/code&gt; 추상 클래스를 상속하는 &lt;code class=&quot;language-text&quot;&gt;KrStockFactory&lt;/code&gt;를 정의합니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;구성요소를 생성합니다.&lt;/strong&gt;&lt;br&gt;
+추상 팩토리는 구성요소를 생성하기 위한 &lt;em&gt;인터페이스&lt;/em&gt;를 선언하는 것이며, 구성요소를 생성하는 책임은 각 구성요소의 추상 클래스를
+상속하고 있는 구체 클래스들 입니다.&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;StockSeller&lt;/code&gt; 추상 클래스를 상속하는 &lt;code class=&quot;language-text&quot;&gt;KrStockSeller&lt;/code&gt; 클래스를 생성합니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;추상 팩토리에 확장 가능한 메서드를 정의합니다.&lt;/strong&gt;&lt;br&gt;
+추상 팩토리에 다양한 구성요소를 생성할 수 있는 메서드를 정의합니다.&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;StockFactory&lt;/code&gt; 추상 클래스에 &lt;code class=&quot;language-text&quot;&gt;CreateStockSeller()&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;CreateStockBuyer()&lt;/code&gt; 등의 다양한 구성요소를 반환하는 메서드를 정의하고,
+&lt;code class=&quot;language-text&quot;&gt;KrStockFactory&lt;/code&gt; 클래스에서 알맞은 구성요소를 생성하여 반환하도록 합니다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1&gt;줄이며…&lt;/h1&gt;
+&lt;p&gt; 다양한 구성요소의 조합을 구체 팩토리 클래스에 위임하여, 손쉽게 구성요소 조합을 사용하고 손쉽게 다른 구성요소 조합으로 변경 할 수 있는
+&lt;strong&gt;추상 팩토리 패턴&lt;/strong&gt;에 대해 알아보았습니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Java 직렬화 (Serialization)와 역 직렬화 (Deserialization) 란]]></title><description><![CDATA[개요 이 포스팅에서는 Java 객체의 직렬화(Serialization)와 직렬화된 정보를 Java 객체로 만드는 역 직렬화(Deserialization…]]></description><link>https://luckydavekim.github.io/development/back-end/java/serialization-java</link><guid isPermaLink="false">https://luckydavekim.github.io/development/back-end/java/serialization-java</guid><pubDate>Mon, 11 Jan 2021 08:43:16 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
 &lt;p&gt;이 포스팅에서는 Java 객체의 직렬화(Serialization)와 직렬화된 정보를 Java 객체로 만드는 역 직렬화(Deserialization)에 대해 알아보겠습니다.&lt;/p&gt;
 &lt;h1&gt;자바 직렬화, 역 직렬화란?&lt;/h1&gt;
 &lt;p&gt;우리는 살면서 중요한 정보를 잊지 않기 위해 메모를 합니다. 이처럼 자바의 객체를 비휘발성 메모리에 저장했다가 꺼내 쓸 수 있고,
