@@ -8,10 +8,10 @@
 <url> <loc>https://luckydavekim.github.io/6</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/development/etc/head-first-design-patterns/observer-pattern</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/development/etc/head-first-design-patterns/strategy-pattern</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
-<url> <loc>https://luckydavekim.github.io/development/back-end/gang-of-four-design-patterns/abstract-factory-pattern</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/development/etc/gang-of-four-design-patterns/abstract-factory-pattern</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/development/back-end/java/serialization-java</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
-<url> <loc>https://luckydavekim.github.io/development/back-end/effective-java/item2-consider-a-builder-when-faced-with-many-constructor-parameters</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
-<url> <loc>https://luckydavekim.github.io/development/back-end/effective-java/item1-consider-static-factory-methods-instead-of-constructors</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/development/etc/effective-java/item2-consider-a-builder-when-faced-with-many-constructor-parameters</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/development/etc/effective-java/item1-consider-static-factory-methods-instead-of-constructors</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/algorithm/leetcode/construct-binary-tree-from-preorder-and-inorder-traversal</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/algorithm/leetcode/binary-tree-level-order-traversal</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/algorithm/leetcode/validate-binary-search-tree</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
