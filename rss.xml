@@ -1,183 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[DevDave]]></title><description><![CDATA[The blog for dave]]></description><link>https://luckydavekim.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Thu, 04 Mar 2021 09:20:46 GMT</lastBuildDate><item><title><![CDATA[[Head First Design Patterns] 스트래티지 패턴(Strategy Pattern)]]></title><description><![CDATA[본 내용은 Head First 디자인 패턴(Eric Freeman, Elisabeth Freeman, Kathy Sierra, Bert Bates…]]></description><link>https://luckydavekim.github.io/development/etc/head-first-design-patterns/strategy-pattern</link><guid isPermaLink="false">https://luckydavekim.github.io/development/etc/head-first-design-patterns/strategy-pattern</guid><pubDate>Wed, 03 Mar 2021 12:36:03 GMT</pubDate><content:encoded>&lt;blockquote&gt;
-&lt;p&gt;본 내용은 &lt;strong&gt;Head First 디자인 패턴&lt;/strong&gt;(Eric Freeman, Elisabeth Freeman, Kathy Sierra, Bert Bates 지음, 서환수 옮김)을 읽은 후, 생각을 정리한 내용입니다.&lt;br&gt;
-보다 상세한 내용이 궁금하신 분은 해당 책을 읽어보는 것을 추천합니다. &lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h1&gt;개요&lt;/h1&gt;
-&lt;p&gt;스트래티지 패턴(Strategy Pattern)에 대해 알아보고, 구현 방법 및 예시에 대해 알아봅니다.&lt;/p&gt;
-&lt;h1&gt;의도 (Intent)&lt;/h1&gt;
-&lt;p&gt; 스트래티지 패턴에서는 알고리즘군을 정의하고 각각을 캡슐화하여 교환해서 사용할 수 있도록 만듭니다.
-스트래티지 패턴을 활용하면 알고리즘을 사용하는 클라이언트와는 독립적으로 알고리즘을 변경할 수 있습니다.&lt;br&gt;
-바뀌는 부분은 따로 뽑아서 캡슐화시킵니다. 그러면 나중에 바뀌지 않는 부분에는 영향을 미치지 않은 채로 원하는 부분만 고치거나
-확장할 수 있습니다.&lt;/p&gt;
-&lt;h1&gt;동기 (Motivation)&lt;/h1&gt;
-&lt;p&gt; 주식 매매에 있어 기준이 되는 &lt;strong&gt;트레이딩 전략&lt;/strong&gt;은 다양하게 있습니다. 이러한 전략에 따라 &lt;em&gt;매수&lt;/em&gt;, &lt;em&gt;매도&lt;/em&gt; 시점이 달라지게 되고,
-트레이딩 전략은 언제든 쉽고 빠르게 교체할 수 있어야 합니다.&lt;/p&gt;
-&lt;p&gt; 만약, 주식 매매 책임을 맡은 &lt;code class=&quot;language-text&quot;&gt;Stock&lt;/code&gt; 내부에 트레이딩 전략을 구현 해놓아 강하게 결합이 되어있다면, 향후 다른 트레이딩 전략으로 변경하기
-쉽지 않을 뿐더러, 트레이딩 전략 변경 중 &lt;code class=&quot;language-text&quot;&gt;Stock&lt;/code&gt; 클래스를 잘못 수정하여 또 다른 사이드이팩트를 야기할지도 모릅니다.&lt;/p&gt;
-&lt;p&gt; 해결 방법으로는 주식 매매 책임을 맡은 &lt;code class=&quot;language-text&quot;&gt;Stock&lt;/code&gt;과 다양한 트레이딩 전략을 따로 뽑아서 캡슐화시키는 것입니다.&lt;br&gt;
-&lt;code class=&quot;language-text&quot;&gt;Stock&lt;/code&gt;은 캡슐화하여 뽑아낸 트레이딩 전략이 무슨 전략인지는 알지 못하고, 알 필요도 없으며 현재가 매수, 매도시점인지 여부만 전달 받고
-그에 맞는 매매를 수행하게 됩니다.&lt;/p&gt;
-&lt;h1&gt;구조 (Structure)&lt;/h1&gt;
-&lt;p&gt; 스트래티지 패턴의 주요 구조는 다음과 같습니다.&lt;/p&gt;
-&lt;p&gt;&lt;span
-      class=&quot;gatsby-resp-image-wrapper&quot;
-      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1018px; &quot;
-    &gt;
-      &lt;a
-    class=&quot;gatsby-resp-image-link&quot;
-    href=&quot;/static/fc76b4939044e3d0e315d7631346d8a9/f759a/strategy-pattern-structure.png&quot;
-    style=&quot;display: block&quot;
-    target=&quot;_blank&quot;
-    rel=&quot;noopener&quot;
-  &gt;
-    &lt;span
-    class=&quot;gatsby-resp-image-background-image&quot;
-    style=&quot;padding-bottom: 35.8%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAHCAIAAACHqfpvAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABAElEQVQY042RSW6DUBBEuf+lWAAyG1tgM5hJGIMgZjARMwiHvOBFpKxSEqh+96/qahC2bYuiyLZt0zTP57PjOJ7nbf+DwHO73SzLQuy6bhAE8Lqu27YdhoHuOI44UvR9f13Xv2ImZ1k2TdM8zxwfj8fr9YKjb5oG68PhEIYh1/q+5wLdrx0/4ufzWRQFmjiOP3e8jWnzRnC9Xk+nU57nb/ffyfSoEinaAUmSpOs6xlZVdb/f0zR9k48dBGFMWZaEEi6XC/uwFcEguq67O47HoyRJDBRFUZZlrqmqSkVRFE3TDMOgIuBETuZjjx7XZVn4YHAsWIfMELq04PwL1kTC8Ru3W37MCiDg/AAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
-  &gt;&lt;/span&gt;
-  &lt;img
-        class=&quot;gatsby-resp-image-image&quot;
-        alt=&quot;Strategy Pattern Structure&quot;
-        title=&quot;Strategy Pattern Structure&quot;
-        src=&quot;/static/fc76b4939044e3d0e315d7631346d8a9/f759a/strategy-pattern-structure.png&quot;
-        srcset=&quot;/static/fc76b4939044e3d0e315d7631346d8a9/0eb09/strategy-pattern-structure.png 500w,
-/static/fc76b4939044e3d0e315d7631346d8a9/1263b/strategy-pattern-structure.png 1000w,
-/static/fc76b4939044e3d0e315d7631346d8a9/f759a/strategy-pattern-structure.png 1018w&quot;
-        sizes=&quot;(max-width: 1018px) 100vw, 1018px&quot;
-        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
-        loading=&quot;lazy&quot;
-      /&gt;
-  &lt;/a&gt;
-    &lt;/span&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Stock&lt;/strong&gt; 추상 클래스 :&lt;br&gt;
-&lt;code class=&quot;language-text&quot;&gt;tradingStrategy&lt;/code&gt; 맴버 변수는 &lt;code class=&quot;language-text&quot;&gt;TradingStrategy&lt;/code&gt; 인터페이스를 구현한 어떤 전략이든 할당이 가능하고,&lt;br&gt;
-&lt;code class=&quot;language-text&quot;&gt;setTradingStrategy()&lt;/code&gt; 메서드로 &lt;code class=&quot;language-text&quot;&gt;tradingStrategy&lt;/code&gt; 멤버 변수를 동적으로 변경할 수 있고,&lt;br&gt;
-&lt;code class=&quot;language-text&quot;&gt;buy()&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;sell()&lt;/code&gt; 추상 메서드가 있습니다.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;KrStock&lt;/strong&gt;, &lt;strong&gt;EnStock&lt;/strong&gt; 클래스 :&lt;br&gt;
-&lt;code class=&quot;language-text&quot;&gt;buy()&lt;/code&gt; 메서드 내부에서 &lt;code class=&quot;language-text&quot;&gt;tradingStrategy.buyable()&lt;/code&gt; 메서드를 통해 매수 동작을 조작하고,&lt;br&gt;
-&lt;code class=&quot;language-text&quot;&gt;sell()&lt;/code&gt; 메서드 내부에서 &lt;code class=&quot;language-text&quot;&gt;tradingStrategy.sellable()&lt;/code&gt; 메서드를 통해 매도 동작을 조작합니다.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;TradingStrategy&lt;/strong&gt; 인터페이스 :&lt;br&gt;
-&lt;code class=&quot;language-text&quot;&gt;buyable()&lt;/code&gt; 메서드는 매수 가능 여부를 반환하고,&lt;br&gt;
-&lt;code class=&quot;language-text&quot;&gt;sellable()&lt;/code&gt; 메서드는 매도 가능 여부를 반환합니다.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;BollingerBand&lt;/strong&gt;, &lt;strong&gt;TripleScreenTrading&lt;/strong&gt; … 클래스 :&lt;br&gt;
-트레이딩 전략에 따라 매수, 매도 시점을 알려주는 &lt;code class=&quot;language-text&quot;&gt;buyable()&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;sellable()&lt;/code&gt; 메서드를 구현합니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1&gt;예제 (Example)&lt;/h1&gt;
-&lt;p&gt; 스트래티지 패턴의 예제입니다.&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;abstract&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Stock&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-
-  &lt;span class=&quot;token keyword&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;TradingStrategy&lt;/span&gt; tradingStrategy&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-
-  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;setTradingStrategy&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;TradingStrategy&lt;/span&gt; tradingStrategy&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;tradingStrategy &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; tradingStrategy&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-
-  &lt;span class=&quot;token keyword&quot;&gt;abstract&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;buy&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-
-  &lt;span class=&quot;token keyword&quot;&gt;abstract&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;sell&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-
-
-&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;KrStock&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Stock&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-
-  &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
-  &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;buy&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;tradingStrategy&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;buyable&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;token comment&quot;&gt;// 한국 주식 매수&lt;/span&gt;
-    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-
-  &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
-  &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;sell&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;tradingStrategy&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;sellable&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;token comment&quot;&gt;// 한국 주식 매도&lt;/span&gt;
-    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-
-
-&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;EnStock&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Stock&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-
-  &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
-  &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;buy&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;tradingStrategy&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;buyable&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;token comment&quot;&gt;// 미국 주식 매수&lt;/span&gt;
-    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-
-  &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
-  &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;sell&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;tradingStrategy&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;sellable&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;token comment&quot;&gt;// 미국 주식 매도&lt;/span&gt;
-    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;TradingStrategy&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-
-  &lt;span class=&quot;token keyword&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;buyable&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-
-  &lt;span class=&quot;token keyword&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;sellable&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-
-
-&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;BollingerBand&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;TradingStrategy&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-
-  &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
-  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;buyable&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;token comment&quot;&gt;// ... 트레이딩 전략에 따른 boolean 반환&lt;/span&gt;
-    &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-
-  &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
-  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;sellable&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;token comment&quot;&gt;// ... 트레이딩 전략에 따른 boolean 반환&lt;/span&gt;
-    &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-
-
-&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;TripleScreenTrading&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;TradingStrategy&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-
-  &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
-  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;buyable&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;token comment&quot;&gt;// ... 트레이딩 전략에 따른 boolean 반환&lt;/span&gt;
-    &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-
-  &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
-  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;sellable&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;token comment&quot;&gt;// ... 트레이딩 전략에 따른 boolean 반환&lt;/span&gt;
-    &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Main&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-
-  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; args&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;token class-name&quot;&gt;Stock&lt;/span&gt; stock &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;KrStock&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-    stock&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;setTradingStrategy&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;BollingerBand&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;token comment&quot;&gt;// Bollinger Band 전략에 따른, 한국 주식 매수&lt;/span&gt;
-    stock&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;buy&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;token comment&quot;&gt;// Bollinger Band 전략에 따른, 한국 주식 매도&lt;/span&gt;
-    stock&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;sell&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h1&gt;줄이며…&lt;/h1&gt;
-&lt;p&gt; 스트래티지 패턴은 &lt;strong&gt;디자인 원칙&lt;/strong&gt; 중 다음 세가지 원칙에 대해 초점을 맞춘 패턴입니다.  &lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;어플리케이션에서 달라지는 부분을 찾아내고, 달라지지 않는 부분으로부터 분리시킨다.  &lt;/li&gt;
-&lt;li&gt;구현이 아닌 인터페이스에 맞춰서 프로그래밍한다.  &lt;/li&gt;
-&lt;li&gt;상속보다는 구성을 활용한다.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;이러한 디자인 원칙을 지켜냄으로써 주식 매매와 독립적으로 트레이딩 전략을 수정할 수 있게 되었습니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[[Head First Design Patterns] 옵저버 패턴(Observer Pattern)]]></title><description><![CDATA[본 내용은 Head First 디자인 패턴(Eric Freeman, Elisabeth Freeman, Kathy Sierra, Bert Bates…]]></description><link>https://luckydavekim.github.io/development/etc/head-first-design-patterns/observer-pattern</link><guid isPermaLink="false">https://luckydavekim.github.io/development/etc/head-first-design-patterns/observer-pattern</guid><pubDate>Fri, 26 Feb 2021 10:33:22 GMT</pubDate><content:encoded>&lt;blockquote&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[DevDave]]></title><description><![CDATA[The blog for dave]]></description><link>https://luckydavekim.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Thu, 04 Mar 2021 09:22:23 GMT</lastBuildDate><item><title><![CDATA[[Head First Design Patterns] 옵저버 패턴(Observer Pattern)]]></title><description><![CDATA[본 내용은 Head First 디자인 패턴(Eric Freeman, Elisabeth Freeman, Kathy Sierra, Bert Bates…]]></description><link>https://luckydavekim.github.io/development/etc/head-first-design-patterns/observer-pattern</link><guid isPermaLink="false">https://luckydavekim.github.io/development/etc/head-first-design-patterns/observer-pattern</guid><pubDate>Thu, 04 Mar 2021 09:18:02 GMT</pubDate><content:encoded>&lt;blockquote&gt;
 &lt;p&gt;본 내용은 &lt;strong&gt;Head First 디자인 패턴&lt;/strong&gt;(Eric Freeman, Elisabeth Freeman, Kathy Sierra, Bert Bates 지음, 서환수 옮김)을 읽은 후, 생각을 정리한 내용입니다.&lt;br&gt;
 보다 상세한 내용이 궁금하신 분은 해당 책을 읽어보는 것을 추천합니다. &lt;/p&gt;
 &lt;/blockquote&gt;
@@ -400,7 +221,186 @@ Code: 삼성; Date: 2021-03-02; Price: 90000&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt
 &lt;h1&gt;줄이며…&lt;/h1&gt;
 &lt;p&gt; 구독중인 데이터가 변경될 때, 모든 구독자에게 한번에 알릴 수 있는 &lt;strong&gt;옵저버 패턴&lt;/strong&gt;에 대해 알아보았습니다. 하지만 이러한 옵저버 패턴을
 사용할 때 주의할 점이 있습니다. 바로, 옵저버한테 연락이 가는 순서에 의존하면 안된다는 점입니다.&lt;br&gt;
-즉, 각 옵저버들의 실행 순서는 독립적이여야 한다는 것 입니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[[GoF의 디자인 패턴] 생성 패턴 | 추상 팩토리(Abstract Factory) 패턴]]></title><description><![CDATA[본 내용은 GoF의 디자인 패턴(Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides…]]></description><link>https://luckydavekim.github.io/development/back-end/gang-of-four-design-patterns/abstract-factory-pattern</link><guid isPermaLink="false">https://luckydavekim.github.io/development/back-end/gang-of-four-design-patterns/abstract-factory-pattern</guid><pubDate>Fri, 26 Feb 2021 10:33:22 GMT</pubDate><content:encoded>&lt;blockquote&gt;
+즉, 각 옵저버들의 실행 순서는 독립적이여야 한다는 것 입니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[[Head First Design Patterns] 스트래티지 패턴(Strategy Pattern)]]></title><description><![CDATA[본 내용은 Head First 디자인 패턴(Eric Freeman, Elisabeth Freeman, Kathy Sierra, Bert Bates…]]></description><link>https://luckydavekim.github.io/development/etc/head-first-design-patterns/strategy-pattern</link><guid isPermaLink="false">https://luckydavekim.github.io/development/etc/head-first-design-patterns/strategy-pattern</guid><pubDate>Wed, 03 Mar 2021 12:36:03 GMT</pubDate><content:encoded>&lt;blockquote&gt;
+&lt;p&gt;본 내용은 &lt;strong&gt;Head First 디자인 패턴&lt;/strong&gt;(Eric Freeman, Elisabeth Freeman, Kathy Sierra, Bert Bates 지음, 서환수 옮김)을 읽은 후, 생각을 정리한 내용입니다.&lt;br&gt;
+보다 상세한 내용이 궁금하신 분은 해당 책을 읽어보는 것을 추천합니다. &lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1&gt;개요&lt;/h1&gt;
+&lt;p&gt;스트래티지 패턴(Strategy Pattern)에 대해 알아보고, 구현 방법 및 예시에 대해 알아봅니다.&lt;/p&gt;
+&lt;h1&gt;의도 (Intent)&lt;/h1&gt;
+&lt;p&gt; 스트래티지 패턴에서는 알고리즘군을 정의하고 각각을 캡슐화하여 교환해서 사용할 수 있도록 만듭니다.
+스트래티지 패턴을 활용하면 알고리즘을 사용하는 클라이언트와는 독립적으로 알고리즘을 변경할 수 있습니다.&lt;br&gt;
+바뀌는 부분은 따로 뽑아서 캡슐화시킵니다. 그러면 나중에 바뀌지 않는 부분에는 영향을 미치지 않은 채로 원하는 부분만 고치거나
+확장할 수 있습니다.&lt;/p&gt;
+&lt;h1&gt;동기 (Motivation)&lt;/h1&gt;
+&lt;p&gt; 주식 매매에 있어 기준이 되는 &lt;strong&gt;트레이딩 전략&lt;/strong&gt;은 다양하게 있습니다. 이러한 전략에 따라 &lt;em&gt;매수&lt;/em&gt;, &lt;em&gt;매도&lt;/em&gt; 시점이 달라지게 되고,
+트레이딩 전략은 언제든 쉽고 빠르게 교체할 수 있어야 합니다.&lt;/p&gt;
+&lt;p&gt; 만약, 주식 매매 책임을 맡은 &lt;code class=&quot;language-text&quot;&gt;Stock&lt;/code&gt; 내부에 트레이딩 전략을 구현 해놓아 강하게 결합이 되어있다면, 향후 다른 트레이딩 전략으로 변경하기
+쉽지 않을 뿐더러, 트레이딩 전략 변경 중 &lt;code class=&quot;language-text&quot;&gt;Stock&lt;/code&gt; 클래스를 잘못 수정하여 또 다른 사이드이팩트를 야기할지도 모릅니다.&lt;/p&gt;
+&lt;p&gt; 해결 방법으로는 주식 매매 책임을 맡은 &lt;code class=&quot;language-text&quot;&gt;Stock&lt;/code&gt;과 다양한 트레이딩 전략을 따로 뽑아서 캡슐화시키는 것입니다.&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;Stock&lt;/code&gt;은 캡슐화하여 뽑아낸 트레이딩 전략이 무슨 전략인지는 알지 못하고, 알 필요도 없으며 현재가 매수, 매도시점인지 여부만 전달 받고
+그에 맞는 매매를 수행하게 됩니다.&lt;/p&gt;
+&lt;h1&gt;구조 (Structure)&lt;/h1&gt;
+&lt;p&gt; 스트래티지 패턴의 주요 구조는 다음과 같습니다.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1018px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/fc76b4939044e3d0e315d7631346d8a9/f759a/strategy-pattern-structure.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 35.8%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAHCAIAAACHqfpvAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABAElEQVQY042RSW6DUBBEuf+lWAAyG1tgM5hJGIMgZjARMwiHvOBFpKxSEqh+96/qahC2bYuiyLZt0zTP57PjOJ7nbf+DwHO73SzLQuy6bhAE8Lqu27YdhoHuOI44UvR9f13Xv2ImZ1k2TdM8zxwfj8fr9YKjb5oG68PhEIYh1/q+5wLdrx0/4ufzWRQFmjiOP3e8jWnzRnC9Xk+nU57nb/ffyfSoEinaAUmSpOs6xlZVdb/f0zR9k48dBGFMWZaEEi6XC/uwFcEguq67O47HoyRJDBRFUZZlrqmqSkVRFE3TDMOgIuBETuZjjx7XZVn4YHAsWIfMELq04PwL1kTC8Ru3W37MCiDg/AAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Strategy Pattern Structure&quot;
+        title=&quot;Strategy Pattern Structure&quot;
+        src=&quot;/static/fc76b4939044e3d0e315d7631346d8a9/f759a/strategy-pattern-structure.png&quot;
+        srcset=&quot;/static/fc76b4939044e3d0e315d7631346d8a9/0eb09/strategy-pattern-structure.png 500w,
+/static/fc76b4939044e3d0e315d7631346d8a9/1263b/strategy-pattern-structure.png 1000w,
+/static/fc76b4939044e3d0e315d7631346d8a9/f759a/strategy-pattern-structure.png 1018w&quot;
+        sizes=&quot;(max-width: 1018px) 100vw, 1018px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Stock&lt;/strong&gt; 추상 클래스 :&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;tradingStrategy&lt;/code&gt; 맴버 변수는 &lt;code class=&quot;language-text&quot;&gt;TradingStrategy&lt;/code&gt; 인터페이스를 구현한 어떤 전략이든 할당이 가능하고,&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;setTradingStrategy()&lt;/code&gt; 메서드로 &lt;code class=&quot;language-text&quot;&gt;tradingStrategy&lt;/code&gt; 멤버 변수를 동적으로 변경할 수 있고,&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;buy()&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;sell()&lt;/code&gt; 추상 메서드가 있습니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;KrStock&lt;/strong&gt;, &lt;strong&gt;EnStock&lt;/strong&gt; 클래스 :&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;buy()&lt;/code&gt; 메서드 내부에서 &lt;code class=&quot;language-text&quot;&gt;tradingStrategy.buyable()&lt;/code&gt; 메서드를 통해 매수 동작을 조작하고,&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;sell()&lt;/code&gt; 메서드 내부에서 &lt;code class=&quot;language-text&quot;&gt;tradingStrategy.sellable()&lt;/code&gt; 메서드를 통해 매도 동작을 조작합니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;TradingStrategy&lt;/strong&gt; 인터페이스 :&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;buyable()&lt;/code&gt; 메서드는 매수 가능 여부를 반환하고,&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;sellable()&lt;/code&gt; 메서드는 매도 가능 여부를 반환합니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;BollingerBand&lt;/strong&gt;, &lt;strong&gt;TripleScreenTrading&lt;/strong&gt; … 클래스 :&lt;br&gt;
+트레이딩 전략에 따라 매수, 매도 시점을 알려주는 &lt;code class=&quot;language-text&quot;&gt;buyable()&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;sellable()&lt;/code&gt; 메서드를 구현합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;예제 (Example)&lt;/h1&gt;
+&lt;p&gt; 스트래티지 패턴의 예제입니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;abstract&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Stock&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;TradingStrategy&lt;/span&gt; tradingStrategy&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;setTradingStrategy&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;TradingStrategy&lt;/span&gt; tradingStrategy&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;tradingStrategy &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; tradingStrategy&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;abstract&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;buy&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;abstract&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;sell&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+
+&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;KrStock&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Stock&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;buy&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;tradingStrategy&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;buyable&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token comment&quot;&gt;// 한국 주식 매수&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;sell&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;tradingStrategy&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;sellable&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token comment&quot;&gt;// 한국 주식 매도&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+
+&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;EnStock&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Stock&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;buy&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;tradingStrategy&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;buyable&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token comment&quot;&gt;// 미국 주식 매수&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;sell&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;tradingStrategy&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;sellable&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token comment&quot;&gt;// 미국 주식 매도&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;TradingStrategy&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;buyable&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;sellable&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+
+&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;BollingerBand&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;TradingStrategy&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;buyable&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// ... 트레이딩 전략에 따른 boolean 반환&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;sellable&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// ... 트레이딩 전략에 따른 boolean 반환&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+
+&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;TripleScreenTrading&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;TradingStrategy&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;buyable&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// ... 트레이딩 전략에 따른 boolean 반환&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;sellable&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// ... 트레이딩 전략에 따른 boolean 반환&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Main&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; args&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;Stock&lt;/span&gt; stock &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;KrStock&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    stock&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;setTradingStrategy&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;BollingerBand&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;// Bollinger Band 전략에 따른, 한국 주식 매수&lt;/span&gt;
+    stock&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;buy&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;// Bollinger Band 전략에 따른, 한국 주식 매도&lt;/span&gt;
+    stock&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;sell&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;줄이며…&lt;/h1&gt;
+&lt;p&gt; 스트래티지 패턴은 &lt;strong&gt;디자인 원칙&lt;/strong&gt; 중 다음 세가지 원칙에 대해 초점을 맞춘 패턴입니다.  &lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;어플리케이션에서 달라지는 부분을 찾아내고, 달라지지 않는 부분으로부터 분리시킨다.  &lt;/li&gt;
+&lt;li&gt;구현이 아닌 인터페이스에 맞춰서 프로그래밍한다.  &lt;/li&gt;
+&lt;li&gt;상속보다는 구성을 활용한다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;이러한 디자인 원칙을 지켜냄으로써 주식 매매와 독립적으로 트레이딩 전략을 수정할 수 있게 되었습니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[[GoF의 디자인 패턴] 생성 패턴 | 추상 팩토리(Abstract Factory) 패턴]]></title><description><![CDATA[본 내용은 GoF의 디자인 패턴(Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides…]]></description><link>https://luckydavekim.github.io/development/back-end/gang-of-four-design-patterns/abstract-factory-pattern</link><guid isPermaLink="false">https://luckydavekim.github.io/development/back-end/gang-of-four-design-patterns/abstract-factory-pattern</guid><pubDate>Fri, 26 Feb 2021 10:33:22 GMT</pubDate><content:encoded>&lt;blockquote&gt;
 &lt;p&gt;본 내용은 &lt;strong&gt;GoF의 디자인 패턴&lt;/strong&gt;(Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides 지음, 김정아 옮김)을 읽은 후, 생각을 정리한 내용입니다.&lt;br&gt;
 보다 상세한 내용이 궁금하신 분은 해당 책을 읽어보는 것을 추천합니다. &lt;/p&gt;
 &lt;/blockquote&gt;
