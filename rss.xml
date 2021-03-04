@@ -1,12 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[DevDave]]></title><description><![CDATA[The blog for dave]]></description><link>https://luckydavekim.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Wed, 03 Mar 2021 12:45:47 GMT</lastBuildDate><item><title><![CDATA[[Head First Design Patterns] 스트래티지 패턴(Strategy Pattern)]]></title><description><![CDATA[본 내용은 Head First 디자인 패턴(Eric Freeman, Elisabeth Freeman, Kathy Sierra, Bert Bates…]]></description><link>https://luckydavekim.github.io/development/etc/head-first-design-patterns/strategy-pattern</link><guid isPermaLink="false">https://luckydavekim.github.io/development/etc/head-first-design-patterns/strategy-pattern</guid><pubDate>Wed, 03 Mar 2021 12:36:03 GMT</pubDate><content:encoded>&lt;blockquote&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[DevDave]]></title><description><![CDATA[The blog for dave]]></description><link>https://luckydavekim.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Thu, 04 Mar 2021 09:20:46 GMT</lastBuildDate><item><title><![CDATA[[Head First Design Patterns] 스트래티지 패턴(Strategy Pattern)]]></title><description><![CDATA[본 내용은 Head First 디자인 패턴(Eric Freeman, Elisabeth Freeman, Kathy Sierra, Bert Bates…]]></description><link>https://luckydavekim.github.io/development/etc/head-first-design-patterns/strategy-pattern</link><guid isPermaLink="false">https://luckydavekim.github.io/development/etc/head-first-design-patterns/strategy-pattern</guid><pubDate>Wed, 03 Mar 2021 12:36:03 GMT</pubDate><content:encoded>&lt;blockquote&gt;
 &lt;p&gt;본 내용은 &lt;strong&gt;Head First 디자인 패턴&lt;/strong&gt;(Eric Freeman, Elisabeth Freeman, Kathy Sierra, Bert Bates 지음, 서환수 옮김)을 읽은 후, 생각을 정리한 내용입니다.&lt;br&gt;
 보다 상세한 내용이 궁금하신 분은 해당 책을 읽어보는 것을 추천합니다. &lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h1&gt;개요&lt;/h1&gt;
-&lt;p&gt; 스트래티지 패턴(Strategy Pattern)에서는 알고리즘군을 정의하고 각각을 캡슐화하여 교환해서 사용할 수 있도록 만든다.
-스트래티지 패턴을 활용하면 알고리즘을 사용하는 클라이언트와는 독립적으로 알고리즘을 변경할 수 있다.&lt;/p&gt;
+&lt;p&gt;스트래티지 패턴(Strategy Pattern)에 대해 알아보고, 구현 방법 및 예시에 대해 알아봅니다.&lt;/p&gt;
 &lt;h1&gt;의도 (Intent)&lt;/h1&gt;
-&lt;p&gt; 바뀌는 부분은 따로 뽑아서 캡슐화시킵니다. 그러면 나중에 바뀌지 않는 부분에는 영향을 미치지 않은 채로 원하는 부분만 고치거나
+&lt;p&gt; 스트래티지 패턴에서는 알고리즘군을 정의하고 각각을 캡슐화하여 교환해서 사용할 수 있도록 만듭니다.
+스트래티지 패턴을 활용하면 알고리즘을 사용하는 클라이언트와는 독립적으로 알고리즘을 변경할 수 있습니다.&lt;br&gt;
+바뀌는 부분은 따로 뽑아서 캡슐화시킵니다. 그러면 나중에 바뀌지 않는 부분에는 영향을 미치지 않은 채로 원하는 부분만 고치거나
 확장할 수 있습니다.&lt;/p&gt;
 &lt;h1&gt;동기 (Motivation)&lt;/h1&gt;
 &lt;p&gt; 주식 매매에 있어 기준이 되는 &lt;strong&gt;트레이딩 전략&lt;/strong&gt;은 다양하게 있습니다. 이러한 전략에 따라 &lt;em&gt;매수&lt;/em&gt;, &lt;em&gt;매도&lt;/em&gt; 시점이 달라지게 되고,
@@ -35,8 +36,8 @@
   &gt;&lt;/span&gt;
   &lt;img
         class=&quot;gatsby-resp-image-image&quot;
-        alt=&quot;Strategy Factory Structure&quot;
-        title=&quot;Strategy Factory Structure&quot;
+        alt=&quot;Strategy Pattern Structure&quot;
+        title=&quot;Strategy Pattern Structure&quot;
         src=&quot;/static/fc76b4939044e3d0e315d7631346d8a9/f759a/strategy-pattern-structure.png&quot;
         srcset=&quot;/static/fc76b4939044e3d0e315d7631346d8a9/0eb09/strategy-pattern-structure.png 500w,
 /static/fc76b4939044e3d0e315d7631346d8a9/1263b/strategy-pattern-structure.png 1000w,
@@ -176,7 +177,230 @@
 &lt;li&gt;구현이 아닌 인터페이스에 맞춰서 프로그래밍한다.  &lt;/li&gt;
 &lt;li&gt;상속보다는 구성을 활용한다.&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;이러한 디자인 원칙을 지켜냄으로써 주식 매매와 독립적으로 트레이딩 전략을 수정할 수 있게 되었습니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[[GoF의 디자인 패턴] 생성 패턴 | 추상 팩토리(Abstract Factory) 패턴]]></title><description><![CDATA[본 내용은 GoF의 디자인 패턴(Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides…]]></description><link>https://luckydavekim.github.io/development/back-end/gang-of-four-design-patterns/abstract-factory-pattern</link><guid isPermaLink="false">https://luckydavekim.github.io/development/back-end/gang-of-four-design-patterns/abstract-factory-pattern</guid><pubDate>Fri, 26 Feb 2021 10:33:22 GMT</pubDate><content:encoded>&lt;blockquote&gt;
+&lt;p&gt;이러한 디자인 원칙을 지켜냄으로써 주식 매매와 독립적으로 트레이딩 전략을 수정할 수 있게 되었습니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[[Head First Design Patterns] 옵저버 패턴(Observer Pattern)]]></title><description><![CDATA[본 내용은 Head First 디자인 패턴(Eric Freeman, Elisabeth Freeman, Kathy Sierra, Bert Bates…]]></description><link>https://luckydavekim.github.io/development/etc/head-first-design-patterns/observer-pattern</link><guid isPermaLink="false">https://luckydavekim.github.io/development/etc/head-first-design-patterns/observer-pattern</guid><pubDate>Fri, 26 Feb 2021 10:33:22 GMT</pubDate><content:encoded>&lt;blockquote&gt;
+&lt;p&gt;본 내용은 &lt;strong&gt;Head First 디자인 패턴&lt;/strong&gt;(Eric Freeman, Elisabeth Freeman, Kathy Sierra, Bert Bates 지음, 서환수 옮김)을 읽은 후, 생각을 정리한 내용입니다.&lt;br&gt;
+보다 상세한 내용이 궁금하신 분은 해당 책을 읽어보는 것을 추천합니다. &lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1&gt;개요&lt;/h1&gt;
+&lt;p&gt; 옵저버 패턴(Observer Pattern)에 대해 알아보고, 구현 방법 및 예시에 대해 알아봅니다.&lt;/p&gt;
+&lt;h1&gt;의도 (Intent)&lt;/h1&gt;
+&lt;p&gt; 옵저버 패턴에서는 한 객체의 상태가 바뀌면 그 객체에 의존하는 다른 객체들한테 연락이 가고 자동으로 내용이 갱신되는 방식으로
+일대다(One-To-Many) 의존성을 정의합니다.&lt;/p&gt;
+&lt;h1&gt;동기 (Motivation)&lt;/h1&gt;
+&lt;p&gt; 주식 데이터는 여러 방법으로 &lt;strong&gt;가공&lt;/strong&gt;할 수 있습니다. 동일한 주식 데이터를 기반으로 다양한 &lt;em&gt;트레이딩 전략&lt;/em&gt;에 따라 가공하거나,
+다양한 종류의 &lt;em&gt;차트별&lt;/em&gt;로 가공을 할 수 있습니다.&lt;br&gt;
+또한, 각 가공방법들은 주식 데이터가 갱신되면, 갱신된 데이터를 기반으로 다시 재 가공해야 합니다.&lt;br&gt;
+일반적인 방법으로는 언제 그리고 어느 시점에 데이터가 가공될지 알기는 쉽지 않습니다. 이럴 때 사용하는 패턴이 &lt;strong&gt;옵저버 패턴&lt;/strong&gt;입니다.&lt;/p&gt;
+&lt;p&gt; 쉬운 예제로 주식 데이터를 기반으로 &lt;strong&gt;한글 차트&lt;/strong&gt;, &lt;strong&gt;영문 차트&lt;/strong&gt;로 가공하는 예시를 들겠습니다.&lt;br&gt;
+각 차트에서 1초마다 주식 데이터가 갱신 되었는지 호출 및 데이터를 비교하여, 데이터가 갱신되었을 때 재 가공하는 방법도 있지만, 이 방법은
+비효율 적입니다.  &lt;/p&gt;
+&lt;p&gt; 해결 방법으로는 &lt;strong&gt;주식 데이터&lt;/strong&gt;를 구독 가능한 &lt;code class=&quot;language-text&quot;&gt;Observable&lt;/code&gt; 인터페이스 구현하도록 하고, &lt;strong&gt;한글 차트&lt;/strong&gt;, &lt;strong&gt;영문 차트&lt;/strong&gt;를 구독자인
+&lt;code class=&quot;language-text&quot;&gt;Observer&lt;/code&gt; 인터페이스를 구현하도록 해서, 주식 데이터가 갱신될 때, 해당 주식 데이터를 구독하는 모든 &lt;em&gt;구독자&lt;/em&gt;에게 데이터가 갱신됨을
+알려주면 됩니다.&lt;br&gt;
+여기서 중요한 것은 구독 가능한 &lt;strong&gt;주식 데이터&lt;/strong&gt;는 구독자들이 해당 갱신된 데이터를 받아가서 무엇을 하는지 알 수 없고, 알 필요도 없다는
+것 입니다.&lt;/p&gt;
+&lt;h1&gt;구조 (Structure)&lt;/h1&gt;
+&lt;p&gt; 옵저버 패턴의 주요 구조는 다음과 같습니다.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 782px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/ce11d288626fba46ff71deba50d9e949/f2aa7/observer-pattern-structure.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 57.599999999999994%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAIAAADtbgqsAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABb0lEQVQoz42SW2+CQBSE+f//yRfQKGo0KqJSEEQUtUrwwqWgpR+skjZNk87DyeyyMzvnLNJkMun1eqqqQnzfL4ri8Xh8vpBlWZqmHxXu93vxE9J0On2rsF6vXddlC01d5/N5t9uVZVlRFDg7URSlL0ij0Wi5XG632zAMsTidTofD4b3CbrdrNpuO42DKEvf9fs9l/X6fmNRSPBgMqBh7nod3nuckFDUIAqyxwDdJEtu2h8Mh9Xg8djodidMwwtRRvyOO48vlgtH5fMYIdwakaRoSgkir1Wo8Huu6DuGz0JCTE+12u9FoQOgITavVonNGW89V4hyBF4sFlYRCDCce7dEwn8jFkj4ty+IaYj/FdgWGdLvdqLwN2RATBM4hNq/XKxoISzo3DEO0Wd7MaQYrpk0klij1CmTGiHbgECr3I2YEpVgIYLzbbDbjEiaEPd5xBcGp9ZIqfphSvNlsRB7h8nvmf6HsmZBENU1TvPP/xV9Ht5RDa4jgVgAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Observer Pattern Structure&quot;
+        title=&quot;Observer Pattern Structure&quot;
+        src=&quot;/static/ce11d288626fba46ff71deba50d9e949/f2aa7/observer-pattern-structure.png&quot;
+        srcset=&quot;/static/ce11d288626fba46ff71deba50d9e949/0eb09/observer-pattern-structure.png 500w,
+/static/ce11d288626fba46ff71deba50d9e949/f2aa7/observer-pattern-structure.png 782w&quot;
+        sizes=&quot;(max-width: 782px) 100vw, 782px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Observable&lt;/strong&gt; 인터페이스 :&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;addObserver()&lt;/code&gt; 메서드로 &lt;code class=&quot;language-text&quot;&gt;Observer&lt;/code&gt;를 구현한 구독자를 추가할 수 있고,&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;deleteObserver()&lt;/code&gt; 메서드로 &lt;code class=&quot;language-text&quot;&gt;Observer&lt;/code&gt;를 구현한 구독자를 제거할 수 있고,&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;notifyObservers()&lt;/code&gt; 메서드로 &lt;code class=&quot;language-text&quot;&gt;Observer&lt;/code&gt;를 구현한 구독자들에게 메시지를 보낼 수 있습니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;StockData&lt;/strong&gt; 클래스 :&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;setData()&lt;/code&gt; 메서드로 데이터를 설정 후, 내부에서 &lt;code class=&quot;language-text&quot;&gt;notifyObservers()&lt;/code&gt; 메서드를 호출해 구독자들에게 메시지를 보내고,&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;getCode()&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;getDate()&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;getPrice()&lt;/code&gt; 메서드를 통해 커스텀 데이터를 반환합니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Observer&lt;/strong&gt; 인터페이스 :&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;update()&lt;/code&gt; 메서드를 통해 구독중인 데이터 갱신시 메시지를 처리합니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Chartable&lt;/strong&gt; 인터페이스 :&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;draw()&lt;/code&gt; 메서드로 차트 그리는 기능을 수행합니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;StockKrChart&lt;/strong&gt;, &lt;strong&gt;StockEnChart&lt;/strong&gt; 클래스 :&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;update()&lt;/code&gt; 메서드 내부에서 &lt;code class=&quot;language-text&quot;&gt;draw()&lt;/code&gt; 메서드를 호출해 구독중인 데이터 갱신시 해당 데이터를 기반으로 차트를 그립니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;예제 (Example)&lt;/h1&gt;
+&lt;p&gt;옵저버 패턴의 예제입니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Observable&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;addObserver&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Observer&lt;/span&gt; observer&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;deleteObserver&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Observer&lt;/span&gt; observer&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;notifyObservers&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+
+&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;StockData&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Observable&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;token generics&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Observer&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt; observers&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; code&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;LocalDate&lt;/span&gt; date&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Long&lt;/span&gt; price&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;StockData&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;observers &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;token generics&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;addObserver&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Observer&lt;/span&gt; observer&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;observers&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;observer&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;deleteObserver&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Observer&lt;/span&gt; observer&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;observers&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;remove&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;observer&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;notifyObservers&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    observers&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;forEach&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;observer &lt;span class=&quot;token operator&quot;&gt;-&gt;&lt;/span&gt; observer&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;setData&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; code&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;LocalDate&lt;/span&gt; date&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Long&lt;/span&gt; price&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;code &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; code&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;date &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; date&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;price &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; price&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;notifyObservers&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;getCode&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; code&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;LocalDate&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;getDate&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; date&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Long&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;getPrice&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; price&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt; &lt;code class=&quot;language-text&quot;&gt;Observable&lt;/code&gt; 인터페이스를 구현한 &lt;code class=&quot;language-text&quot;&gt;StockData&lt;/code&gt; 클래스를 만듭니다.&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;StockData&lt;/code&gt; 클래스 내부에는 &lt;em&gt;구독자&lt;/em&gt; 리스트를 관리할 수 있는 &lt;code class=&quot;language-text&quot;&gt;observers&lt;/code&gt; 맴버 변수를 두고, &lt;code class=&quot;language-text&quot;&gt;addObserver()&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;deleteObserver()&lt;/code&gt;,
+&lt;code class=&quot;language-text&quot;&gt;notifyObservers()&lt;/code&gt; 메서드를 알맞게 구현합니다. 그리고 &lt;code class=&quot;language-text&quot;&gt;setData()&lt;/code&gt; 메서드를 통해 데이터 갱신이 일어나면 &lt;code class=&quot;language-text&quot;&gt;notifyObservers()&lt;/code&gt; 메서드를
+호출하여 모든 구독자들에게 데이터 갱신을 알립니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Observer&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Observable&lt;/span&gt; observable&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+
+&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Chartable&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;draw&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+
+&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;StockKrChart&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Observer&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Chartable&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; code&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;LocalDate&lt;/span&gt; date&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Long&lt;/span&gt; price&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Observable&lt;/span&gt; observable&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;observable &lt;span class=&quot;token keyword&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;StockData&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token class-name&quot;&gt;StockData&lt;/span&gt; stockData &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;StockData&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; observable&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;code &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; stockData&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getCode&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;date &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; stockData&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getDate&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;price &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; stockData&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getPrice&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+      &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;draw&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;draw&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// Chart 그리기&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;out&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;코드: %s; 날짜: %s; 가격: %d\n&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;code&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;date&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;price&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+
+&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;StockEnChart&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Observer&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Chartable&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; code&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;LocalDate&lt;/span&gt; date&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Long&lt;/span&gt; price&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Observable&lt;/span&gt; observable&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;observable &lt;span class=&quot;token keyword&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;StockData&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token class-name&quot;&gt;StockData&lt;/span&gt; stockData &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;StockData&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; observable&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;code &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; stockData&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getCode&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;date &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; stockData&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getDate&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;price &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; stockData&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getPrice&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+      &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;draw&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token annotation punctuation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;draw&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// Chart 그리기&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;out&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Code: %s; Date: %s; Price: %d\n&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;code&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;date&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;price&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt; &lt;code class=&quot;language-text&quot;&gt;Observer&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;Chartable&lt;/code&gt; 인터페이스를 구현한 &lt;code class=&quot;language-text&quot;&gt;StockKrChart&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;StockEnChart&lt;/code&gt; 클래스를 만듭니다.&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;StockKrChart&lt;/code&gt; 클래스는 구독중인 데이터가 갱신되면, 데이터를 한글 기반으로 그리고,
+&lt;code class=&quot;language-text&quot;&gt;StockEnChart&lt;/code&gt; 클래스는 구독중인 데이터가 갱신되면, 데이터를 영문 기반으로 그립니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;java&quot;&gt;&lt;pre class=&quot;language-java&quot;&gt;&lt;code class=&quot;language-java&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Main&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; args&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;StockData&lt;/span&gt; stockData &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;StockData&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    stockData&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;addObserver&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;StockKrChart&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    stockData&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;addObserver&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;StockEnChart&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    stockData&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;setData&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;삼성전자&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;LocalDate&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;of&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;2021&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;80000L&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    stockData&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;setData&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;삼성전자&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;LocalDate&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;of&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;2021&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;90000L&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt; 이제 구독 가능한 클래스인 &lt;code class=&quot;language-text&quot;&gt;StockData&lt;/code&gt;를 생성하고, &lt;code class=&quot;language-text&quot;&gt;StockKrChart&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;StockEnChart&lt;/code&gt; 구독자를 추가합니다.&lt;br&gt;
+이후 삼성전자의 &lt;strong&gt;2021-03-01&lt;/strong&gt;, &lt;strong&gt;2021-03-02&lt;/strong&gt; 데이터를 입력하면 아래와 같이 &lt;em&gt;한글 데이터&lt;/em&gt;, &lt;em&gt;영문 데이터&lt;/em&gt;가 출력됩니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;코드: 삼성; 날짜: 2021-03-01; 가격: 80000
+Code: 삼성; Date: 2021-03-01; Price: 80000
+
+코드: 삼성; 날짜: 2021-03-02; 가격: 90000
+Code: 삼성; Date: 2021-03-02; Price: 90000&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;줄이며…&lt;/h1&gt;
+&lt;p&gt; 구독중인 데이터가 변경될 때, 모든 구독자에게 한번에 알릴 수 있는 &lt;strong&gt;옵저버 패턴&lt;/strong&gt;에 대해 알아보았습니다. 하지만 이러한 옵저버 패턴을
+사용할 때 주의할 점이 있습니다. 바로, 옵저버한테 연락이 가는 순서에 의존하면 안된다는 점입니다.&lt;br&gt;
+즉, 각 옵저버들의 실행 순서는 독립적이여야 한다는 것 입니다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[[GoF의 디자인 패턴] 생성 패턴 | 추상 팩토리(Abstract Factory) 패턴]]></title><description><![CDATA[본 내용은 GoF의 디자인 패턴(Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides…]]></description><link>https://luckydavekim.github.io/development/back-end/gang-of-four-design-patterns/abstract-factory-pattern</link><guid isPermaLink="false">https://luckydavekim.github.io/development/back-end/gang-of-four-design-patterns/abstract-factory-pattern</guid><pubDate>Fri, 26 Feb 2021 10:33:22 GMT</pubDate><content:encoded>&lt;blockquote&gt;
 &lt;p&gt;본 내용은 &lt;strong&gt;GoF의 디자인 패턴&lt;/strong&gt;(Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides 지음, 김정아 옮김)을 읽은 후, 생각을 정리한 내용입니다.&lt;br&gt;
 보다 상세한 내용이 궁금하신 분은 해당 책을 읽어보는 것을 추천합니다. &lt;/p&gt;
 &lt;/blockquote&gt;
