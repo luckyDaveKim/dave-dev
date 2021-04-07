@@ -1,4 +1,102 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[DevDave]]></title><description><![CDATA[The blog for dave]]></description><link>https://luckydavekim.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Fri, 05 Mar 2021 05:05:18 GMT</lastBuildDate><item><title><![CDATA[[Head First Design Patterns] 데코레이터 패턴(Decorator Pattern)]]></title><description><![CDATA[본 내용은 Head First 디자인 패턴(Eric Freeman, Elisabeth Freeman, Kathy Sierra, Bert Bates…]]></description><link>https://luckydavekim.github.io/development/etc/head-first-design-patterns/decorator-pattern</link><guid isPermaLink="false">https://luckydavekim.github.io/development/etc/head-first-design-patterns/decorator-pattern</guid><pubDate>Fri, 05 Mar 2021 05:01:48 GMT</pubDate><content:encoded>&lt;blockquote&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[DevDave]]></title><description><![CDATA[The blog for dave]]></description><link>https://luckydavekim.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Wed, 07 Apr 2021 16:40:13 GMT</lastBuildDate><item><title><![CDATA[DB Transaction]]></title><description><![CDATA[개요 이 포스팅에서는 DB의 트랜잭션(Transaction)의 특성 및 연산의 종류와 그에 따른 상태에 대해 알아보겠습니다. 트랜잭션이란? DB의 트랜잭션에 대해 알아보도록 하겠습니다. DBMS(Database Management System…]]></description><link>https://luckydavekim.github.io/development/etc/what-is-the-transaction</link><guid isPermaLink="false">https://luckydavekim.github.io/development/etc/what-is-the-transaction</guid><pubDate>Wed, 07 Apr 2021 16:12:14 GMT</pubDate><content:encoded>&lt;h1&gt;개요&lt;/h1&gt;
+&lt;p&gt;이 포스팅에서는 DB의 트랜잭션(Transaction)의 특성 및 연산의 종류와 그에 따른 상태에 대해 알아보겠습니다.&lt;/p&gt;
+&lt;h1&gt;트랜잭션이란?&lt;/h1&gt;
+&lt;p&gt;DB의 트랜잭션에 대해 알아보도록 하겠습니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;DBMS(Database Management System)의 데이터를 다루는 논리적인 작업의 단위이다.&lt;/li&gt;
+&lt;li&gt;DB의 데이터를 다루는 중 장애가 발생할 경우 데이터를 복구하는 작업의 단위이다.&lt;/li&gt;
+&lt;li&gt;DB에서 여러 작업이 동시에 동일한 데이터를 다룰 때 작업을 구분하는 단위이다.&lt;/li&gt;
+&lt;li&gt;트랜젝션에 포함된 작업은 전체가 수행되거나, 또는 전혀 수행되지 않아야 한다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;위와 같은 트랜잭션은 왜 필요할까요?&lt;br&gt;
+게임에서 플레이어 P가 아이템 I를 구매하는 로직을 수행하는 경우를 예로 들어보면 다음과 같은 순서로 로직이 진행 될 것입니다.  &lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;플레이어 P가 아이템 I를 구매할 돈이 충분한지 확인합니다.  &lt;/li&gt;
+&lt;li&gt;플레이어 P의 보유 금액에서 아이템 I의 금액만큼 뺍니다.  &lt;/li&gt;
+&lt;li&gt;플레이어 P에게 아이템 I를 할당합니다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;이 경우 (1) ~ (2) 로직을 정상 수행 후, (3) 로직을 수행하다 오류가 발생했다고 가정하겠습니다.
+그러면 플레이어 P는 보유 금액은 차감되었으나, 아이템은 얻지 못한 상태가 됩니다.&lt;br&gt;
+이렇게 하나의 논리적인 작업을 진행 시, &lt;strong&gt;전체가 수행(금액 차감, 아이템 할당) 되거나 또는
+전혀 수행되지 않아야(금액 차감 안됨, 아이템 할당 안됨)&lt;/strong&gt; 합니다.&lt;br&gt;
+이러한 &lt;strong&gt;&lt;em&gt;논리적인 작업의 단위를 하나의 트랜잭션&lt;/em&gt;&lt;/strong&gt;이라 합니다.&lt;/p&gt;
+&lt;h1&gt;트랜잭션 특성 (ACID)&lt;/h1&gt;
+&lt;p&gt;위에서 알아본 트랜잭션의 4가지 특성(ACID)에 대해 알아보도록 하겠습니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;원자성 (&lt;strong&gt;A&lt;/strong&gt;tomicity)&lt;/li&gt;
+&lt;li&gt;일관성 (&lt;strong&gt;C&lt;/strong&gt;onsistency)&lt;/li&gt;
+&lt;li&gt;독립성 (&lt;strong&gt;I&lt;/strong&gt;solation)&lt;/li&gt;
+&lt;li&gt;지속성 (&lt;strong&gt;D&lt;/strong&gt;urability)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;1. 원자성 (Atomicity)&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;트랜잭션과 관련된 작업들이 부분적으로 실행되다가 중단되지 않는 것을 보장하는 것&lt;/strong&gt;입니다.&lt;br&gt;
+즉, 위의 예시와 같이 플레이어의 보유 금액은 차감되고, 아이템은 얻지 못한 상태로 남는 일이 없도록 보장하는 것입니다.
+그렇기에 트랜잭션 내의 모든 명령은 반드시 완벽히 수행되어야 하며, 모두가 완벽히 수행되지 않고 어느하나라도 오류가 발생하면 트랜잭션
+전부가 취소되어야 합니다.&lt;/p&gt;
+&lt;h2&gt;2. 일관성 (Consistency)&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;트랜잭션이 성공적으로 완료되면 일관적인 DB상태를 유지해야 하는 것&lt;/strong&gt;입니다.&lt;br&gt;
+즉, 트랜잭션이 완료 후 무결성 제약조건이 깨지거나, 데이터 타입이 정수형(Integer)에서 문자열(String) 으로 변경되지 않는 것입니다.&lt;/p&gt;
+&lt;h2&gt;3. 독립성 (Isolation)&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;트랜잭션 수행 중 다른 트랜잭션의 작업이 끼어들지 못하는 것&lt;/strong&gt;입니다.&lt;br&gt;
+즉, 트랜잭션 밖에서는 트랜잭션 내의 연산 중간 단계의 데이터를 볼 수 없는 것입니다.&lt;/p&gt;
+&lt;h2&gt;4. 지속성 (Durability)&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;성공적으로 완료된 트랜잭션의 결과는 영구적으로 반영되어야 하는 것&lt;/strong&gt;입니다.&lt;br&gt;
+즉, 커밋(Commit)을 하면 로그를 남기고 그 결과는 완전히 반영되는 것입니다. 또한, 로그를 이용해서 트랜잭션 수행전 상태로 되돌릴 수 있습니다.&lt;/p&gt;
+&lt;h1&gt;트랜잭션 연산&lt;/h1&gt;
+&lt;p&gt;트랜잭션의 연산에 대해 알아보도록 하겠습니다.&lt;br&gt;
+일반적으로 쿼리를 날리면 DB에 바로 반영이 된다고 생각하기 쉬운데, DB에 반영되는 시점은 &lt;strong&gt;트랜잭션 연산이 성공적으로 완료&lt;/strong&gt;되는 시점에
+실제 DB에 반영이 됩니다. 그리고 트랜잭션의 연산에는 크게 두 가지 &lt;strong&gt;커밋(Commit)&lt;/strong&gt;, &lt;strong&gt;롤백(Rollback)&lt;/strong&gt; 과정이 있습니다.&lt;/p&gt;
+&lt;h2&gt;커밋(Commit) 연산&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;커밋 연산은 트랜잭션이 성공적으로 완료되었음을 선언하는 것&lt;/strong&gt;입니다.&lt;br&gt;
+커밋 시 트랜잭션의 특성인 일관성과 지속성에 의해, 로그를 남기고 그 결과가 DB에 일관적인 상태로 영구 반영됩니다.&lt;/p&gt;
+&lt;h2&gt;롤백(Rollback) 연산&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;롤백 연산은 트랜잭션이 완벽히 수행되지 않고 실패했음을 선언하는 것&lt;/strong&gt;입니다.&lt;br&gt;
+롤백 시 트랜잭션의 특성인 원자성에 의해, 현재 트랜잭션에서 지금까지 수행된 연산이 취소되고 이전 상태로 돌아가게 됩니다.&lt;/p&gt;
+&lt;h1&gt;트랜잭션 상태&lt;/h1&gt;
+&lt;p&gt;트랜잭션은 연산을 수행할 때, 다음과 같이 크게 5가지 상태가 존재합니다.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 522px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/32fdb2e57735317693ea34352ec3da29/d15a3/transaction-status.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 78.8%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAIAAACZeshMAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAB50lEQVQoz4WSR28qQRCE9//fOXNBXAAhECByjhJJ5Jxzzhns7zEWb40tuQ+7OztVU13VI338qPv9vtlsDocDH/v9frvdPh6Pj99Kki8EqNvt5vP5SCSiUCiSySTfw+HwtfsHudPpTCaTYrFoMBigTafTdrstOvqbDCGRSFgsFshutzudTo/H49+VH7Li7NvthmEIPp8vm816vd54PH48Honger3Kwd+UxRqRWCxGq2LJcz6fYzuVSsF/05cGg0G1WiUkfAaDQaQqlUqr1SJkARVoIjAajdFolEQAiF2pVCqdz+dAIGC1Wu12u8lkQmq9XmcyGaTK5fJyueQsBE6nk0qlAsP8crkcHiWMkZDD4fD7/eQEGRHQLBuNBt3yJDb+0B3i/Od0ISmh6XQ6XS5XKBQChGGWZrMZzdd4CAwNaOTPVjgcrtfrX2kL97VardlsCsLbCMSTLfTBcNb/OeOw3+9zmZgKDnu9HlN5G+lisZjNZgRGFkzkcrn8I/Niqrvdjoa1Wi1hjkYjLMmjXq1WJAxHrVZjk7kIgESGhUKBu8GRWOImckkYrJxMov1n6XQ6NAAApjsJGrMlRpg2m02j0ej1epHWi0xfHo9HqVSKwMCQ35dnxM/PYoCEwVJYkhf/kWFr9ywB+AQvv2blRkwtJQAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Transaction Status&quot;
+        title=&quot;Transaction Status&quot;
+        src=&quot;/static/32fdb2e57735317693ea34352ec3da29/d15a3/transaction-status.png&quot;
+        srcset=&quot;/static/32fdb2e57735317693ea34352ec3da29/0eb09/transaction-status.png 500w,
+/static/32fdb2e57735317693ea34352ec3da29/d15a3/transaction-status.png 522w&quot;
+        sizes=&quot;(max-width: 522px) 100vw, 522px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;활동 (Active)&lt;br&gt;
+: 트랜잭션이 수행을 시작하여 실행중인 상태&lt;/li&gt;
+&lt;li&gt;부분 완료 (Partially Committed)&lt;br&gt;
+: 트랜잭션의 마지막 까지의 연산을 실행하고, 커밋을 하지 않아 DB에 반영하지 않은 상태&lt;/li&gt;
+&lt;li&gt;완료 (Committed)&lt;br&gt;
+: 트랜잭션이 성공적으로 완료되어 커밋을 실행한 상태&lt;/li&gt;
+&lt;li&gt;실패 (Failed)&lt;br&gt;
+: 오류가 발생해서 트랜잭션의 수행이 중단되고, 롤백을 하지 않은 상태&lt;/li&gt;
+&lt;li&gt;철회 (Aborted)&lt;br&gt;
+: 트랜잭션이 실패되어 롤백을 실행한 상태&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;줄이며…&lt;/h1&gt;
+&lt;p&gt;지금까지 트랜잭션이 무엇인지 그리고 트랜잭션의 특성, 연산의 종류, 상태에 대해 알아보았습니다.&lt;br&gt;
+이와 같은 트랜잭션 덕분에 DB가 항상 정확하고 일관된 상태를 유지할 수 있습니다. &lt;/p&gt;</content:encoded></item><item><title><![CDATA[[Head First Design Patterns] 데코레이터 패턴(Decorator Pattern)]]></title><description><![CDATA[본 내용은 Head First 디자인 패턴(Eric Freeman, Elisabeth Freeman, Kathy Sierra, Bert Bates…]]></description><link>https://luckydavekim.github.io/development/etc/head-first-design-patterns/decorator-pattern</link><guid isPermaLink="false">https://luckydavekim.github.io/development/etc/head-first-design-patterns/decorator-pattern</guid><pubDate>Fri, 05 Mar 2021 05:01:48 GMT</pubDate><content:encoded>&lt;blockquote&gt;
 &lt;p&gt;본 내용은 &lt;strong&gt;Head First 디자인 패턴&lt;/strong&gt;(Eric Freeman, Elisabeth Freeman, Kathy Sierra, Bert Bates 지음, 서환수 옮김)을 읽은 후, 생각을 정리한 내용입니다.&lt;br&gt;
 보다 상세한 내용이 궁금하신 분은 해당 책을 읽어보는 것을 추천합니다. &lt;/p&gt;
 &lt;/blockquote&gt;

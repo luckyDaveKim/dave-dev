@@ -6,6 +6,7 @@
 <url> <loc>https://luckydavekim.github.io/4</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/5</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/6</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/development/etc/what-is-the-transaction</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/development/etc/head-first-design-patterns/decorator-pattern</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/development/etc/head-first-design-patterns/observer-pattern</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/development/etc/head-first-design-patterns/strategy-pattern</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
@@ -40,6 +41,9 @@
 <url> <loc>https://luckydavekim.github.io/development/front-end/add-blog-to-search-engine</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/development/front-end/install-jekyll</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/development/front-end/create-github-pages</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/database</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/transaction</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://luckydavekim.github.io/tags/acid</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/tags/head-first-design-patterns</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/tags/decorator-patterns</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/tags/observer-patterns</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
@@ -96,8 +100,4 @@
 <url> <loc>https://luckydavekim.github.io/tags/hash-table</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/tags/two-pointers</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://luckydavekim.github.io/tags/sliding-window</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
-<url> <loc>https://luckydavekim.github.io/tags/linked-list</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
-<url> <loc>https://luckydavekim.github.io/tags/kotlin</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
-<url> <loc>https://luckydavekim.github.io/tags/spring-boot</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
-<url> <loc>https://luckydavekim.github.io/tags/rest-api</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 </urlset>
