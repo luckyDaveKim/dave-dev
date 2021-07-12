@@ -12,7 +12,7 @@ tags:
 ---
 
 # 개요
- 이 포스팅에서는 [Spring Bean](/development/back-end/spring-framework/create-spring-bean)을 등록하는 여러 가지 방법에 대해 알아봅니다.
+ 이 포스팅에서는 [Spring Bean](/development/back-end/spring-framework/what-is-the-spring-ioc-container-and-bean)을 등록하는 여러 가지 방법에 대해 알아봅니다.
 
 # Spring Bean 등록 방법
  Spring Bean을 설정하는 방법에는 크게 XML 설정을 통한 방법과 Java 설정을 통한 방법이 있습니다.
